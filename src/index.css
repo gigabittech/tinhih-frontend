@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@theme {
+  --font-inter: "Inter", sans-serif;
+  --font-nunito: "Nunito", sans-serif;
+
+  /* fixed color */
+  --color-fixed-100: #0d0e12;
+  --color-fixed-200: #222228;
+  --color-fixed-text: #fdfefe;
+
+  /* brand color */
+  --color-primary-400: #ffea0d;
+  --color-primary-500: #ffdb00;
+  --color-primary-600: #e5c500;
+  --color-primary-700: #ccaf00;
+
+  /* theme color */
+  --color-base-100: #ffffff;
+  --color-base-200: #f2f4f7;
+  --color-base-300: #f5f5f5;
+
+  /* text color */
+  --color-context-50: #f6f7f9;
+  --color-context-lighter: #7c7c7c;
+  --color-context-light: #656565;
+  --color-context-medium: #464646;
+  --color-context-dark: #292929;
+
+  /* action */
+  --color-action-light: rgba(0, 0, 0, 0.06);
+  --color-action-medium: rgba(0, 0, 0, 0.18);
+  --color-action-dark: rgba(0, 0, 0, 0.45);
+
+  /* outline */
+  --color-outline-light: rgba(0, 0, 0, 0.08);
+  --color-outline-medium: rgba(0, 0, 0, 0.18);
+  --color-outline-dark: rgba(0, 0, 0, 0.35);
+
+  /* shadow */
+  --color-shadow-100: rgba(0, 0, 0, 0.12);
+  --color-shadow-200: rgba(0, 0, 0, 0.14);
+  --color-shadow-300: rgba(0, 0, 0, 0.2);
+}
+
+body {
+  font-family: var(--font-nunito), var(--font-inter), sans-serif;
+  background-color: var(--color-base-100);
+  color: var(--color-context-dark);
+}
+
+.trans {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.shadow-sidebar {
+  box-shadow: var(--color-shadow-300) 0px 8px 10px -5px,
+    var(--color-shadow-200) 0px 16px 24px 2px,
+    var(--color-shadow-100) 0px 6px 30px 5px;
+}
