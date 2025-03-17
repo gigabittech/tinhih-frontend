@@ -3,7 +3,7 @@ import { create } from "zustand";
 const useMenuStore = create((set, get) => ({
   menu: [],
   subMenu: [],
-  isMenuOpen: true,
+  isMenuOpen: false,
   isSubMenuOpen: false,
   setMenu: (menu) => set({ menu }),
   toggleMenu: () => set((state) => ({ isMenuOpen: !state.isMenuOpen })),

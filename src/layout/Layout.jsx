@@ -4,7 +4,7 @@ import useMenuStore from "../store/menuStore";
 import { cn } from "./../lib/utils";
 import useIsMobile from "./../hook/useIsMobile";
 import Overlay from "../components/ui/Overlay";
-import Menu from "../components/navbar/Menu";
+import NavMenu from "../components/navbar/NavMenu";
 import Submenu from "../components/navbar/Submenu";
 import { ChevronLeft } from "lucide-react";
 
@@ -24,14 +24,18 @@ function Layout() {
   return (
     <div className="flex">
       {(isMobile || isOpenSubMenu) && (
-        <Overlay isOpen={isOpenMenu || isOpenSubMenu} onClick={closeAll} />
+        <Overlay
+          isOpen={isOpenMenu || isOpenSubMenu}
+          onClick={closeAll}
+          className="z-10"
+        />
       )}
 
       {/* submenu sidebar */}
       <aside
         className={cn(
           "fixed h-screen w-[300px] trans",
-          isMobile ? "z-50" : "",
+          isMobile ? "z-50" : "z-20",
           isMobile && (isOpenSubMenu ? "translate-x-0" : "-translate-x-full"),
           !isMobile && (isOpenMenu ? "left-56" : "left-14"),
           isOpenSubMenu ? "translate-x-0" : "-translate-x-full"
@@ -44,12 +48,12 @@ function Layout() {
       <aside
         className={cn(
           "fixed h-screen left-0 top-0 w-12 text-primary bg-navbar trans",
-          isMobile ? "w-56" : "",
+          isMobile ? "w-56 z-20" : "z-30",
           !isMobile && (isOpenMenu ? "w-56" : "w-14"),
           isMobile && (isOpenMenu ? "translate-x-0" : "-translate-x-full")
         )}
       >
-        <Menu />
+        <NavMenu />
       </aside>
       <div
         className={cn(
@@ -60,7 +64,8 @@ function Layout() {
         {!isMobile && (
           <button
             onClick={toggleMenu}
-            className={cn("absolute -z-10 cursor-pointer trans")}
+            className={cn("absolute z-10 cursor-pointer trans")}
+            aria-label="Toggle menu"
           >
             <svg
               className="fill-fixed-100"
@@ -82,11 +87,15 @@ function Layout() {
                 ></path>
               </g>
             </svg>
-            <ChevronLeft className="absolute top-7 text-fixed-text" />
+            <ChevronLeft
+              className={cn(
+                "absolute top-7 text-fixed-text trans",
+                isOpenMenu ? "rotate-0" : "-rotate-180"
+              )}
+            />
           </button>
         )}
         <Outlet />
-        <div></div>
       </div>
     </div>
   );

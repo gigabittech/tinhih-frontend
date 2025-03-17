@@ -3,8 +3,9 @@ import { NavLink, useLocation } from "react-router";
 import menu from "../../data/providerNav";
 import { cn } from "../../lib/utils";
 import useMenuStore from "../../store/menuStore";
+import logoImage from "../../assets/Logo.png";
 
-function Menu() {
+function NavMenu() {
   const location = useLocation();
   const openSubMenu = useMenuStore((state) => state.openSubMenu);
   const colseSubMenu = useMenuStore((state) => state.closeSubMenu);
@@ -21,7 +22,14 @@ function Menu() {
 
   return (
     <div className="relative h-screen py-5 bg-fixed-100" onClick={colseSubMenu}>
-   
+      <div className="flex items-center space-x-5 text-fixed-text mb-4 overflow-x-hidden">
+        <img
+          src={logoImage}
+          alt="Tinhih-logo"
+          className="w-10 relative left-2.5 shrink-0"
+        />
+        <h2 className="text-2xl font-bold">Tinhih</h2>
+      </div>
 
       <nav>
         <ul className="text-red-100 overflow-x-hidden">
@@ -67,4 +75,4 @@ function Menu() {
   );
 }
 
-export default Menu;
+export default NavMenu;

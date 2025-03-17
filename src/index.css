@@ -14,6 +14,7 @@
   --color-primary-500: #ffdb00;
   --color-primary-600: #e5c500;
   --color-primary-700: #ccaf00;
+  --color-primary-800: #998300;
 
   /* theme color */
   --color-base-100: #ffffff;
@@ -28,8 +29,10 @@
   --color-context-dark: #292929;
 
   /* action */
-  --color-action-light: rgba(0, 0, 0, 0.06);
+  --color-action-lighter: rgba(0, 0, 0, 0.06);
+  --color-action-light: rgba(0, 0, 0, 0.1);
   --color-action-medium: rgba(0, 0, 0, 0.18);
+  --color-action-mediumer: rgba(0, 0, 0, 0.3);
   --color-action-dark: rgba(0, 0, 0, 0.45);
 
   /* outline */
