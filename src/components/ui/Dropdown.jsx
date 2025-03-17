@@ -1,12 +1,14 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
+import { cn } from "../../lib/utils";
 
 function Dropdown({
   trigger,
-  menu,
+  menuRenderer,
   selectedValues,
   onSelect,
   multiple = false,
+  className,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -33,26 +35,25 @@ function Dropdown({
         <div onClick={() => setIsOpen((prev) => !prev)}>{trigger}</div>
       )}
       {/* custom menu */}
-      {menu && (
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -5 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -5 }}
-              transition={{ duration: 0.2 }}
-              className="absolute left-0 mt-1 rounded-xs z-10 dropdown-menu"
-            >
-              {menu(closeMenu, selectedValues, onSelect, multiple)}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      )}
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: -5 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -5 }}
+            transition={{ duration: 0.2 }}
+            className={cn(
+              "absolute left-0 mt-1 rounded-xs z-10 dropdown-menu",
+              className
+            )}
+          >
+            {menuRenderer?.(closeMenu, selectedValues, onSelect, multiple)}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
-
-
-
-export { Dropdown };
+export default Dropdown;

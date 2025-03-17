@@ -21,6 +21,7 @@ const buttonVariants = cva(
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
         sm: "h-8 gap-1.5 px-3 has-[>svg]:px-2.5",
         lg: "h-10 px-6 has-[>svg]:px-4",
+        none: "",
       },
     },
     defaultVariants: {
@@ -30,7 +31,7 @@ const buttonVariants = cva(
   }
 );
 
-function Button({ className, variant, size, children, ...props }) {
+function Button({ className, variant, size, children, onClick, ...props }) {
   const [ripples, setRipples] = useState([]);
 
   const handleRipple = (event) => {
@@ -54,15 +55,22 @@ function Button({ className, variant, size, children, ...props }) {
         return "bg-current/15";
       case "ghost":
         return "bg-current/10";
+      case "text":
+        return "bg-current/10";
       default:
         return "bg-primary-500/50";
     }
   };
 
+  const handleClick = (event) => {
+    handleRipple(event);
+    onClick?.(event);
+  };
+
   return (
     <button
       className={cn(buttonVariants({ variant, size }), className)}
-      onClick={handleRipple}
+      onClick={handleClick}
       {...props}
     >
       {children}
