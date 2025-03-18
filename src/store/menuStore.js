@@ -7,6 +7,7 @@ const useMenuStore = create((set, get) => ({
   isSubMenuOpen: false,
   setMenu: (menu) => set({ menu }),
   toggleMenu: () => set((state) => ({ isMenuOpen: !state.isMenuOpen })),
+  openMenu: () => set({ isMenuOpen: true }),
   closeMenu: () => set({ isMenuOpen: false }),
   openSubMenu: (subOption) => {
     const isSame = get().subMenu?.id === subOption?.id;

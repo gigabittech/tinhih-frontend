@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import Button from "../components/ui/Button";
 import { X } from "lucide-react";
 import Dropdown from "../components/ui/Dropdown";
-import Drawer from "../components/ui/Drawer";
 import Input from "../components/ui/Input";
+import useMenuStore from "./../store/menuStore";
+import Spinner from "../components/ui/spinner";
+import AppLoader from "../components/global/AppLoader";
 
 function Home() {
   const options = [
@@ -16,6 +18,8 @@ function Home() {
 
   const [selceted, setSelected] = useState(options[3]);
   const [isOpen, setIsOpen] = useState(false);
+
+  const openMenu = useMenuStore((state) => state.openMenu);
 
   const handleSelect = (item) => {
     setSelected(item);
@@ -78,7 +82,8 @@ function Home() {
           </ul>
         )}
       />
-      <Button onClick={() => setIsOpen(true)}>Open</Button>
+      <Button onClick={openMenu}>Open</Button>
+      <Spinner />
       <div className="w-32">
         <Input label="Name" type="text" className="focus:ring-transparent" />
       </div>

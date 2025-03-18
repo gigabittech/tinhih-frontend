@@ -1,12 +1,12 @@
 import React, { useMemo } from "react";
 import { NavLink, useLocation } from "react-router";
-import menu from "../../data/providerNav";
 import { cn } from "../../lib/utils";
 import useMenuStore from "../../store/menuStore";
 import logoImage from "../../assets/Logo.png";
 
 function NavMenu() {
   const location = useLocation();
+  const menu = useMenuStore((state) => state.menu);
   const openSubMenu = useMenuStore((state) => state.openSubMenu);
   const colseSubMenu = useMenuStore((state) => state.closeSubMenu);
 

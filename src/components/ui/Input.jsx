@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Field, ErrorMessage } from "formik";
 import { Eye, EyeOff } from "lucide-react";
+import { cn } from "../../lib/utils";
 
 function Input({
   label,
@@ -50,13 +51,15 @@ function Input({
             id={name}
             name={name}
             type={isPassword && showPassword ? "text" : type}
-            className={`border border-outline-dark flex h-9 w-full rounded-md bg-transparent px-3 py-1 text-base md:text-sm transition focus:outline-none focus:border-primary-700 focus:ring-2 focus:ring-primary-400/30
-              ${
-                isError ? "border-error" : ""
-              } // Add red border if there's an error
-              ${Icon ? (iconPosition === "left" ? "pl-10" : "pr-10") : ""}
-              ${isPassword ? "pr-10" : ""}
-              ${className || ""}`}
+            className={cn(
+              "border border-outline-dark flex h-9 w-full rounded-md bg-transparent px-3 py-1 text-base md:text-sm transition focus:outline-none",
+              isError
+                ? "border-error"
+                : "focus:border-primary-700 focus:ring-2 focus:ring-primary-400/30",
+              Icon ? (iconPosition === "left" ? "pl-10" : "pr-10") : "",
+              isPassword ? "pr-10" : "",
+              className
+            )}
             {...props}
           />
         ) : (
@@ -66,13 +69,15 @@ function Input({
             type={isPassword && showPassword ? "text" : type}
             value={inputValue}
             onChange={handleChange}
-            className={`border border-outline-dark flex h-9 w-full rounded-md bg-transparent px-3 py-1 text-base md:text-sm transition focus:outline-none focus:border-primary-700 focus:ring-2 focus:ring-primary-400/30
-              ${
-                isError ? "border-error" : ""
-              } // Add red border if there's an error
-              ${Icon ? (iconPosition === "left" ? "pl-10" : "pr-10") : ""}
-              ${isPassword ? "pr-10" : ""}
-              ${className || ""}`}
+            className={cn(
+              "border border-outline-dark flex h-9 w-full rounded-md bg-transparent px-3 py-1 text-base md:text-sm transition focus:outline-none",
+              isError
+                ? "border-error"
+                : "focus:border-primary-700 focus:ring-2 focus:ring-primary-400/30",
+              Icon ? (iconPosition === "left" ? "pl-10" : "pr-10") : "",
+              isPassword ? "pr-10" : "",
+              className
+            )}
             {...props}
           />
         )}
@@ -105,7 +110,7 @@ function Input({
         <ErrorMessage
           name={name}
           component="p"
-          className="text-sm text-error mt-1"
+          className="text-xs text-error mt-1"
         />
       )}
     </div>
