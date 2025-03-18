@@ -44,6 +44,13 @@
   --color-shadow-100: rgba(0, 0, 0, 0.12);
   --color-shadow-200: rgba(0, 0, 0, 0.14);
   --color-shadow-300: rgba(0, 0, 0, 0.2);
+
+  /* notify colors */
+  --color-error: #f63c3c;
+  --color-error-context: #ffffff;
+
+  --color-success: #34b263;
+  --color-success-context: #ffffff;
 }
 
 body {

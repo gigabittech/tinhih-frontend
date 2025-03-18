@@ -44,7 +44,7 @@ function Dropdown({
             exit={{ opacity: 0, scale: 0.95, y: -5 }}
             transition={{ duration: 0.2 }}
             className={cn(
-              "absolute left-0 mt-1 rounded-xs z-10 dropdown-menu",
+              "absolute left-0 mt-1 rounded-xs z-10 dropdown-menu bg-base-100",
               className
             )}
           >

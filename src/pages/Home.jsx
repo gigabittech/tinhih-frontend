@@ -3,12 +3,14 @@ import Button from "../components/ui/Button";
 import { X } from "lucide-react";
 import Dropdown from "../components/ui/Dropdown";
 import Drawer from "../components/ui/Drawer";
+import Input from "../components/ui/Input";
 
 function Home() {
   const options = [
     { label: "Day", value: "1" },
     { label: "3 Days", value: "3" },
     { label: "Week", value: "7" },
+    { label: "Month", value: "30" },
     { label: "Year", value: "365" },
   ];
 
@@ -20,7 +22,7 @@ function Home() {
   };
 
   return (
-    <div className="space-x-5 mt-12 flex items-center">
+    <div className="space-x-5 space-y-5  mt-12 mx-12">
       Rahul Roy Nipon
       <Button size="lg">Home</Button>
       <Button variant="outline" size="lg">
@@ -66,9 +68,10 @@ function Home() {
                   }}
                   variant="ghost"
                   size="none"
-                  className="px-5 py-1.5 rounded-none w-full justify-start bg-transparent"
+                  className="px-5 py-1.5 font-bold rounded-none w-full justify-between gap-x-5 bg-transparent"
                 >
-                  {item?.label}
+                  <span>{item?.label}</span>
+                  <span>{item?.label[0]}</span>
                 </Button>
               </li>
             ))}
@@ -76,6 +79,9 @@ function Home() {
         )}
       />
       <Button onClick={() => setIsOpen(true)}>Open</Button>
+      <div className="w-32">
+        <Input label="Name" type="text" className="focus:ring-transparent" />
+      </div>
     </div>
   );
 }
