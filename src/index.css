@@ -59,15 +59,6 @@ body {
   color: var(--color-context-dark);
 }
 
-@layer components {
-  .auth-card {
-    @apply bg-base-200 px-[3vw] min-h-screen flex items-center justify-center;
-  }
-  .auth-card-body {
-    @apply bg-base-100 shadow-sm rounded-[5px] w-full sm:max-w-sm md:max-w-md  p-5 md:px-6 md:py-7 2xl:px-10 2xl:py-12;
-  }
-}
-
 .trans {
   @apply transition-all duration-300 ease-in-out;
 }

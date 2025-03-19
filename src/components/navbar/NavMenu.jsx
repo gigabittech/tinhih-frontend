@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { NavLink, useLocation } from "react-router";
 import { cn } from "../../lib/utils";
 import useMenuStore from "../../store/menuStore";
-import logoImage from "../../assets/Logo.png";
+import logoImage from "../../assets/auth/Logo.svg";
 
 function NavMenu() {
   const location = useLocation();

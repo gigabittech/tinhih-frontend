@@ -4,10 +4,13 @@ import { loginSchema as validationSchema } from "../../../../FormSchema/Global/a
 import Input from "../../../../components/ui/Input";
 import Button from "../../../../components/ui/Button";
 import { Link } from "react-router";
-import Logo from "../../../../assets/Logo.png";
-import bgImage from "../../../../assets/authBg.svg";
 import useUserStore from "../../../../store/userStore";
 import Spinner from "../../../../components/ui/spinner";
+import {
+  CardContainer,
+  CardBody,
+  CardDivider,
+} from "../components/CardComponent";
 
 function Login() {
   const loginHandler = useUserStore((state) => state.loginHandler);
@@ -25,15 +28,8 @@ function Login() {
   };
 
   return (
-    <div
-      className={`auth-card bg-cover bg-center bg-no-repeat`}
-      style={{ backgroundImage: `url(${bgImage})` }}
-    >
-      <main className="auth-card-body relative">
-        <div className="logo-shadow absolute -top-7 left-1/2 -translate-x-1/2 p-1 rounded-full border border-primary-500 ring-3 ring-primary-500/40">
-          <img src={Logo} alt="Tinhih Logo" className="h-14" />
-        </div>
-
+    <CardContainer>
+      <CardBody>
         <div className="mt-9 md:mt-5  text-center">
           <h4 className="text-[clamp(25px,3vw,32px)] font-bold text-context-dark leading-tight">
             Welcome back
@@ -45,13 +41,7 @@ function Login() {
 
         {/* google & Apple button */}
 
-        {/* divider start */}
-        <div className="flex items-center justify-center gap-2 mx-4 my-5">
-          <span className="flex-1 border-t border-outline-medium"></span>
-          <span className="text-context-light text-sm font-medium">OR</span>
-          <span className="flex-1 border-t border-outline-medium"></span>
-        </div>
-        {/* divider end */}
+        <CardDivider text="or" />
 
         <Formik
           validationSchema={validationSchema}
@@ -112,8 +102,8 @@ function Login() {
             Create account
           </Link>
         </p>
-      </main>
-    </div>
+      </CardBody>
+    </CardContainer>
   );
 }
 
