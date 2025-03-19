@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import updateState from "../lib/updateState";
 import axiosInstance from "../lib/axiosInstance";
-import { head } from "framer-motion/client";
 
 const API_STATE = {
+  user: false,
   login: false,
   register: false,
   logout: false,
@@ -12,19 +12,56 @@ const API_STATE = {
 const useUserStore = create((set) => ({
   isAuthenticated: false,
   user: null,
-  role: "provider",
+  role: null,
   isLoading: { ...API_STATE },
-  isEorror: { ...API_STATE },
+  isError: { ...API_STATE },
   isSuccess: { ...API_STATE },
   message: { login: "", register: "", logout: "" },
 
+  getUser: async () => {
+    const token = localStorage.getItem("auth-token");
+    if (!token) return;
+
+    updateState(set, "user", { loading: true, success: false, error: false });
+
+    try {
+      const response = await axiosInstance.get("/user", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.status === 200) {
+        set({
+          isAuthenticated: true,
+          user: response.data?.user,
+          role: response.data?.user?.role,
+        });
+
+        updateState(set, "user", {
+          loading: false,
+          success: true,
+          error: false,
+          message: "User logged in successfully",
+        });
+      }
+    } catch (error) {
+      updateState(set, "user", {
+        loading: false,
+        success: false,
+        error: true,
+        message: error?.response?.data?.message || "User not found.",
+      });
+
+      set({
+        isAuthenticated: false,
+        user: null,
+        role: null,
+      });
+    }
+  },
+
   loginHandler: async (userData) => {
-    updateState(set, "login", {
-      loading: true,
-      success: false,
-      error: false,
-      message: "",
-    });
+    updateState(set, "login", { loading: true, success: false, error: false });
+
     try {
       const response = await axiosInstance.post("/auth/login", userData);
       if (response.status === 200) {
@@ -37,33 +74,34 @@ const useUserStore = create((set) => ({
           error: false,
           message: "User logged in successfully",
         });
+
+        await useUserStore.getState().getUser(); // Proper state update
       }
     } catch (error) {
-      const errorInfo =
-        error?.response?.data?.message || "Login failed. Please try again.";
       updateState(set, "login", {
         loading: false,
         success: false,
         error: true,
-        message: errorInfo,
+        message: error?.response?.data?.message || "Login failed.",
       });
     }
   },
+
   logoutHandler: async () => {
-    updateState(set, "logout", {
-      loading: true,
-      success: false,
-      error: false,
-      message: "",
-    });
+    updateState(set, "logout", { loading: true, success: false, error: false });
 
     try {
       const token = localStorage.getItem("auth-token");
-      const response = await axiosInstance.post("/auth/logout", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axiosInstance.post(
+        "/auth/logout",
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
       if (response.status === 200) {
         localStorage.removeItem("auth-token");
+        set({ isAuthenticated: false, user: null, role: null });
+
         updateState(set, "logout", {
           loading: false,
           success: true,
@@ -72,13 +110,11 @@ const useUserStore = create((set) => ({
         });
       }
     } catch (error) {
-      const errorInfo =
-        error?.response?.data?.message || "Logout failed. Please try again.";
       updateState(set, "logout", {
         loading: false,
         success: false,
         error: true,
-        message: errorInfo,
+        message: error?.response?.data?.message || "Logout failed.",
       });
     }
   },
@@ -88,7 +124,6 @@ const useUserStore = create((set) => ({
       loading: true,
       success: false,
       error: false,
-      message: "",
     });
 
     try {
@@ -103,16 +138,15 @@ const useUserStore = create((set) => ({
           error: false,
           message: "User registered successfully",
         });
+
+        await useUserStore.getState().getUser();
       }
     } catch (error) {
-      const errorInfo =
-        error?.response?.data?.message ||
-        "Registration failed. Please try again.";
       updateState(set, "register", {
         loading: false,
         success: false,
         error: true,
-        message: errorInfo,
+        message: error?.response?.data?.message || "Registration failed.",
       });
     }
   },

@@ -1,9 +1,9 @@
 import React, { lazy, Suspense, useEffect } from "react";
-import AppLoader from "../components/global/AppLoader";
 import { Routes, Route, Navigate } from "react-router";
+import AppLoader from "../components/global/AppLoader";
 import useMenuStore from "../store/menuStore";
-
 import providerNav from "../data/providerNav";
+
 const VerifyingPrivateRoute = lazy(() =>
   import("../components/routeVerifying/VerifyingPrivateRoute")
 );
@@ -20,8 +20,8 @@ function ProviderRoutes() {
       <Routes>
         <Route element={<VerifyingPrivateRoute allowedRole="provider" />}>
           <Route index element={<Navigate to="calendar" replace />} />
-          <Route path="calendar" element={<p>Calendar</p>} />
-          <Route path="*" element={<Navigate to="/404" replace />} />
+          <Route path="dashboard" element={<p>Provider Dashboard</p>} />
+          <Route path="calendar" element={<p>Provider Calendar</p>} />
         </Route>
       </Routes>
     </Suspense>

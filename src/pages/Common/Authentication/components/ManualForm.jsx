@@ -40,10 +40,6 @@ function ManualForm({
                 type="checkbox"
                 name="termsAccepted"
                 id="termsAccepted"
-                checked={formik.values.termsAccepted}
-                onChange={(e) => {
-                  formik.setFieldValue("termsAccepted", e.target.checked);
-                }}
                 className="checkbox rounded-sm h-4 w-4 cursor-pointer focus:outline-none"
               />
 
