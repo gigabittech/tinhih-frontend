@@ -83,7 +83,39 @@ const useUserStore = create((set) => ({
     }
   },
 
-  registerHandler: async (userData) => {},
+  registerHandler: async (userData) => {
+    updateState(set, "register", {
+      loading: true,
+      success: false,
+      error: false,
+      message: "",
+    });
+
+    try {
+      const response = await axiosInstance.post("/auth/register", userData);
+      if (response.status === 200) {
+        const token = response.data?.payload?.token;
+        localStorage.setItem("auth-token", token);
+
+        updateState(set, "register", {
+          loading: false,
+          success: true,
+          error: false,
+          message: "User registered successfully",
+        });
+      }
+    } catch (error) {
+      const errorInfo =
+        error?.response?.data?.message ||
+        "Registration failed. Please try again.";
+      updateState(set, "register", {
+        loading: false,
+        success: false,
+        error: true,
+        message: errorInfo,
+      });
+    }
+  },
 }));
 
 export default useUserStore;

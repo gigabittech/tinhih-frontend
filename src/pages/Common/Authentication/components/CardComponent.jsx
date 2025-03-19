@@ -62,7 +62,7 @@ function SelectionCard({ image, alt, header, context, path }) {
       onClick={navigateHandler}
       className="overflow-hidden group/role-card bg-base-100 rounded-xl shadow-sm hover:shadow-lg md:shadow-lg md:hover:shadow-2xl cursor-pointer w-full p-5 md:w-sm md:max-w-xs lg:max-w-sm transition-shadow duration-300"
     >
-      <div className="bg-base-300 p-4 rounded-xl hidden md:flex items-center justify-center ">
+      <div className="bg-base-200 p-4 rounded-xl hidden md:flex items-center justify-center ">
         <img
           src={image}
           alt={alt}
@@ -70,8 +70,8 @@ function SelectionCard({ image, alt, header, context, path }) {
         />
       </div>
       <div className=" md:mt-5">
-        <h4 className="font-extrabold text-2xl">{header}</h4>
-        <p className="text-context-lighter mt-1 text-sm">{context}</p>
+        <h2 className="font-extrabold text-2xl">{header}</h2>
+        <h3 className="text-context-light mt-1 text-sm">{context}</h3>
         <div className="flex items-center gap-1 mt-5">
           <Button
             className="rounded-full h-10 w-[7rem] md:w-0 md:p-0 trans
@@ -79,7 +79,7 @@ function SelectionCard({ image, alt, header, context, path }) {
           >
             Get Started
           </Button>
-          <Button className="rounded-full h-10 w-10">
+          <Button aria-label="next" className="rounded-full h-10 w-10">
             <ArrowRight />
           </Button>
         </div>

@@ -7,9 +7,9 @@ function SelectRegisterRole() {
   return (
     <CardContainer>
       <main className="w-full flex flex-col items-center justify-center">
-        <h2 className="mb-5 md:mb-7 lg:mb-10 2xl:mb-12 text-center text-[clamp(25px,3vw,30px)] font-bold">
+        <h1 className="mb-5 md:mb-7 lg:mb-10 2xl:mb-12 text-center text-[clamp(25px,3vw,30px)] font-bold">
           Which describes you best?
-        </h2>
+        </h1>
 
         <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full md:w-auto">
           <SelectionCard

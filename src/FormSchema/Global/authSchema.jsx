@@ -13,6 +13,7 @@ const loginSchema = Yup.object().shape({
 });
 
 const signupSchema = Yup.object({
+  name: Yup.string().required("Name is required"),
   role: Yup.string()
     .oneOf(["client", "provider"], "Invalid role")
     .required("Role is required"),
