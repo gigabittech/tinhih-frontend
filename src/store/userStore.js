@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import updateState from "../lib/updateState";
 import axiosInstance from "../lib/axiosInstance";
+import { Notify } from "../components/ui/Toaster";
 
 const API_STATE = {
   user: false,
@@ -64,6 +65,7 @@ const useUserStore = create((set) => ({
 
     try {
       const response = await axiosInstance.post("/auth/login", userData);
+
       if (response.status === 200) {
         const token = response.data?.payload?.token;
         localStorage.setItem("auth-token", token);
@@ -75,7 +77,7 @@ const useUserStore = create((set) => ({
           message: "User logged in successfully",
         });
 
-        await useUserStore.getState().getUser(); // Proper state update
+        await useUserStore.getState().getUser();
       }
     } catch (error) {
       updateState(set, "login", {
@@ -84,6 +86,8 @@ const useUserStore = create((set) => ({
         error: true,
         message: error?.response?.data?.message || "Login failed.",
       });
+
+      Notify("error", error?.response?.data?.message || "Login failed.");
     }
   },
 

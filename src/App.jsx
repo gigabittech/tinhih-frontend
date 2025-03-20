@@ -4,6 +4,8 @@ import AppLoader from "./components/global/AppLoader";
 import useUserStore from "./store/userStore";
 import AuthRedirect from "./components/routeVerifying/AuthRedirect";
 import ProtectedRoute from "./components/routeVerifying/ProtectedRoute";
+import { toast, Toaster } from "sonner";
+import Component from "./pages/Componet";
 
 const ProviderRoutes = lazy(() => import("./routes/ProviderRoutes"));
 const ClientRoutes = lazy(() => import("./routes/ClientRoutes"));
@@ -25,6 +27,8 @@ function App() {
   return (
     <BrowserRouter>
       <Suspense fallback={<AppLoader />}>
+        <Toaster position="bottom-right" expand={true} />
+
         <Routes>
           <Route path="/" element={<ProtectedRoute />} />
 
@@ -50,6 +54,8 @@ function App() {
             <Route path="/client/*" element={<ClientRoutes />} />
             <Route path="/provider/*" element={<ProviderRoutes />} />
           </Route>
+
+          <Route path="/component" element={<Component />} />
 
           <Route path="*" element={<p>Not Found</p>} />
         </Routes>

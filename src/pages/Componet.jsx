@@ -3,11 +3,12 @@ import Button from "../components/ui/Button";
 import { X } from "lucide-react";
 import Dropdown from "../components/ui/Dropdown";
 import Input from "../components/ui/Input";
-import useMenuStore from "./../store/menuStore";
+import useMenuStore from "../store/menuStore";
 import Spinner from "../components/ui/spinner";
 import AppLoader from "../components/global/AppLoader";
+import { CustomNotify } from "../components/ui/Toaster";
 
-function Home() {
+function Component() {
   const options = [
     { label: "Day", value: "1" },
     { label: "3 Days", value: "3" },
@@ -87,8 +88,14 @@ function Home() {
       <div className="w-32">
         <Input label="Name" type="text" className="focus:ring-transparent" />
       </div>
+      <div className="flex space-x-2">
+        <CustomNotify type="success" message="Rahul Roy Nipon" />
+        <CustomNotify type="error" message="Rahul Roy Nipon" />
+        <CustomNotify message="Rahul Roy Nipon" />
+        <CustomNotify type="warning" message="Rahul Roy Nipon" />
+      </div>
     </div>
   );
 }
 
-export default Home;
+export default Component;

@@ -47,10 +47,9 @@
 
   /* notify colors */
   --color-error: #f63c3c;
-  --color-error-context: #ffffff;
-
   --color-success: #34b263;
-  --color-success-context: #ffffff;
+  --color-info: #3b82f6;
+  --color-warning: #fe5e11;
 }
 
 body {
@@ -82,4 +81,11 @@ body {
     rgba(255, 219, 0, 0.2) 0px 16px 24px 2px,
     rgba(255, 219, 0, 0.4) 0px 6px 30px 5px;
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-sonner-toast] {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
 }
