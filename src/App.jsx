@@ -4,7 +4,7 @@ import AppLoader from "./components/global/AppLoader";
 import useUserStore from "./store/userStore";
 import AuthRedirect from "./components/routeVerifying/AuthRedirect";
 import ProtectedRoute from "./components/routeVerifying/ProtectedRoute";
-import { toast, Toaster } from "sonner";
+import { Toaster } from "sonner";
 import Component from "./pages/Componet";
 
 const ProviderRoutes = lazy(() => import("./routes/ProviderRoutes"));

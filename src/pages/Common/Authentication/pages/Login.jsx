@@ -40,7 +40,6 @@ function Login() {
         </div>
 
         {/* google & Apple button */}
-
         <CardDivider text="or" />
 
         <Formik

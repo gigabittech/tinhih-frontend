@@ -6,7 +6,7 @@ function Spinner({ className }) {
   return (
     <motion.div
       className={cn(
-        "size-5 border-2 border-outline-medium border-t-primary-500 rounded-full animate-spin",
+        "size-5 shrink-0 border-2 border-outline-medium border-t-primary-500 rounded-full animate-spin",
         className
       )}
       initial={{ rotate: 0 }}

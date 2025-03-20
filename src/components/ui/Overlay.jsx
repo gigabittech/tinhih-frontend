@@ -7,7 +7,7 @@ const Overlay = ({ isOpen, onClick = null, className }) => {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className={cn("fixed inset-0 bg-black/60", className)}
+          className={cn("fixed inset-0 bg-black/65", className)}
           onClick={onClick}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

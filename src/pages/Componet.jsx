@@ -6,6 +6,13 @@ import Input from "../components/ui/Input";
 import useMenuStore from "../store/menuStore";
 import Spinner from "../components/ui/Spinner";
 import { CustomNotify } from "../components/ui/Toaster";
+import {
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from "../components/ui/Modal";
+import { MapPinPlusInside } from "lucide-react";
 
 function Component() {
   const options = [
@@ -82,7 +89,7 @@ function Component() {
           </ul>
         )}
       />
-      <Button onClick={openMenu}>Open</Button>
+      <Button onClick={() => setIsOpen(true)}>Open</Button>
       <Spinner />
       <div className="w-32">
         <Input label="Name" type="text" className="focus:ring-transparent" />
@@ -93,6 +100,15 @@ function Component() {
         <CustomNotify message="Rahul Roy Nipon" />
         <CustomNotify type="warning" message="Rahul Roy Nipon" />
       </div>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <ModalHeader
+          icon={<MapPinPlusInside />}
+          title="New Location"
+          onClose={() => setIsOpen(false)}
+        ></ModalHeader>
+        <ModalBody></ModalBody>
+        <ModalFooter></ModalFooter>
+      </Modal>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { cn } from "../../lib/utils";
 import { X } from "lucide-react";
 import Button from "./Button";
 import React from "react";
-import { nanoid } from "nanoid"; // Import nanoid for unique IDs
+import { nanoid } from "nanoid";
 
 const colors = {
   success: "--color-success",
@@ -53,7 +53,7 @@ const icons = {
 
 const CustomNotify = ({ type = "info", message, onClose }) => {
   return (
-    <div className="relative min-w-xs max-w-xs bg-base-100 overflow-hidden flex items-center rounded-md border border-outline-light shadow-lg">
+    <div className="relative  max-w-xs bg-base-100 overflow-hidden flex items-center rounded-md border border-outline-light shadow-lg">
       <div
         className="absolute inset-0 border-l-8"
         style={{ borderColor: `var(${colors[type]})` }}
@@ -75,7 +75,9 @@ const CustomNotify = ({ type = "info", message, onClose }) => {
             <X className="text-context-light" />
           </Button>
         </div>
-        <p className="font-medium text-sm text-context-light">{message}</p>
+        <p className="font-medium text-sm text-context-light pr-10">
+          {message}
+        </p>
       </div>
     </div>
   );
