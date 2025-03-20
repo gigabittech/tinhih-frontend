@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router";
 import Input from "../../../../components/ui/Input";
 import Button from "../../../../components/ui/Button";
-import Spinner from "../../../../components/ui/spinner";
+import Spinner from "../../../../components/ui/Spinner";
 
 function ManualForm({
   validationSchema,
