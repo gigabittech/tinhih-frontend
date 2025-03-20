@@ -4,8 +4,7 @@ import { X } from "lucide-react";
 import Dropdown from "../components/ui/Dropdown";
 import Input from "../components/ui/Input";
 import useMenuStore from "../store/menuStore";
-import Spinner from "../components/ui/spinner";
-import AppLoader from "../components/global/AppLoader";
+import Spinner from "../components/ui/Spinner";
 import { CustomNotify } from "../components/ui/Toaster";
 
 function Component() {

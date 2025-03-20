@@ -5,7 +5,7 @@ import Input from "../../../../components/ui/Input";
 import Button from "../../../../components/ui/Button";
 import { Link } from "react-router";
 import useUserStore from "../../../../store/userStore";
-import Spinner from "../../../../components/ui/spinner";
+import Spinner from "../../../../components/ui/Spinner";
 import {
   CardContainer,
   CardBody,
