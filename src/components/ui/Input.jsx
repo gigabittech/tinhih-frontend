@@ -52,7 +52,7 @@ function Input({
             name={name}
             type={isPassword && showPassword ? "text" : type}
             className={cn(
-              "border border-outline-dark flex h-9 w-full rounded-md bg-transparent px-3 py-1 text-base md:text-sm transition focus:outline-none",
+              "border border-outline-medium flex h-9 w-full rounded-md bg-transparent px-3 py-1 text-base md:text-sm transition focus:outline-none",
               isError
                 ? "border-error"
                 : "focus:border-primary-700 focus:ring-2 focus:ring-primary-400/30",

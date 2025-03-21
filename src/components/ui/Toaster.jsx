@@ -69,7 +69,7 @@ const CustomNotify = ({ type = "info", message, onClose }) => {
           <p className="font-bold text-context-dark capitalize">{type}</p>
           <Button
             variant="ghost"
-            className="rounded-full h-6 w-6"
+            className="rounded-full h-6 w-6 [&>svg]:size-4"
             onClick={onClose}
           >
             <X className="text-context-light" />

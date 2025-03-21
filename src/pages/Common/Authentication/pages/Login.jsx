@@ -11,6 +11,7 @@ import {
   CardBody,
   CardDivider,
 } from "../components/CardComponent";
+import GoogleAppleBtn from "../components/GoogleAppleBtn";
 
 function Login() {
   const loginHandler = useUserStore((state) => state.loginHandler);
@@ -30,7 +31,7 @@ function Login() {
   return (
     <CardContainer>
       <CardBody>
-        <div className="mt-9 md:mt-5  text-center">
+        <div className="text-center">
           <h4 className="text-[clamp(25px,3vw,32px)] font-bold text-context-dark leading-tight">
             Welcome back
           </h4>
@@ -38,6 +39,8 @@ function Login() {
             Please enter your details to sign in
           </p>
         </div>
+
+        <GoogleAppleBtn />
 
         {/* google & Apple button */}
         <CardDivider text="or" />

@@ -10,7 +10,7 @@ function CardContainer({ children, className }) {
   return (
     <div
       className={cn(
-        "bg-cover bg-center bg-no-repeat bg-base-200 px-[3vw] min-h-svh flex items-center justify-center",
+        " overflow-y-auto  bg-cover bg-center bg-no-repeat bg-base-200 px-[3vw] min-h-svh max-h-svh flex items-center justify-center",
         className
       )}
       style={{ backgroundImage: `url(${bgImage})` }}
@@ -28,7 +28,7 @@ function CardBody({ children, className }) {
         className
       )}
     >
-      <div className="logo-shadow absolute -top-7 left-1/2 -translate-x-1/2 p-1 rounded-full border border-primary-500 ring-3 ring-primary-500/40">
+      <div className="relative -top-1 md:-top-2 2xl:-top-3 flex items-center justify-center">
         <img src={Logo} alt="Tinhih Logo" className="h-14" />
       </div>
       {children}

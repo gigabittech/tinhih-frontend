@@ -80,14 +80,15 @@ const useUserStore = create((set) => ({
         await useUserStore.getState().getUser();
       }
     } catch (error) {
+      const errorInfo = error?.response?.data?.message || "Login failed.";
       updateState(set, "login", {
         loading: false,
         success: false,
         error: true,
-        message: error?.response?.data?.message || "Login failed.",
+        message: errorInfo,
       });
 
-      Notify("error", error?.response?.data?.message || "Login failed.");
+      Notify("error", errorInfo);
     }
   },
 
@@ -146,12 +147,15 @@ const useUserStore = create((set) => ({
         await useUserStore.getState().getUser();
       }
     } catch (error) {
+      const errorInfo =
+        error?.response?.data?.message || "Registration failed.";
       updateState(set, "register", {
         loading: false,
         success: false,
         error: true,
-        message: error?.response?.data?.message || "Registration failed.",
+        message: errorInfo,
       });
+      Notify("error", errorInfo);
     }
   },
 }));

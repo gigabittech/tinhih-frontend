@@ -3,6 +3,7 @@ import { CardBody, CardContainer, CardDivider } from "./CardComponent";
 import { signupSchema as validationSchema } from "../../../../FormSchema/Global/authSchema";
 import ManualForm from "./ManualForm";
 import useUserStore from "../../../../store/userStore";
+import GoogleAppleBtn from "./GoogleAppleBtn";
 
 function ClientRegister() {
   const registerHandler = useUserStore((state) => state.registerHandler);
@@ -26,6 +27,16 @@ function ClientRegister() {
   return (
     <CardContainer>
       <CardBody>
+        <div className="">
+          <h4
+            className="text-[clamp(25px,3vw,32px)] font-bold flex flex-col items-center
+          text-context-dark leading-tight"
+          >
+            <span> Manage your health </span>
+            <span> from one place</span>
+          </h4>
+        </div>
+        <GoogleAppleBtn />
         <CardDivider text="or" />
         <ManualForm
           initialValues={initialValues}

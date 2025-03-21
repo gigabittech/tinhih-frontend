@@ -49,7 +49,7 @@
   --color-error: #f63c3c;
   --color-success: #34b263;
   --color-info: #3b82f6;
-  --color-warning: #fe5e11;
+  --color-warning: #ff7729;
 }
 
 body {
@@ -88,4 +88,17 @@ body {
   box-shadow: none !important;
   border: none !important;
   padding: 0 !important;
+}
+
+@keyframes slideLeftToRight {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.slide-animation {
+  animation: slideLeftToRight 2s linear infinite;
 }

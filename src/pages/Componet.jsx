@@ -106,7 +106,7 @@ function Component() {
           title="New Location"
           onClose={() => setIsOpen(false)}
         ></ModalHeader>
-        <ModalBody></ModalBody>
+        <ModalBody>Rahul Roy Nipon</ModalBody>
         <ModalFooter></ModalFooter>
       </Modal>
     </div>
