@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import updateState from "../lib/updateState";
-import axiosInstance from "../lib/axiosInstance";
-import { Notify } from "../components/ui/Toaster";
+import updateState from "../../lib/updateState";
+import axiosInstance from "../../lib/axiosInstance";
+import { Notify } from "../../components/ui/Toaster";
 
 const API_STATE = {
   user: false,
@@ -115,12 +115,14 @@ const useUserStore = create((set) => ({
         });
       }
     } catch (error) {
+      const errorInfo = error?.response?.data?.message || "Logout failed.";
       updateState(set, "logout", {
         loading: false,
         success: false,
         error: true,
-        message: error?.response?.data?.message || "Logout failed.",
+        message: errorInfo,
       });
+      Notify("error", errorInfo);
     }
   },
 

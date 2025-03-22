@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router";
-import useUserStore from "../../store/userStore";
+import useUserStore from "../../store/global/userStore";
 
 function AuthRedirect({ children }) {
   const { isAuthenticated, role } = useUserStore();

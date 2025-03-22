@@ -1,5 +1,5 @@
 import { Navigate } from "react-router";
-import useUserStore from "../../store/userStore";
+import useUserStore from "../../store/global/userStore";
 
 function ProtectedRoute() {
   const { isAuthenticated, role } = useUserStore();

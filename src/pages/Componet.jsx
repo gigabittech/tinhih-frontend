@@ -3,7 +3,7 @@ import Button from "../components/ui/Button";
 import { X } from "lucide-react";
 import Dropdown from "../components/ui/Dropdown";
 import Input from "../components/ui/Input";
-import useMenuStore from "../store/menuStore";
+import useMenuStore from "../store/global/menuStore";
 import Spinner from "../components/ui/Spinner";
 import { CustomNotify } from "../components/ui/Toaster";
 import {
@@ -45,7 +45,7 @@ function Component() {
       <Button variant="link">Home</Button>
       <Button variant="ghost">fasd</Button>
       <Dropdown
-        trigger={<Button>New</Button>}
+        trigger={() => <Button>New</Button>}
         menuRenderer={(closeMenu) => (
           <ul className="py-1">
             {options?.map((item, index) => (
@@ -54,9 +54,8 @@ function Component() {
                   onClick={() => {
                     closeMenu();
                   }}
-                  variant="ghost"
+                  variant="option"
                   size="none"
-                  className="rounded-none w-full bg-transparent px-5 py-1.5 justify-start"
                 >
                   {item?.label}
                 </Button>
@@ -66,7 +65,7 @@ function Component() {
         )}
       />
       <Dropdown
-        trigger={<Button variant="outline">{selceted?.label}</Button>}
+        trigger={() => <Button variant="outline">{selceted?.label}</Button>}
         onSelect={handleSelect}
         menuRenderer={(closeMenu, _, onSelect) => (
           <ul className="py-1">

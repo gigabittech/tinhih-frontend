@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Outlet, Navigate } from "react-router";
-import useUserStore from "../../store/userStore";
+import useUserStore from "../../store/global/userStore";
 
 function VerifyingPrivateRoute({ allowedRole }) {
   const isAuthenticated = useUserStore((state) => state.isAuthenticated);

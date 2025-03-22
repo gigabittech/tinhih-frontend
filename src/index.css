@@ -100,5 +100,5 @@ body {
 }
 
 .slide-animation {
-  animation: slideLeftToRight 2s linear infinite;
+  animation: slideLeftToRight 2.5s linear infinite;
 }

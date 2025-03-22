@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { NavLink, useLocation } from "react-router";
 import { cn } from "../../lib/utils";
-import useMenuStore from "../../store/menuStore";
+import useMenuStore from "../../store/global/menuStore";
 import logoImage from "../../assets/auth/Logo.svg";
 
 function NavMenu() {
@@ -28,7 +28,7 @@ function NavMenu() {
           alt="Tinhih-logo"
           className="w-10 relative left-2.5 shrink-0"
         />
-        <h2 className="text-2xl font-bold">Tinhih</h2>
+        <h2 className="text-xl font-semibold">TiNHiH</h2>
       </div>
 
       <nav>

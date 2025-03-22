@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router";
-import useMenuStore from "../../store/menuStore";
+import useMenuStore from "../../store/global/menuStore";
 import { cn } from "../../lib/utils";
 import { ArrowLeftToLine, X } from "lucide-react";
 import useIsMobile from "../../hook/useIsMobile";

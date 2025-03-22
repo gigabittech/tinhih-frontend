@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router";
-import useMenuStore from "../store/menuStore";
+import useMenuStore from "../store/global/menuStore";
 import { cn } from "./../lib/utils";
 import useIsMobile from "./../hook/useIsMobile";
 import Overlay from "../components/ui/Overlay";

@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useEffect } from "react";
 import { Routes, Route, BrowserRouter } from "react-router";
 import AppLoader from "./components/global/AppLoader";
-import useUserStore from "./store/userStore";
+import useUserStore from "./store/global/userStore";
 import AuthRedirect from "./components/routeVerifying/AuthRedirect";
 import ProtectedRoute from "./components/routeVerifying/ProtectedRoute";
 import { Toaster } from "sonner";
@@ -12,7 +12,7 @@ const ClientRoutes = lazy(() => import("./routes/ClientRoutes"));
 const Layout = lazy(() => import("./layout/Layout"));
 const Login = lazy(() => import("./pages/Common/Authentication/pages/Login"));
 const Register = lazy(() =>
-  import("./pages/Common/Authentication/pages/Register")
+  import("./../src/pages/Common/Authentication/pages/Register")
 );
 
 function App() {

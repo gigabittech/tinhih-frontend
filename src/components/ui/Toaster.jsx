@@ -53,7 +53,7 @@ const icons = {
 
 const CustomNotify = ({ type = "info", message, onClose }) => {
   return (
-    <div className="relative  max-w-xs bg-base-100 overflow-hidden flex items-center rounded-md border border-outline-light shadow-lg">
+    <div className="relative  max-w-xs bg-base-100 overflow-hidden flex items-center rounded-md  shadow-lg">
       <div
         className="absolute inset-0 border-l-8"
         style={{ borderColor: `var(${colors[type]})` }}

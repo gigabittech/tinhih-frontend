@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router";
 import AppLoader from "../components/global/AppLoader";
-import useMenuStore from "../store/menuStore";
+import useMenuStore from "../store/global/menuStore";
 import providerNav from "../data/providerNav";
 
 const VerifyingPrivateRoute = lazy(() =>

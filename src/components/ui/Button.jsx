@@ -16,6 +16,8 @@ const buttonVariants = cva(
           "bg-action-light hover:bg-action-lighter focus-visible:ring-action-medium",
         link: "font-semibold",
         text: "",
+        option:
+          "w-full bg-transparent px-5 py-1.5 justify-start hover:bg-action-lighter focus-visible:ring-action-medium rounded-none",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

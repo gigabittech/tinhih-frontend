@@ -31,7 +31,7 @@ function Input({
       {label && (
         <label
           htmlFor={name}
-          className="mb-0.5 text-sm font-medium text-gray-700"
+          className="mb-0.5 text-sm font-medium text-context-medium"
         >
           {label}
         </label>
@@ -53,9 +53,7 @@ function Input({
             type={isPassword && showPassword ? "text" : type}
             className={cn(
               "border border-outline-medium flex h-9 w-full rounded-md bg-transparent px-3 py-1 text-base md:text-sm transition focus:outline-none",
-              isError
-                ? "border-error"
-                : "focus:border-primary-700 focus:ring-2 focus:ring-primary-400/30",
+              isError ? "border-error" : "focus:border-primary-700 ",
               Icon ? (iconPosition === "left" ? "pl-10" : "pr-10") : "",
               isPassword ? "pr-10" : "",
               className
@@ -73,7 +71,7 @@ function Input({
               "border border-outline-dark flex h-9 w-full rounded-md bg-transparent px-3 py-1 text-base md:text-sm transition focus:outline-none",
               isError
                 ? "border-error"
-                : "focus:border-primary-700 focus:ring-2 focus:ring-primary-400/30",
+                : "focus:border-primary-700 focus-visible::ring-2 focus-visible:ring-primary-400/30",
               Icon ? (iconPosition === "left" ? "pl-10" : "pr-10") : "",
               isPassword ? "pr-10" : "",
               className
@@ -87,7 +85,7 @@ function Input({
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="cursor-pointer absolute right-3 text-gray-500 focus:outline-none"
+            className="cursor-pointer absolute right-3 text-context-light focus:outline-none"
           >
             {showPassword ? (
               <EyeOff className="w-5 h-5" />
@@ -98,7 +96,7 @@ function Input({
         ) : (
           Icon &&
           iconPosition === "right" && (
-            <span className="absolute right-3 text-gray-500">
+            <span className="absolute right-3 text-context-light">
               <Icon className="w-5 h-5" />
             </span>
           )

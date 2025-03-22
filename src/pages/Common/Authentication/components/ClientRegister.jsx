@@ -2,7 +2,7 @@ import React from "react";
 import { CardBody, CardContainer, CardDivider } from "./CardComponent";
 import { signupSchema as validationSchema } from "../../../../FormSchema/Global/authSchema";
 import ManualForm from "./ManualForm";
-import useUserStore from "../../../../store/userStore";
+import useUserStore from "../../../../store/global/userStore";
 import GoogleAppleBtn from "./GoogleAppleBtn";
 
 function ClientRegister() {
