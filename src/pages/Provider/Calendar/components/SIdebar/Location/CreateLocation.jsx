@@ -25,8 +25,10 @@ import FormLoader from "../../../../../../components/ui/FormLoader";
 import InPersonForm from "./components/InPersonForm";
 
 const CreateLocation = ({ isOpen, onClose }) => {
-  const { getLocationTypes, createLocation, isSuccess, isLoading } =
-    useLocationStore();
+  const { getLocationTypes, createLocation } = useLocationStore();
+  const isLoading = useLocationStore((state) => state.isLoading.create);
+  const isSuccess = useLocationStore((state) => state.isSuccess.create);
+
   const [locationType, setLocationType] = useState("");
   const [locationTypePlaceholder, setLocationTypePlaceholder] = useState(
     <LocationPlaceholder />
@@ -57,7 +59,7 @@ const CreateLocation = ({ isOpen, onClose }) => {
 
   const submitHandler = async (values, { resetForm }) => {
     await createLocation(locationType, values);
-    if (isSuccess.create) {
+    if (isSuccess) {
       resetForm();
       closeHandler();
     }
@@ -159,12 +161,12 @@ const CreateLocation = ({ isOpen, onClose }) => {
                   Save
                 </Button>
               </div>
-              {isLoading.create && <FormLoader className="hidden sm:block" />}
+              {isLoading && <FormLoader className="hidden sm:block" />}
             </ModalFooter>
           </Form>
         )}
       </Formik>
-      {isLoading.create && <FormLoader className="block sm:hidden" />}
+      {isLoading && <FormLoader className="block sm:hidden" />}
     </Modal>
   );
 };
