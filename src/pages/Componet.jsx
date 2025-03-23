@@ -13,6 +13,8 @@ import {
   ModalHeader,
 } from "../components/ui/Modal";
 import { MapPinPlusInside } from "lucide-react";
+import MultiSelector from "../components/ui/MultiSelector";
+import ToggleButton from "../components/ui/ToggleButton";
 
 function Component() {
   const options = [
@@ -108,6 +110,10 @@ function Component() {
         <ModalBody>Rahul Roy Nipon</ModalBody>
         <ModalFooter></ModalFooter>
       </Modal>
+      <div className="flex gap-3 items-center">
+        <MultiSelector />
+        <ToggleButton />
+      </div>
     </div>
   );
 }

@@ -61,9 +61,12 @@ const CreateLocation = ({ isOpen, onClose }) => {
     await createLocation(locationType, values);
     if (isSuccess) {
       resetForm();
-      closeHandler();
     }
   };
+
+  useEffect(() => {
+    if (isSuccess) closeHandler();
+  }, [isSuccess]);
 
   return (
     <Modal isOpen={isOpen} onClose={closeHandler}>
@@ -101,7 +104,11 @@ const CreateLocation = ({ isOpen, onClose }) => {
                   <Dropdown
                     className="max-h-[20rem] overflow-y-auto"
                     trigger={(isOpen) => (
-                      <DropdownTrigger label="Location Type" isOpen={isOpen}>
+                      <DropdownTrigger
+                        label="Location Type"
+                        isOpen={isOpen}
+                        className="rounded-md"
+                      >
                         {locationTypePlaceholder}
                       </DropdownTrigger>
                     )}
@@ -147,7 +154,7 @@ const CreateLocation = ({ isOpen, onClose }) => {
                 <InPersonForm formik={formik} />
               )}
             </ModalBody>
-            <ModalFooter isLoading={false} className="justify-end border-none">
+            <ModalFooter className="justify-end border-none">
               <div className="w-full sm:w-auto flex flex-col-reverse sm:flex-row items-center gap-3">
                 <Button
                   type="button"

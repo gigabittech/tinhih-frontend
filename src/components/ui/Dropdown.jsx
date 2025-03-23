@@ -103,7 +103,7 @@ export function DropdownTrigger({ className, isOpen, children, label }) {
         type="button"
         variant="outline"
         className={cn(
-          " border-outline-medium px-3 py-1 w-full focus:border-primary-700 flex items-center justify-between ",
+          " border-outline-medium px-3 py-1 w-full focus:border-primary-700 flex items-center justify-between",
           className
         )}
       >
