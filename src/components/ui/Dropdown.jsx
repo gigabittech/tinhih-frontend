@@ -6,6 +6,7 @@ import Button from "./Button";
 
 function Dropdown({
   trigger,
+  btnTrigger,
   menuRenderer,
   selectedValues,
   onSelect,
@@ -59,10 +60,16 @@ function Dropdown({
   }, [isOpen]);
 
   return (
-    <div ref={dropdownRef} className="relative -top-0.5 w-full">
+    <div ref={dropdownRef} className="relative -top-0.5 ">
       {trigger && (
         <span onClick={() => setIsOpen((prev) => !prev)}>
           {trigger?.(isOpen)}
+        </span>
+      )}
+
+      {btnTrigger && (
+        <span onClick={() => setIsOpen(true)}>
+          {btnTrigger?.(isOpen, () => setIsOpen(false))}
         </span>
       )}
 

@@ -20,7 +20,7 @@ function ToggleButton({ label, formik, name }) {
       <div className="flex items-center gap-4">
         <div
           className={cn(
-            "shadow-inner h-4 w-10 relative rounded-xl cursor-pointer",
+            "shadow-inner h-3.5 w-9 relative rounded-xl cursor-pointer",
             (formik ? formik.values[name] : toggled)
               ? "bg-primary-800"
               : "bg-outline-dark"
@@ -28,16 +28,16 @@ function ToggleButton({ label, formik, name }) {
           onClick={handleToggle}
         >
           <motion.div
-            layout
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
             className={cn(
-              "absolute hover:ring-4 hover:ring-primary-500/40 border border-primary-400 bg-primary-500 top-1/2 transform -translate-y-1/2 size-6 rounded-full"
+              "absolute hover:ring-4 hover:ring-primary-500/40 border border-primary-400 bg-primary-500 top-1/2 transform -translate-y-1/2 size-5 rounded-full"
             )}
-            animate={{ x: (formik ? formik.values[name] : toggled) ? 22 : -4 }}
+            animate={{ x: (formik ? formik.values[name] : toggled) ? 18 : 0 }}
           />
         </div>
         <input
           type="checkbox"
+          id={name}
           name={name}
           checked={formik ? formik.values[name] : toggled}
           onChange={handleToggle}

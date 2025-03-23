@@ -7,7 +7,7 @@ function Input({
   label,
   name,
   type = "text",
-  icon: Icon,
+  icon,
   iconPosition = "left",
   className,
   formik,
@@ -38,10 +38,10 @@ function Input({
       )}
 
       <div className="relative flex items-center">
-        {/* Left Icon */}
-        {Icon && iconPosition === "left" && (
+        {/* Left Icon or Component */}
+        {icon && iconPosition === "left" && (
           <span className="absolute left-3 text-gray-500">
-            <Icon className="w-5 h-5" />
+            {typeof icon === "function" ? icon() : icon}
           </span>
         )}
 
@@ -54,7 +54,7 @@ function Input({
             className={cn(
               "border border-outline-medium flex h-9 w-full rounded-md bg-transparent px-3 py-1 text-base md:text-sm transition focus:outline-none",
               isError ? "border-error" : "focus:border-primary-700 ",
-              Icon ? (iconPosition === "left" ? "pl-10" : "pr-10") : "",
+              icon ? (iconPosition === "left" ? "pl-10" : "pr-10") : "",
               isPassword ? "pr-10" : "",
               className
             )}
@@ -72,7 +72,7 @@ function Input({
               isError
                 ? "border-error"
                 : "focus:border-primary-700 focus-visible::ring-2 focus-visible:ring-primary-400/30",
-              Icon ? (iconPosition === "left" ? "pl-10" : "pr-10") : "",
+              icon ? (iconPosition === "left" ? "pl-10" : "pr-10") : "",
               isPassword ? "pr-10" : "",
               className
             )}
@@ -80,7 +80,7 @@ function Input({
           />
         )}
 
-        {/* Right Icon (Password Toggle or Regular Icon) */}
+        {/* Right Icon (Password Toggle or Custom Component) */}
         {isPassword ? (
           <button
             type="button"
@@ -94,10 +94,10 @@ function Input({
             )}
           </button>
         ) : (
-          Icon &&
+          icon &&
           iconPosition === "right" && (
-            <span className="absolute right-3 text-context-light">
-              <Icon className="w-5 h-5" />
+            <span className="absolute right-3  text-context-light">
+              {typeof icon === "function" ? icon() : icon}
             </span>
           )
         )}

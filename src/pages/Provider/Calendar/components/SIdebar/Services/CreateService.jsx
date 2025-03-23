@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalBody,
@@ -7,33 +7,52 @@ import {
 } from "../../../../../../components/ui/Modal";
 import { Form, Formik } from "formik";
 import Button from "../../../../../../components/ui/Button";
-import validationSchema from "../../../../../../FormSchema/Provider/createService";
+import { createServiceSchema as validationSchema } from "../../../../../../FormSchema/Provider/createService";
+import Input from "../../../../../../components/ui/Input";
+import { Plus, BookText } from "lucide-react";
+import Textarea from "../../../../../../components/ui/Textarea";
+import useUserStore from "./../../../../../../store/global/userStore";
+import ServiceTogggler from "./components/ServiceTogggler";
+import GroupEventToggler from "./components/GroupEventToggler";
+import currencies from "../../../../../../data/Currencies";
 
 function CreateService({ isOpen, onClose }) {
+  const [isDescription, setIsDescription] = useState(false);
+  const user = useUserStore((state) => state.user);
+
   const initialValues = {
-    user_id: "",
+    user_id: user?.id,
     service_name: "",
     display_name: "",
     code: "",
-    duration: "",
-    price: "",
+    duration: 0,
+    price: 0,
     description: "",
-    group_event: "",
+    group_event: false,
     max_attendees: "",
-    taxable: "",
-    bookable_online: "",
-    allow_new_clients: "",
+    taxable: true,
+    bookable_online: true,
+    allow_new_clients: true,
     team_members: "",
     locations: "",
   };
 
   const closeHandler = () => {
+    setIsDescription(false);
     onClose();
+  };
+
+  const submitHandler = (values) => {
+    console.log(values);
   };
 
   return (
     <Modal isOpen={isOpen} onClose={closeHandler}>
-      <Formik validationSchema={validationSchema} initialValues={initialValues}>
+      <Formik
+        validationSchema={validationSchema}
+        initialValues={initialValues}
+        onSubmit={submitHandler}
+      >
         {(formik) => (
           <Form>
             <ModalHeader
@@ -49,7 +68,115 @@ function CreateService({ isOpen, onClose }) {
                 </svg>
               }
             />
-            <ModalBody></ModalBody>
+            <ModalBody className="flex flex-col gap-3 mt-5 sm:max-h-[65vh] overflow-y-auto">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Input
+                  label="Service Name"
+                  name="service_name"
+                  formik={formik}
+                />
+                <Input
+                  label="Display Name"
+                  name="display_name"
+                  formik={formik}
+                />
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Input label="Code" name="code" formik={formik} />
+                <Input
+                  label="Duration"
+                  name="duration"
+                  type="number"
+                  icon={<p className="">mins</p>}
+                  iconPosition="right"
+                  formik={formik}
+                  className="pr-14"
+                />
+              </div>
+
+              <Input
+                label="Price"
+                name="price"
+                type="number"
+                formik={formik}
+                icon={
+                  <p className="">
+                    {user?.country
+                      ? currencies[user?.country]
+                      : currencies["United States"]}
+                  </p>
+                }
+                className="sm:w-1/2 pl-14"
+              />
+
+              {/* descriptions start */}
+
+              {isDescription ? (
+                <Textarea
+                  label="Description"
+                  name="description"
+                  className="resize-none"
+                  formik={formik}
+                />
+              ) : (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="text-primary-800 font-bold self-start bg-transparent p-2"
+                  onClick={() => setIsDescription((prev) => !prev)}
+                >
+                  <Plus size={20} className="relative -top-px" />
+                  <span>Add description</span>
+                </Button>
+              )}
+
+              {/* descriptions end */}
+
+              {/* missing field assign member*/}
+
+              <div className="flex flex-col gap-5 my-2">
+                <GroupEventToggler formik={formik} />
+
+                <ServiceTogggler
+                  title="Taxable"
+                  description="Includes sales tax on generated invoices"
+                  name="taxable"
+                  formik={formik}
+                />
+              </div>
+
+              <div className="flex flex-col gap-5 border-y border-outline-medium my-2 py-5">
+                <div className="flex items-center gap-2 text-context-dark">
+                  <BookText size={22} />
+                  <p className="text-base font-bold">Online bookings</p>
+                </div>
+
+                <p className="text-sm text-context-light">
+                  Choose when online bookings can be made and by which type of
+                  clients
+                </p>
+
+                <div className="flex flex-col gap-5 mb-2">
+                  <ServiceTogggler
+                    title="Bookable online"
+                    description="Clients can book this service online"
+                    name="bookable_online"
+                    formik={formik}
+                  />
+
+                  {formik.values.bookable_online && (
+                    <ServiceTogggler
+                      title="Allow for new clients"
+                      description="New clients can book this service"
+                      name="allow_new_clients"
+                      formik={formik}
+                    />
+                  )}
+                </div>
+              </div>
+            </ModalBody>
             <ModalFooter className="justify-end">
               <div className="w-full sm:w-auto flex flex-col-reverse sm:flex-row items-center gap-3">
                 <Button

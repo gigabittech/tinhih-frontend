@@ -98,7 +98,7 @@ const CreateLocation = ({ isOpen, onClose }) => {
               }
               onClose={closeHandler}
             />
-            <ModalBody className="flex flex-col gap-3">
+            <ModalBody className="flex flex-col gap-3  my-3">
               <div className="flex gap-3 flex-col sm:flex-row">
                 <div className="w-full">
                   <Dropdown
