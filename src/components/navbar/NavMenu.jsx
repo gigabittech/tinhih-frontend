@@ -28,11 +28,11 @@ function NavMenu() {
           alt="Tinhih-logo"
           className="w-10 relative left-2.5 shrink-0"
         />
-        <h2 className="text-xl font-semibold">TiNHiH</h2>
+        <h2 className="text-xl font-semibold text-nowrap">TiNHiH Portal</h2>
       </div>
 
       <nav>
-        <ul className="text-red-100 overflow-x-hidden">
+        <ul className="overflow-x-hidden">
           {menu?.map((item, index) => (
             <li key={index}>
               {item?.subMenu ? (

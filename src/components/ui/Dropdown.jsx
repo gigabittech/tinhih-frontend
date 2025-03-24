@@ -20,16 +20,32 @@ function Dropdown({
 
   const closeMenu = () => setIsOpen(false);
 
+  const toggleDropdown = (e) => {
+    e.stopPropagation();
+    updatePosition();
+    setIsOpen((prev) => !prev);
+  };
+
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target) &&
+        menuRef.current &&
+        !menuRef.current.contains(e.target)
+      ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [isOpen]);
 
   const updatePosition = () => {
     if (dropdownRef.current && menuRef.current) {
@@ -38,11 +54,9 @@ function Dropdown({
       const spaceBelow = window.innerHeight - dropdownRect.bottom;
       const spaceAbove = dropdownRect.top;
 
-      if (spaceBelow < menuHeight && spaceAbove > menuHeight) {
-        setPosition("top");
-      } else {
-        setPosition("bottom");
-      }
+      setPosition(
+        spaceBelow < menuHeight && spaceAbove > menuHeight ? "top" : "bottom"
+      );
     }
   };
 
@@ -52,7 +66,6 @@ function Dropdown({
       window.addEventListener("scroll", updatePosition, { passive: true });
       window.addEventListener("resize", updatePosition);
     }
-
     return () => {
       window.removeEventListener("scroll", updatePosition);
       window.removeEventListener("resize", updatePosition);
@@ -60,17 +73,10 @@ function Dropdown({
   }, [isOpen]);
 
   return (
-    <div ref={dropdownRef} className="relative -top-0.5 ">
-      {trigger && (
-        <span onClick={() => setIsOpen((prev) => !prev)}>
-          {trigger?.(isOpen)}
-        </span>
-      )}
-
+    <div ref={dropdownRef} className="relative">
+      {trigger && <span onClick={toggleDropdown}>{trigger(isOpen)}</span>}
       {btnTrigger && (
-        <span onClick={() => setIsOpen(true)}>
-          {btnTrigger?.(isOpen, () => setIsOpen(false))}
-        </span>
+        <span onClick={toggleDropdown}>{btnTrigger(isOpen, closeMenu)}</span>
       )}
 
       <AnimatePresence>
@@ -84,7 +90,6 @@ function Dropdown({
             className={cn(
               "absolute z-10 dropdown-menu bg-base-100 rounded-xs overflow-y-auto w-full",
               position === "bottom" ? "top-full mt-1" : "bottom-full mb-1",
-
               className
             )}
           >
@@ -110,7 +115,7 @@ export function DropdownTrigger({ className, isOpen, children, label }) {
         type="button"
         variant="outline"
         className={cn(
-          " border-outline-medium px-3 py-1 w-full focus:border-primary-700 flex items-center justify-between",
+          "border-outline-medium px-3 py-1 w-full focus:border-primary-700 flex items-center justify-between",
           className
         )}
       >

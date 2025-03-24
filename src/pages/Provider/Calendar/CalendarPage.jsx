@@ -1,21 +1,19 @@
 import React, { useState } from "react";
+import CalendarHeader from "./components/Header/CalendarHeader";
 import Button from "../../../components/ui/Button";
-import CreateLocation from "./components/SIdebar/Location/CreateLocation";
-import CreateService from "./components/SIdebar/Services/CreateService";
+import CreateNewClient from "./components/SIdebar/NewClient/CreateNewClient";
+import Sidebar from "./components/SIdebar/Sidebar";
 
 function CalendarPage() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenService, setIsOpenService] = useState(false);
 
   return (
-    <div className="flex gap-3 items-center justify-center h-svh">
-      <Button onClick={() => setIsOpen(true)}>Create Locations</Button>
-      <Button onClick={() => setIsOpenService(true)}>Create Services</Button>
-      <CreateLocation isOpen={isOpen} onClose={() => setIsOpen(false)} />
-      <CreateService
-        isOpen={isOpenService}
-        onClose={() => setIsOpenService(false)}
-      />
+    <div className="flex flex-col">
+      <CalendarHeader />
+
+      <Button onClick={() => setIsOpen(true)}>Add Client</Button>
+      <CreateNewClient isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <Sidebar />
     </div>
   );
 }
