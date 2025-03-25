@@ -7,6 +7,7 @@ import Button from "./Button";
 function Dropdown({
   trigger,
   btnTrigger,
+  inputTrigger,
   menuRenderer,
   selectedValues,
   onSelect,
@@ -74,9 +75,15 @@ function Dropdown({
 
   return (
     <div ref={dropdownRef} className="relative">
-      {trigger && <span onClick={toggleDropdown}>{trigger(isOpen)}</span>}
+      {trigger && <span onClick={toggleDropdown}>{trigger?.(isOpen)}</span>}
       {btnTrigger && (
-        <span onClick={toggleDropdown}>{btnTrigger(isOpen, closeMenu)}</span>
+        <span onClick={toggleDropdown}>{btnTrigger?.(isOpen, closeMenu)}</span>
+      )}
+
+      {inputTrigger && (
+        <span onClick={() => setIsOpen(true)}>
+          {inputTrigger?.(isOpen, closeMenu)}
+        </span>
       )}
 
       <AnimatePresence>

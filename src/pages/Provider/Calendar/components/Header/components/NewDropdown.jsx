@@ -2,10 +2,13 @@ import React from "react";
 import Dropdown from "../../../../../../components/ui/Dropdown";
 import Button from "../../../../../../components/ui/Button";
 import { Plus } from "lucide-react";
+import useCalendarPage from "../../../../../../FormSchema/Provider/calendarPage";
 
 function NewDropdown() {
+  const { openCalendarSideBar, closeCalendarSideBar } = useCalendarPage();
+
   const options = [
-    { label: "Appointment" },
+    { label: "Appointment", onClick: openCalendarSideBar },
     { label: "Task" },
     { label: "Reminder" },
     { label: "Meeting" },
@@ -17,7 +20,7 @@ function NewDropdown() {
       <Dropdown
         className="w-[7.5rem] right-0"
         trigger={() => (
-          <Button className="font-bold gap-1">
+          <Button size="header" className="font-bold gap-1">
             <Plus size={18} className="relative -top-px" />
             <span>New</span>
           </Button>
@@ -29,6 +32,7 @@ function NewDropdown() {
                 <Button
                   onClick={() => {
                     closeMenu();
+                    item?.onClick();
                   }}
                   variant="ghost"
                   size="none"

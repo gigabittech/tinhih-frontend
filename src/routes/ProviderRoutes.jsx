@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router";
 import AppLoader from "../components/global/AppLoader";
 import useMenuStore from "../store/global/menuStore";
 import providerNav from "../data/providerNav";
+import ProviderLayout from "../layout/ProviderLayout";
 
 const VerifyingPrivateRoute = lazy(() =>
   import("../components/routeVerifying/VerifyingPrivateRoute")
@@ -22,9 +23,11 @@ function ProviderRoutes() {
     <Suspense fallback={<AppLoader />}>
       <Routes>
         <Route element={<VerifyingPrivateRoute allowedRole="provider" />}>
-          <Route index element={<Navigate to="calendar" replace />} />
-          <Route path="dashboard" element={<p>Provider Dashboard</p>} />
-          <Route path="calendar" element={<CalendarPage />} />
+          <Route element={<ProviderLayout />}>
+            <Route index element={<Navigate to="calendar" replace />} />
+            <Route path="dashboard" element={<p>Provider Dashboard</p>} />
+            <Route path="calendar" element={<CalendarPage />} />
+          </Route>
         </Route>
       </Routes>
     </Suspense>

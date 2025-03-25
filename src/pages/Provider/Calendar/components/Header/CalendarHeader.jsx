@@ -10,7 +10,7 @@ import TodayDuration from "./components/TodayDuration";
 
 function CalendarHeader() {
   return (
-    <div className="py-1 px-5 lg:pl-12 lg:pr-10 flex justify-between">
+    <div className="h-[4rem] py-1 px-5 lg:pl-12 lg:pr-10 flex justify-between">
       <div className="flex items-center gap-1.5 md:gap-3">
         <TodayDuration />
 
@@ -21,13 +21,14 @@ function CalendarHeader() {
 
       <div className="flex items-center gap-1.5 md:gap-3">
         <GridListButton className="md:hidden" />
-        <Button variant="outline" className="hidden lg:flex">
+        <Button variant="outline" size="header" className="hidden lg:flex">
           <Link2 size={18} />
           <span>Booking</span>
         </Button>
         <NewDropdown />
         <Button
           variant="outline"
+          size="header"
           className="hidden md:flex items-center justify-center"
         >
           <svg

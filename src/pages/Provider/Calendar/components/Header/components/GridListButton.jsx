@@ -8,15 +8,17 @@ function GridListButton({ className }) {
   return (
     <div className={cn(className)}>
       <Button
+        size="header"
         variant={isGrid ? "default" : "outline"}
-        className="rounded-r-none h-9 p-2 has-[>svg]:px-1.5"
+        className="rounded-r-none px-1"
         onClick={() => setIsGrid(true)}
       >
         <LayoutGrid />
       </Button>
       <Button
+        size="header"
         variant={isGrid ? "outline" : "default"}
-        className="rounded-l-none h-9 p-2 has-[>svg]:px-1.5"
+        className="rounded-l-none px-1"
         onClick={() => setIsGrid(false)}
       >
         <List />

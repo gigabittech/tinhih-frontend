@@ -1,12 +1,22 @@
 import React from "react";
 import Button from "../../../../../../components/ui/Button";
 import DurationDropdown from "./DurationDropdown";
+import { useCalendarStore } from "../../../../../../FormSchema/Provider/calendarStore";
 
 function TodayDuration() {
+  const { goToToday } = useCalendarStore();
+
   return (
-    <Button variant="outline" className="overflow-visible">
+    <Button
+      variant="outline"
+      size="header"
+      onClick={goToToday}
+      className="overflow-visible sm:overflow-hidden"
+    >
       <span>Today</span>
-      <DurationDropdown className="-left-16 top-7" />
+      <span className="block sm:hidden">
+        <DurationDropdown className="-left-16 top-7" />
+      </span>
     </Button>
   );
 }

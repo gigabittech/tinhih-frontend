@@ -15,6 +15,7 @@ import {
 import { MapPinPlusInside } from "lucide-react";
 import MultiSelector from "../components/ui/MultiSelector";
 import ToggleButton from "../components/ui/ToggleButton";
+import AppointmentInput from "./Provider/Calendar/components/SIdebar/Appointment/components/AppointmentInput";
 
 function Component() {
   const options = [
@@ -113,6 +114,7 @@ function Component() {
       <div className="flex gap-3 items-center">
         <MultiSelector />
         <ToggleButton />
+        <AppointmentInput />
       </div>
     </div>
   );

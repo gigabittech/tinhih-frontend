@@ -24,7 +24,7 @@ function SettingDropdown() {
     <Dropdown
       className="w-[11rem] right-0"
       trigger={() => (
-        <Button variant="ghost" className="has-[>svg]:px-2">
+        <Button variant="ghost" size="header" className="has-[>svg]:px-2">
           <Settings className="text-context-medium" />
         </Button>
       )}

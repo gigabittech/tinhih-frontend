@@ -64,7 +64,7 @@ function Layout() {
         {!isMobile && (
           <button
             onClick={toggleMenu}
-            className={cn("absolute z-10 cursor-pointer trans")}
+            className={cn("absolute z-10 cursor-pointer trans ")}
             aria-label="Toggle menu"
           >
             <svg

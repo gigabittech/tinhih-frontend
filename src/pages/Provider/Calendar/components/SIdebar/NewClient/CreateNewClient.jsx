@@ -6,9 +6,10 @@ import {
   ModalHeader,
 } from "../../../../../../components/ui/Modal";
 import { createNewClientSchema as validationSchema } from "../../../../../../FormSchema/Provider/createNewClient";
-import { ErrorMessage, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import Button from "../../../../../../components/ui/Button";
 import Input from "../../../../../../components/ui/Input";
+import { UserRoundPlus } from "lucide-react";
 
 function CreateNewClient({ isOpen, onClose }) {
   const initialValues = {
@@ -38,7 +39,7 @@ function CreateNewClient({ isOpen, onClose }) {
         {(formilk) => (
           <Form>
             <ModalHeader
-              icon={<></>}
+              icon={<UserRoundPlus className="text-context-light size-6" />}
               title="New client"
               onClose={closeHandler}
             />

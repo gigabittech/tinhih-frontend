@@ -24,7 +24,7 @@ function DurationDropdown({ isFull = false, className }) {
         onSelect={handleSelect}
         trigger={(isOpen) => {
           return isFull ? (
-            <Button variant="outline">
+            <Button size="header" variant="outline">
               <span>{selected?.label}</span>
               <ChevronDown
                 size={18}

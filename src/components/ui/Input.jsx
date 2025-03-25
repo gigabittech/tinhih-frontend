@@ -13,6 +13,7 @@ function Input({
   formik,
   value,
   onChange,
+  error,
   ...props
 }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -23,7 +24,8 @@ function Input({
   const handleChange = formik ? formik.handleChange : onChange;
 
   // Check if there's an error and if the field is touched
-  const isError = formik && formik.errors[name] && formik.touched[name];
+  const isError =
+    (formik && formik.errors[name] && formik.touched[name]) || error;
 
   return (
     <div className="flex flex-col w-full">
