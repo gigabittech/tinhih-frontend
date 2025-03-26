@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { SideModal } from "../../../../../components/ui/SideModal";
 import useCalendarPage from "../../../../../FormSchema/Provider/calendarPage";
+import CreateAppointment from "./Appointment/CreateAppointment";
 
 function Sidebar() {
   const { isOpenCalendarSideBar, closeCalendarSideBar } = useCalendarPage();
 
   return (
     <SideModal isOpen={isOpenCalendarSideBar} onClose={closeCalendarSideBar}>
-      <div>
-        <header>1</header>
-        <main>2</main>
-        <footer>3</footer>
+      <div className="px-7 py-5">
+        <CreateAppointment />
       </div>
     </SideModal>
   );

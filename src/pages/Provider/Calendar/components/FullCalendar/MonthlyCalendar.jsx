@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "../../../../../lib/utils";
 
-function MonthlyCalendar({ dateSlots = [] }) {
+function MonthlyCalendar({ dateSlots = [], selectedDate }) {
   return (
     <section className="h-full">
       {/* Calendar Header */}
@@ -20,6 +20,8 @@ function MonthlyCalendar({ dateSlots = [] }) {
       <div className="grid grid-cols-7 text-center h-[95%] border-collapse">
         {dateSlots?.map(({ date, currentMonth }, index) => {
           const isToday = date.toDateString() === new Date().toDateString();
+          const isSelected =
+            date.toDateString() === selectedDate.toDateString();
 
           return (
             <div
@@ -27,10 +29,18 @@ function MonthlyCalendar({ dateSlots = [] }) {
               className={cn(
                 "p-2 text-[13px] border-t border-r border-outline-light flex items-start justify-end text-base-content",
                 currentMonth ? "" : "bg-action-lighter text-context-lighter",
-                isToday ? "font-extrabold text-sm text-secondary" : ""
+                isToday ? "font-extrabold text-sm text-primary-700" : "",
+                isSelected ? "text-primary-700 font-extrabold" : ""
               )}
             >
-              {date.getDate()}
+              <span
+                className={cn(
+                  isSelected && "border p-1 rounded-full size-7 shrink-0"
+                )}
+              >
+                {" "}
+                {date.getDate()}
+              </span>
             </div>
           );
         })}

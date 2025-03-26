@@ -7,7 +7,7 @@ import Button from "./Button";
 function Modal({ isOpen, onClose, children, className }) {
   return (
     isOpen && (
-      <div className="z-[200] h-svh w-svw fixed top-0 left-0 flex items-center justify-center">
+      <div className="z-[400] h-svh w-svw fixed top-0 left-0 flex items-center justify-center">
         <Overlay isOpen={true} onClick={onClose} />
 
         <div

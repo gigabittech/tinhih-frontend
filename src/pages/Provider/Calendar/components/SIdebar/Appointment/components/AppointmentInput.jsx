@@ -1,52 +1,45 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Dropdown from "../../../../../../../components/ui/Dropdown";
 import Input from "./../../../../../../../components/ui/Input";
 import { ChevronDown } from "lucide-react";
 import { cn } from "../../../../../../../lib/utils";
-import Button from "../../../../../../../components/ui/Button";
 
-function AppointmentInput() {
-  const clients = [
-    {
-      name: "Alice Johnson",
-      avatar: "https://randomuser.me/api/portraits/women/1.jpg",
-    },
-    {
-      name: "Bob Smith",
-      avatar: "https://randomuser.me/api/portraits/men/2.jpg",
-    },
-    {
-      name: "Charlie Brown",
-      avatar: "https://randomuser.me/api/portraits/men/3.jpg",
-    },
-    {
-      name: "Diana Prince",
-      avatar: "https://randomuser.me/api/portraits/women/4.jpg",
-    },
-    {
-      name: "Ethan Hunt",
-      avatar: "https://randomuser.me/api/portraits/men/5.jpg",
-    },
-    {
-      name: "Fiona Gallagher",
-      avatar: "https://randomuser.me/api/portraits/women/6.jpg",
-    },
-    {
-      name: "George Miller",
-      avatar: "https://randomuser.me/api/portraits/men/7.jpg",
-    },
-  ];
-
+function AppointmentInput({
+  options = [],
+  selectedValues = [],
+  onChange,
+  label,
+  labelKey = "name",
+  valueKey = "id",
+  MenuItemComponent,
+  NewButtonComponent,
+}) {
   const [searchItem, setSearchItem] = useState("");
+
+  const filteredOptions = useMemo(() => {
+    return searchItem
+      ? options.filter((item) =>
+          item[labelKey]?.toLowerCase()?.includes(searchItem?.toLowerCase())
+        )
+      : options;
+  }, [searchItem, options]);
+
+  const selectHandler = (item) => {
+    const newSelected = selectedValues.includes(item[valueKey])
+      ? selectedValues.filter((id) => id !== item[valueKey])
+      : [...selectedValues, item[valueKey]];
+    onChange(newSelected);
+  };
 
   return (
     <Dropdown
-      className="max-h-[10rem]"
       inputTrigger={(isOpen) => (
         <Input
+          label={label}
           value={searchItem}
           onChange={(e) => setSearchItem(e.target.value)}
           iconPosition="right"
+          className="rounded-sm"
           icon={
             <ChevronDown
               className={cn(
@@ -58,15 +51,41 @@ function AppointmentInput() {
         />
       )}
       menuRenderer={() => (
-        <ul className="py-2">
-          {clients?.map((item, index) => (
-            <li key={index}>
-              <Button variant="option" type="button">
-                {item?.name}
-              </Button>
-            </li>
-          ))}
-        </ul>
+        <div>
+          <ul className="py-2 max-h-[10rem] overflow-y-auto">
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((item) => (
+                <li key={item[valueKey]}>
+                  {MenuItemComponent ? (
+                    <MenuItemComponent
+                      item={item}
+                      isSelected={selectedValues.includes(item[valueKey])}
+                      onSelect={() => selectHandler(item)}
+                    />
+                  ) : (
+                    <div
+                      className={cn(
+                        "transition-all cursor-pointer px-4 py-1.5 text-sm",
+                        selectedValues.includes(item[valueKey])
+                          ? "bg-primary-500/50 "
+                          : ""
+                      )}
+                      onClick={() => selectHandler(item)}
+                    >
+                      {item[labelKey]}
+                    </div>
+                  )}
+                </li>
+              ))
+            ) : (
+              <li className="py-1 text-center text-context-lighter">
+                No options match
+              </li>
+            )}
+          </ul>
+
+          {NewButtonComponent && <NewButtonComponent />}
+        </div>
       )}
     />
   );

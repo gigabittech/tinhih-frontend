@@ -5,6 +5,21 @@ const useCalendarPage = create((set) => ({
   sidebarType: "",
   setMeetingDate: new Date(),
 
+  // add new client
+  isClientCreate: false,
+  openCreateClient: () => set({ isClientCreate: true }),
+  closeCreateClient: () => set({ isClientCreate: false }),
+
+  // add new service
+  isServiceCreate: false,
+  openCreateService: () => set({ isServiceCreate: true }),
+  closeCreateService: () => set({ isServiceCreate: false }),
+
+  //add new location
+  isLocationCreate: false,
+  openCreateLocation: () => set({ isLocationCreate: true }),
+  closeCreateLocation: () => set({ isLocationCreate: false }),
+
   openCalendarSideBar: (type) =>
     set({ isOpenCalendarSideBar: true, sidebarType: type }),
   closeCalendarSideBar: () => set({ isOpenCalendarSideBar: false }),
