@@ -6,6 +6,7 @@ import AuthRedirect from "./components/routeVerifying/AuthRedirect";
 import ProtectedRoute from "./components/routeVerifying/ProtectedRoute";
 import { Toaster } from "sonner";
 import Component from "./pages/Componet";
+import NotFoundRoute from "./pages/NotFoundRoute";
 
 const ProviderRoutes = lazy(() => import("./routes/ProviderRoutes"));
 const ClientRoutes = lazy(() => import("./routes/ClientRoutes"));
@@ -57,7 +58,7 @@ function App() {
 
           <Route path="/component" element={<Component />} />
 
-          <Route path="*" element={<p>Not Found</p>} />
+          <Route path="*" element={<NotFoundRoute />} />
         </Routes>
       </Suspense>
     </BrowserRouter>
