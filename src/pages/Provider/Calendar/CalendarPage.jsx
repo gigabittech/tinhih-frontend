@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import CalendarHeader from "./components/Header/CalendarHeader";
 import { useCalendarStore } from "../../../FormSchema/Provider/calendarStore";
 import ShortCalendar, {
@@ -34,7 +34,7 @@ function CalendarPage() {
   );
 
   return (
-    <div className=" flex flex-col h-full">
+    <div className=" flex flex-col h-screen">
       <CalendarHeader />
       <div className="flex gap-3 h-full md:pl-5 border-t border-outline-medium">
         <section className="hidden md:block md:w-[17rem] pt-3">

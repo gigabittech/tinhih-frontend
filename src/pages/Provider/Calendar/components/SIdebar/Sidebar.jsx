@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { SideModal } from "../../../../../components/ui/SideModal";
 import useCalendarPage from "../../../../../FormSchema/Provider/calendarPage";
 import CreateAppointment from "./Appointment/CreateAppointment";
