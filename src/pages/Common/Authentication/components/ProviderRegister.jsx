@@ -11,7 +11,6 @@ function ProviderRegister() {
   const isSuccess = useUserStore((state) => state.isSuccess.register);
 
   const initialValues = {
-    name: "",
     email: "",
     password: "",
     role: "provider",

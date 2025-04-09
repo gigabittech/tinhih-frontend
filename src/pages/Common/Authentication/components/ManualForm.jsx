@@ -19,7 +19,6 @@ function ManualForm({
     >
       {(formik) => (
         <Form className="space-y-3.5">
-          <Input type="name" name="name" placeholder="Name" formik={formik} />
           <Input
             type="email"
             name="email"
