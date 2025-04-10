@@ -27,4 +27,5 @@ jobs:
           port: ${{ secrets.DO_PORT }}
           key: ${{ secrets.DO_SSH_KEY }}
           source: "dist/*"
+          strip_components: 1
           target: "/var/www/tinhih.com"
