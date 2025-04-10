@@ -26,5 +26,5 @@ jobs:
           username: ${{ secrets.DO_USER }}
           port: ${{ secrets.DO_PORT }}
           key: ${{ secrets.DO_SSH_KEY }}
-          source: "build/*"
+          source: "dist/*"
           target: "/var/www/tinhih.com"
