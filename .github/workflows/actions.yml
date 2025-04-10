@@ -26,17 +26,6 @@ jobs:
           username: ${{ secrets.DO_USER }}
           port: ${{ secrets.DO_PORT }}
           key: ${{ secrets.DO_SSH_KEY }}
-          source: "dist/*"
+          source: "dist/"
           strip_components: 1
           target: "/var/www/tinhih.com"
-
-      - name: Remove dist folder from the server
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.DO_HOST }}
-          username: ${{ secrets.DO_USER }}
-          port: ${{ secrets.DO_PORT }}
-          key: ${{ secrets.DO_SSH_KEY }}
-          script: |
-            rm -rf /var/www/tinhih.com/dist
-            echo "✅ dist folder removed successfully!"
