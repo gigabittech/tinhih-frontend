@@ -2,7 +2,7 @@ import React from "react";
 import Overlay from "./Overlay";
 import { cn } from "./../../lib/utils";
 
-function SideModal({ isOpen, onClose, children, className }) {
+function SideModal({ isOpen, onClose, children}) {
   return (
     <>
       <Overlay isOpen={isOpen} onClick={onClose} className="z-[200]" />
