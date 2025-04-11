@@ -1,25 +1,46 @@
-import { createBrowserRouter } from "react-router";
-import Login from "../pages/Common/Authentication/pages/Login";
-import NotFoundRoute from "../pages/NotFoundRoute";
-import Register from "../pages/Common/Authentication/pages/Register";
-import CalendarPage from "../pages/Provider/Calendar/CalendarPage";
-import Layout from "../layout/Layout";
+import { createBrowserRouter, Navigate } from "react-router";
+import { lazy } from "react";
+
+const Login = lazy(() => import("../pages/Common/Authentication/pages/Login"));
+const Register = lazy(() => import("../pages/Common/Authentication/pages/Register"));
+const CalendarPage = lazy(() => import("../pages/Provider/Calendar/CalendarPage"));
+const Layout = lazy(() => import("../layout/Layout"));
+const NotFoundRoute = lazy(() => import("../pages/NotFoundRoute"));
+
+import AuthRedirect from "../components/routeVerifying/AuthRedirect";
+import ProtectedRoute from "../components/routeVerifying/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />,
+    element: <Navigate to="/login" replace />,
+  },
+  {
+    path: "/login",
+    element: (
+      <AuthRedirect>
+        <Login />
+      </AuthRedirect>
+    ),
   },
   {
     path: "/register",
-    element: <Register />,
+    element: (
+      <AuthRedirect>
+        <Register />
+      </AuthRedirect>
+    ),
   },
   {
-    path: "/calender",
-    element: <Layout />,
+    path: "/calendar",
+    element: (
+      <ProtectedRoute allowedRoles={['provider']}>
+        <Layout />
+      </ProtectedRoute>
+    ),
     children: [
       {
-        path: "/calender",
+        path: "/calendar",
         element: <CalendarPage />,
       },
     ],

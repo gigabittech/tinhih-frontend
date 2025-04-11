@@ -36,6 +36,8 @@ const useUserStore = create((set) => ({
           user: response.data?.user,
           role: response.data?.user?.role,
         });
+        console.log(response.data);
+        
 
         updateState(set, "user", {
           loading: false,

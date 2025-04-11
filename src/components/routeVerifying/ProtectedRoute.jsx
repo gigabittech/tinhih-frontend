@@ -1,13 +1,18 @@
 import { Navigate } from "react-router";
 import useUserStore from "../../store/global/userStore";
 
-function ProtectedRoute() {
+function ProtectedRoute({ allowedRoles, children }) {
   const { isAuthenticated, role } = useUserStore();
 
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
 
-  const path = role === "client" ? "/client/calendar" : "/provider/calendar";
-  return <Navigate to={path} replace />;
+  if (allowedRoles && !allowedRoles.includes(role)) {
+    return <Navigate to="/unauthorized" replace />;
+  }
+
+  return children;
 }
 
 export default ProtectedRoute;
