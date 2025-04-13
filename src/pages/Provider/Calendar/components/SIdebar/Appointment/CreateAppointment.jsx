@@ -35,13 +35,13 @@ const locations = [
 
 function SelectedItems({ items, options, labelKey, onRemove }) {
   return (
-    <div className="flex flex-wrap gap-2 mt-2">
+    <div className="grid grid-cols-2 gap-2 mt-2">
       {items.map((id) => {
         const item = options.find((opt) => opt.id === id);
         return (
           <div
             key={id}
-            className="flex items-center gap-1 bg-gray-100 px-4 py-2 text-sm"
+            className="flex items-center justify-between bg-gray-100 px-4 py-2 text-sm"
           >
             <span>{item?.[labelKey]}</span>
             <button
@@ -68,7 +68,6 @@ function CreateAppointment({ onClose }) {
   const [selectedTeamMember, setSelectedTeamMember] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState([]);
 
-  // Refs to control each dropdown's open state
   const clientDropdownRef = useRef(null);
   const serviceDropdownRef = useRef(null);
   const teamDropdownRef = useRef(null);

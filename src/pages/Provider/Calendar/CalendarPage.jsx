@@ -51,7 +51,6 @@ function CalendarPage() {
         </section>
       </div>
       <Sidebar />
-
       <CreateNewClient isOpen={isClientCreate} onClose={closeCreateClient} />
       <CreateService isOpen={isServiceCreate} onClose={closeCreateService} />
       <CreateLocation isOpen={isLocationCreate} onClose={closeCreateLocation} />
