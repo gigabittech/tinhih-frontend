@@ -24,13 +24,6 @@ function AppointmentInput({
       : options;
   }, [searchItem, options, labelKey]);
 
-  const selectHandler = (item) => {
-    const newSelected = selectedValues.includes(item[valueKey])
-      ? selectedValues.filter((id) => id !== item[valueKey])
-      : [...selectedValues, item[valueKey]];
-    onChange(newSelected);
-  };
-
   return (
     <Dropdown
       inputTrigger={(isOpen) => (
@@ -50,44 +43,55 @@ function AppointmentInput({
           }
         />
       )}
-      menuRenderer={() => (
-        <div>
-          <ul className="py-2 max-h-[10rem] overflow-y-auto">
-            {filteredOptions.length > 0 ? (
-              filteredOptions.map((item) => (
-                <li key={item[valueKey]}>
-                  {MenuItemComponent ? (
-                    <MenuItemComponent
-                      item={item}
-                      isSelected={selectedValues.includes(item[valueKey])}
-                      onSelect={() => selectHandler(item)}
-                    />
-                  ) : (
-                    <div
-                      className={cn(
-                        "transition-all cursor-pointer px-4 py-1.5 text-sm",
-                        selectedValues.includes(item[valueKey])
-                          ? "bg-primary-500/50 "
-                          : ""
-                      )}
-                      onClick={() => selectHandler(item)}
-                    >
-                      {item[labelKey]}
-                    </div>
-                  )}
-                </li>
-              ))
-            ) : (
-              <li className="py-1 text-center text-context-lighter">
-                No options match
-              </li>
-            )}
-          </ul>
+      menuRenderer={(closeMenu) => {
+        const selectHandler = (item) => {
+          const newSelected = selectedValues.includes(item[valueKey])
+            ? selectedValues.filter((id) => id !== item[valueKey])
+            : [...selectedValues, item[valueKey]];
+          onChange(newSelected);
+          closeMenu();
+        };
 
-          {NewButtonComponent && <NewButtonComponent />}
-        </div>
-      )}
+        return (
+          <div>
+            <ul className="py-2 max-h-[10rem] overflow-y-auto">
+              {filteredOptions.length > 0 ? (
+                filteredOptions.map((item) => (
+                  <li key={item[valueKey]}>
+                    {MenuItemComponent ? (
+                      <MenuItemComponent
+                        item={item}
+                        isSelected={selectedValues.includes(item[valueKey])}
+                        onSelect={() => selectHandler(item)}
+                      />
+                    ) : (
+                      <div
+                        className={cn(
+                          "transition-all cursor-pointer px-4 py-1.5 text-sm",
+                          selectedValues.includes(item[valueKey])
+                            ? "bg-primary-500/50 "
+                            : ""
+                        )}
+                        onClick={() => selectHandler(item)}
+                      >
+                        {item[labelKey]}
+                      </div>
+                    )}
+                  </li>
+                ))
+              ) : (
+                <li className="py-1 text-center text-context-lighter">
+                  No options match
+                </li>
+              )}
+            </ul>
+
+            {NewButtonComponent && <NewButtonComponent />}
+          </div>
+        );
+      }}
     />
   );
 }
-export default AppointmentInput
+
+export default AppointmentInput;
