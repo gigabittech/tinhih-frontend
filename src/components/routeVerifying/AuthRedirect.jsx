@@ -9,7 +9,7 @@ function AuthRedirect({ children }) {
     return role === "client" ? (
       <Navigate to="/client/calendar" replace />
     ) : (
-      <Navigate to="/provider/calendar" replace />
+      <Navigate to="/calendar" replace />
     );
   }
 

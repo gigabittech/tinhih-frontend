@@ -22,7 +22,7 @@ function AppointmentInput({
           item[labelKey]?.toLowerCase()?.includes(searchItem?.toLowerCase())
         )
       : options;
-  }, [searchItem, options]);
+  }, [searchItem, options, labelKey]);
 
   const selectHandler = (item) => {
     const newSelected = selectedValues.includes(item[valueKey])
@@ -90,5 +90,4 @@ function AppointmentInput({
     />
   );
 }
-
-export default AppointmentInput;
+export default AppointmentInput

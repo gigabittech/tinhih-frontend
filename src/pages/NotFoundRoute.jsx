@@ -1,13 +1,7 @@
 import React from "react";
-import { useNavigate } from "react-router";
-import { Hammer, Loader2 } from "lucide-react";
+import { Hammer } from "lucide-react";
 
 function NotFoundRoute() {
-  const navigate = useNavigate();
-
-  const goToHome = () => {
-    navigate("/");
-  };
 
   return (
     <div className="pr-12 pl-10 h-[calc(100svh-10rem)] flex items-center justify-center">
