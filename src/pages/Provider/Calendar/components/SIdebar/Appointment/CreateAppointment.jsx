@@ -3,8 +3,9 @@ import AppointmentInput from "./components/AppointmentInput";
 import Button from "../../../../../../components/ui/Button";
 import { Plus, X } from "lucide-react";
 import useCalendarPage from "../../../../../../FormSchema/Provider/calendarPage";
+import TeamDropdown from "../TeamDropdown";
+import HeadCalendar from "../HeadCalendar";
 
-// Sample data
 const clients = [
   {
     id: 1,
@@ -63,6 +64,7 @@ function SelectedItems({ items, options, labelKey, onRemove }) {
 function CreateAppointment({ onClose }) {
   const { openCreateClient, openCreateService, openCreateLocation } =
     useCalendarPage();
+
   const [selectedClients, setSelectedClients] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
   const [selectedTeamMember, setSelectedTeamMember] = useState([]);
@@ -116,7 +118,15 @@ function CreateAppointment({ onClose }) {
   };
 
   return (
-    <div className="grid grid-cols-1">
+    <div className="grid grid-cols-1 relative">
+      <div className=" py-4 px-5 border-b border-gray-200 bg-white">
+        <div className="flex justify-between items-center gap-3">
+          <button className="border border-gray-300 py-2 rounded font-semibold hover:bg-gray-50 transition-colors ">
+            <HeadCalendar/>
+          </button>
+          <TeamDropdown />
+        </div>
+      </div>
       <div className="px-7 py-5 grid grid-cols-1 gap-4">
         <h2 className="font-bold text-lg">Appointment details</h2>
 
@@ -147,37 +157,6 @@ function CreateAppointment({ onClose }) {
               options={clients}
               labelKey="name"
               onRemove={handleRemoveClient}
-            />
-          )}
-        </div>
-
-        {/* Services */}
-        <div>
-          <AppointmentInput
-            ref={serviceDropdownRef}
-            label="Services"
-            options={services}
-            selectedValues={selectedServices}
-            onChange={handleServiceSelect}
-            labelKey="name"
-            valueKey="id"
-            NewButtonComponent={() => (
-              <Button
-                onClick={openCreateService}
-                variant="ghost"
-                className="w-full justify-start font-bold text-primary-800 rounded-none"
-              >
-                <Plus size={16} />
-                <span>New Service</span>
-              </Button>
-            )}
-          />
-          {selectedServices.length > 0 && (
-            <SelectedItems
-              items={selectedServices}
-              options={services}
-              labelKey="name"
-              onRemove={handleRemoveService}
             />
           )}
         </div>
@@ -213,6 +192,37 @@ function CreateAppointment({ onClose }) {
           )}
         </div>
 
+        {/* Services */}
+        <div>
+          <AppointmentInput
+            ref={serviceDropdownRef}
+            label="Services"
+            options={services}
+            selectedValues={selectedServices}
+            onChange={handleServiceSelect}
+            labelKey="name"
+            valueKey="id"
+            NewButtonComponent={() => (
+              <Button
+                onClick={openCreateService}
+                variant="ghost"
+                className="w-full justify-start font-bold text-primary-800 rounded-none"
+              >
+                <Plus size={16} />
+                <span>New Service</span>
+              </Button>
+            )}
+          />
+          {selectedServices.length > 0 && (
+            <SelectedItems
+              items={selectedServices}
+              options={services}
+              labelKey="name"
+              onRemove={handleRemoveService}
+            />
+          )}
+        </div>
+
         {/* Location */}
         <div>
           <AppointmentInput
@@ -244,7 +254,7 @@ function CreateAppointment({ onClose }) {
           )}
         </div>
       </div>
-      <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-200 bg-white">
+      <div className="fixed bottom-0 left-0 right-0 p-6 border-t border-gray-200 bg-white">
         <div className="grid grid-cols-2 gap-3">
           <button
             onClick={onClose}

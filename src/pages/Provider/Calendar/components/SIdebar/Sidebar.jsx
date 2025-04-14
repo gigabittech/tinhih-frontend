@@ -1,53 +1,86 @@
-import React from "react";
+import React, { useState } from "react";
 import { SideModal } from "../../../../../components/ui/SideModal";
 import CreateAppointment from "./Appointment/CreateAppointment";
+import { motion } from "framer-motion";
+import CreateNewClient from "./NewClient/CreateNewClient";
+import useCalendarPage from "../../../../../FormSchema/Provider/calendarPage";
+import CreateService from "./Services/CreateService";
+import CreateLocation from "./Location/CreateLocation";
 import { RxCross1 } from "react-icons/rx";
 import { FaRegCalendarCheck } from "react-icons/fa6";
-import HeadCalendar from "./HeadCalendar";
-import TeamDropdown from "./TeamDropdown";
-import { motion } from "framer-motion";
+import { BsClockFill } from "react-icons/bs";
+import { RiTaskFill } from "react-icons/ri";
+import { FaDoorOpen } from "react-icons/fa";
+import { BiTaskX } from "react-icons/bi";
 
-function Sidebar({ isOpen, onClose, contentName }) {
+const options = [
+  { label: "Appointment", icon: <FaRegCalendarCheck /> },
+  { label: "Task", icon: <RiTaskFill /> },
+  { label: "Reminder", icon: <BsClockFill /> },
+  { label: "Meeting", icon: <BiTaskX /> },
+  { label: "Out of office", icon: <FaDoorOpen /> },
+];
+
+function Sidebar({ isOpen, onClose, contentName,setSiderbarContent }) {
+
+  const {
+    closeCreateClient,
+    isClientCreate,
+    isServiceCreate,
+    closeCreateService,
+    isLocationCreate,
+    closeCreateLocation,
+  } = useCalendarPage();
+
+  const handleCloseMemu = () => {
+    onClose();
+    setSiderbarContent("");
+  };
+
   return (
-    <SideModal isOpen={isOpen} onClose={onClose}>
-      <div className=" py-4 px-5 border-b border-gray-200 bg-white">
-        <div className="flex justify-between items-center gap-3">
-          <button className="border border-gray-300 py-2 rounded font-semibold hover:bg-gray-50 transition-colors ">
-            <HeadCalendar />
-          </button>
-          <TeamDropdown />
+    <div>
+      <CreateNewClient isOpen={isClientCreate} onClose={closeCreateClient} />
+      <CreateService isOpen={isServiceCreate} onClose={closeCreateService} />
+      <CreateLocation isOpen={isLocationCreate} onClose={closeCreateLocation} />
+      <SideModal isOpen={isOpen} onClose={onClose}>
+        <div>
+          {contentName === "Appointment" && (
+            <CreateAppointment onClose={onClose} />
+          )}
+          {isOpen && (
+            <div className="absolute top-5 -left-20">
+              <div className="grid gap-5">
+                <motion.div
+                  initial={{ opacity: 0, y: -20, scale: 0.8 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="bg-white transition-colors  hover:bg-gray-200 duration-300 w-[55px] h-[55px] rounded-full flex items-center justify-center cursor-pointer shadow-md"
+                  onClick={handleCloseMemu}
+                >
+                  <RxCross1 size={20} />
+                </motion.div>
+                {options.map((option, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: -20, scale: 0.8 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+                    className={`${
+                      option.label === contentName
+                        ? "bg-[#ffdb00] w-[55px] h-[55px] transition-colors hover:bg-primary-600"
+                        : " bg-white w-10 h-10 transition-all duration-300 hover:w-[55px] hover:h-[55px] hover:bg-gray-200"
+                    } mx-auto text-xl rounded-full flex items-center justify-center shadow-md cursor-pointer`}
+                    onClick={() => setSiderbarContent(option.label)}
+                  >
+                    <button>{option.icon}</button>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      </div>
-      <div>
-        {contentName === "Appointment" && (
-          <CreateAppointment onClose={onClose} />
-        )}
-        {isOpen && (
-          <div className="absolute top-5 -left-20">
-          <div className="grid gap-5">
-            <motion.div
-              initial={{ opacity: 0, y: -20, scale: 0.8 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-              className="bg-white w-16 h-16 rounded-full flex items-center justify-center cursor-pointer shadow-md"
-              onClick={onClose}
-            >
-              <RxCross1 size={20} />
-            </motion.div>
-        
-            <motion.div
-              initial={{ opacity: 0, y: -20, scale: 0.8 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
-              className="bg-[#ffdb00] w-16 h-16 rounded-full flex items-center justify-center shadow-md"
-            >
-              <FaRegCalendarCheck size={20} />
-            </motion.div>
-          </div>
-        </div>
-        )}
-      </div>
-    </SideModal>
+      </SideModal>
+    </div>
   );
 }
 

@@ -6,7 +6,7 @@ import Sidebar from "../../SIdebar/Sidebar";
 function NewDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenSidebar, setIsOpenSidebar] = useState(false);
-  const [sidebarContent, setSiderbarContent] = useState("Appointment");
+  const [sidebarContent, setSiderbarContent] = useState("");
 
   const options = [
     { label: "Appointment" },
@@ -43,20 +43,19 @@ function NewDropdown() {
         {options.map((option, index) => (
           <button
             key={index}
-            onClick={() => handleSidebar(option.label)}
+            onClick={() => handleSidebar(option?.label)}
             className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm"
           >
             {option.label}
           </button>
         ))}
       </div>
-      {isOpenSidebar && (
-        <Sidebar
-          isOpen={isOpenSidebar}
-          onClose={() => setIsOpenSidebar(false)}
-          contentName={sidebarContent}
-        />
-      )}
+      <Sidebar
+        isOpen={isOpenSidebar}
+        onClose={() => setIsOpenSidebar(false)}
+        contentName={sidebarContent}
+        setSiderbarContent={setSiderbarContent}
+      />
     </div>
   );
 }

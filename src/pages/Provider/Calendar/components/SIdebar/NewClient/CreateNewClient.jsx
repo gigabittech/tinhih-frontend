@@ -21,16 +21,13 @@ function CreateNewClient({ isOpen, onClose }) {
     members: [],
   };
 
-  const closeHandler = () => {
-    onClose();
-  };
-
   const submitHandler = (values) => {
     console.log(values);
   };
 
+  
   return (
-    <Modal isOpen={isOpen} onClose={closeHandler}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <Formik
         validationSchema={validationSchema}
         initialValues={initialValues}
@@ -41,7 +38,7 @@ function CreateNewClient({ isOpen, onClose }) {
             <ModalHeader
               icon={<UserRoundPlus className="text-context-light size-6" />}
               title="New client"
-              onClose={closeHandler}
+              onClose={onClose}
             />
             <ModalBody className="my-3 flex flex-col gap-3">
               <div className="flex flex-col sm:flex-row gap-3">
@@ -71,7 +68,7 @@ function CreateNewClient({ isOpen, onClose }) {
                   type="button"
                   variant="outline"
                   className="w-full sm:w-auto"
-                  onClick={closeHandler}
+                  onClick={onClose}
                 >
                   Cancel
                 </Button>
