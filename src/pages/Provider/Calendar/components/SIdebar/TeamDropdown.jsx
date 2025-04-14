@@ -1,59 +1,123 @@
-import { useState } from 'react';
-import { IoIosArrowDown } from 'react-icons/io';
+import { useState, useRef, useEffect } from "react";
+import { IoIosArrowDown } from "react-icons/io";
+import { ImCheckmark } from "react-icons/im";
 
 const TeamDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedMember, setSelectedMember] = useState({
-    id: 2,
-    name: 'Aniga Chowdhury',
-    initials: 'AC'
-  });
+  const [selectedMembers, setSelectedMembers] = useState([
+    {
+      id: 2,
+      name: "Aniqa Chowdhury",
+      initials: "AC",
+    },
+  ]);
 
-  const toggleDropdown = () => setIsOpen(!isOpen);
+  const dropdownRef = useRef(null);
 
   const teamMembers = [
-    { id: 1, name: 'Wendy Smith', initials: 'WS' },
-    { id: 2, name: 'Smith Wendy', initials: 'SW' },
+    { id: 2, name: "Aniqa Chowdhury", initials: "AC" },
+    { id: 1, name: "Wendy Smith", initials: "WS" },
+    { id: 3, name: "Noah Jenkins", initials: "NJ" },
   ];
 
-  return (
-    <div className="relative inline-block text-left">
-      {/* Button with initials and dropdown arrow */}
-      <div className="flex items-center gap-1 bg-[#efefef] p-2 rounded-full">
-        <button 
-          className="bg-[#FFB400] text-white w-7 h-7 text-xs rounded-full font-bold"
-          onClick={toggleDropdown}
-        >
-          {selectedMember.initials}
-        </button>
-        <button onClick={toggleDropdown}>
-          <IoIosArrowDown className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-        </button>
-      </div>
+  const toggleDropdown = () => setIsOpen((prev) => !prev);
 
-      {/* Dropdown panel */}
+  const isSelected = (id) => selectedMembers.some((m) => m.id === id);
+
+  const handleToggleMember = (member) => {
+    const alreadySelected = isSelected(member.id);
+    const updated = alreadySelected
+      ? selectedMembers.filter((m) => m.id !== member.id)
+      : [...selectedMembers, member];
+
+    setSelectedMembers(updated);
+    setIsOpen(false);
+  };
+
+  const primaryMember = selectedMembers[0] || {
+    name: "Anonymous",
+    initials: "",
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const unselectedMembers = teamMembers.filter(
+    (member) => !selectedMembers.find((m) => m.id === member.id)
+  );
+
+  return (
+    <div ref={dropdownRef} className="relative inline-block text-left">
+      <div
+        onClick={toggleDropdown}
+        className="flex items-center gap-1 bg-[#efefef] px-3 py-2 rounded-full cursor-pointer"
+      >
+        <div className="flex -space-x-3">
+          {selectedMembers.length > 0 ? (
+            selectedMembers.map((member, index) => (
+              <div
+                key={member.id}
+                className="w-7 h-7 rounded-full border-2 border-white bg-primary-500 text-xs font-bold flex items-center justify-center text-white"
+                style={{ zIndex: selectedMembers.length - index }}
+              >
+                {member.initials}
+              </div>
+            ))
+          ) : (
+            <div className="w-7 h-7 rounded-full bg-gray-300 text-xs font-bold flex items-center justify-center">
+              ?
+            </div>
+          )}
+        </div>
+
+        <IoIosArrowDown
+          className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+        />
+      </div>
       {isOpen && (
-        <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg border border-gray-200 bg-white z-10">
+        <div className="origin-top-right absolute right-0 mt-2 w-60 rounded-md shadow-lg border border-gray-200 bg-white z-10">
           <div className="py-1">
-            <div className="px-4 py-2 text-xs text-gray-500">All team members</div>
-            
-            {teamMembers.map((member) => (
+            {selectedMembers.map((member) => (
               <button
                 key={member.id}
-                onClick={() => {
-                  setSelectedMember(member);
-                  setIsOpen(false);
-                }}
-                className={`flex items-center w-full text-left px-4 py-2 text-sm ${
-                  selectedMember.id === member.id 
-                    ? 'bg-gray-100 text-gray-900' 
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
+                onClick={() => handleToggleMember(member)}
+                className="flex items-center justify-between w-full text-left px-4 py-2 text-sm font-medium"
               >
-                <span className="bg-[#FFB400] text-white w-6 h-6 text-xs rounded-full font-bold flex items-center justify-center mr-3">
-                  {member.initials}
+                <div className="flex items-center gap-3">
+                  <span className="bg-primary-500 text-black w-6 h-6 text-xs rounded-full font-bold flex items-center justify-center">
+                    {member.initials}
+                  </span>
+                  {member.name}
+                </div>
+                <span className="w-3 h-3 flex items-center justify-center rounded-full bg-gray-400">
+                  <ImCheckmark size={10} color="#ffffff" />
                 </span>
-                {member.name}
+              </button>
+            ))}
+            {selectedMembers.length !== teamMembers.length && (
+              <div className="px-4 py-2 text-xs text-gray-500">
+                All team members
+              </div>
+            )}
+            {unselectedMembers.map((member) => (
+              <button
+                key={member.id}
+                onClick={() => handleToggleMember(member)}
+                className="flex items-center justify-between w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="bg-primary-500 text-black w-6 h-6 text-xs rounded-full font-bold flex items-center justify-center">
+                    {member.initials}
+                  </span>
+                  {member.name}
+                </div>
               </button>
             ))}
           </div>

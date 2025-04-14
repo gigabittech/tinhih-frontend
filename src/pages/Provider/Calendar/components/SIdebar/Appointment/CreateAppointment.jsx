@@ -122,7 +122,7 @@ function CreateAppointment({ onClose }) {
       <div className=" py-4 px-5 border-b border-gray-200 bg-white">
         <div className="flex justify-between items-center gap-3">
           <button className="border border-gray-300 py-2 rounded font-semibold hover:bg-gray-50 transition-colors ">
-            <HeadCalendar/>
+            <HeadCalendar />
           </button>
           <TeamDropdown />
         </div>

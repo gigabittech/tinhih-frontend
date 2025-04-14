@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { SideModal } from "../../../../../components/ui/SideModal";
-import CreateAppointment from "./Appointment/CreateAppointment";
+import React from "react";
 import { motion } from "framer-motion";
 import CreateNewClient from "./NewClient/CreateNewClient";
 import useCalendarPage from "../../../../../FormSchema/Provider/calendarPage";
@@ -12,6 +10,8 @@ import { BsClockFill } from "react-icons/bs";
 import { RiTaskFill } from "react-icons/ri";
 import { FaDoorOpen } from "react-icons/fa";
 import { BiTaskX } from "react-icons/bi";
+import { SideModal } from "../../../../../components/ui/SideModal";
+import CreateAppointment from "./Appointment/CreateAppointment";
 
 const options = [
   { label: "Appointment", icon: <FaRegCalendarCheck /> },
