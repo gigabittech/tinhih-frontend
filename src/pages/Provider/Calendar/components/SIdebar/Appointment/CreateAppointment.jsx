@@ -1,23 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import AppointmentInput from "./components/AppointmentInput";
 import Button from "../../../../../../components/ui/Button";
 import { Plus, X } from "lucide-react";
 import useCalendarPage from "../../../../../../FormSchema/Provider/calendarPage";
 import TeamDropdown from "../TeamDropdown";
 import HeadCalendar from "../HeadCalendar";
-
-const clients = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    avatar: "https://randomuser.me/api/portraits/women/1.jpg",
-  },
-  {
-    id: 2,
-    name: "Bob Smith",
-    avatar: "https://randomuser.me/api/portraits/men/2.jpg",
-  },
-];
+import AttendeesInput from "./components/AttendeesInput";
 
 const services = [
   { id: 1, name: "Haircut" },
@@ -62,23 +50,15 @@ function SelectedItems({ items, options, labelKey, onRemove }) {
 }
 
 function CreateAppointment({ onClose }) {
-  const { openCreateClient, openCreateService, openCreateLocation } =
-    useCalendarPage();
+  const { openCreateService, openCreateLocation } = useCalendarPage();
 
-  const [selectedClients, setSelectedClients] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
   const [selectedTeamMember, setSelectedTeamMember] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState([]);
 
-  const clientDropdownRef = useRef(null);
   const serviceDropdownRef = useRef(null);
   const teamDropdownRef = useRef(null);
   const locationDropdownRef = useRef(null);
-
-  const handleClientSelect = (ids) => {
-    setSelectedClients(ids);
-    clientDropdownRef.current?.close();
-  };
 
   const handleServiceSelect = (ids) => {
     setSelectedServices(ids);
@@ -93,10 +73,6 @@ function CreateAppointment({ onClose }) {
   const handleLocationSelect = (ids) => {
     setSelectedLocation(ids);
     locationDropdownRef.current?.close();
-  };
-
-  const handleRemoveClient = (id) => {
-    setSelectedClients(selectedClients.filter((clientId) => clientId !== id));
   };
 
   const handleRemoveService = (id) => {
@@ -129,37 +105,9 @@ function CreateAppointment({ onClose }) {
       </div>
       <div className="px-7 py-5 grid grid-cols-1 gap-4">
         <h2 className="font-bold text-lg">Appointment details</h2>
-
         {/* Clients */}
-        <div>
-          <AppointmentInput
-            ref={clientDropdownRef}
-            label="Attendees"
-            options={clients}
-            selectedValues={selectedClients}
-            onChange={handleClientSelect}
-            labelKey="name"
-            valueKey="id"
-            NewButtonComponent={() => (
-              <Button
-                onClick={openCreateClient}
-                variant="ghost"
-                className="w-full justify-start font-bold text-primary-800 rounded-none"
-              >
-                <Plus size={16} />
-                <span>New Client</span>
-              </Button>
-            )}
-          />
-          {selectedClients.length > 0 && (
-            <SelectedItems
-              items={selectedClients}
-              options={clients}
-              labelKey="name"
-              onRemove={handleRemoveClient}
-            />
-          )}
-        </div>
+
+        <AttendeesInput />
 
         {/* Team Member */}
         <div>
@@ -262,10 +210,7 @@ function CreateAppointment({ onClose }) {
           >
             Cancel
           </button>
-          <button
-            className="bg-primary-600 text-white py-2 rounded font-semibold hover:bg-primary-700 transition-colors"
-            disabled={!selectedClients.length || !selectedServices.length}
-          >
+          <button className="bg-primary-600 text-white py-2 rounded font-semibold hover:bg-primary-700 transition-colors">
             Create
           </button>
         </div>
