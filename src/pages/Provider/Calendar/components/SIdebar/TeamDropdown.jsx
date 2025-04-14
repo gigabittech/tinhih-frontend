@@ -5,17 +5,12 @@ import { ImCheckmark } from "react-icons/im";
 const TeamDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedMembers, setSelectedMembers] = useState([
-    {
-      id: 2,
-      name: "Aniqa Chowdhury",
-      initials: "AC",
-    },
+    { id: 1, name: "Wendy Smith", initials: "WS" },
   ]);
 
   const dropdownRef = useRef(null);
 
   const teamMembers = [
-    { id: 2, name: "Aniqa Chowdhury", initials: "AC" },
     { id: 1, name: "Wendy Smith", initials: "WS" },
     { id: 3, name: "Noah Jenkins", initials: "NJ" },
   ];
@@ -32,11 +27,6 @@ const TeamDropdown = () => {
 
     setSelectedMembers(updated);
     setIsOpen(false);
-  };
-
-  const primaryMember = selectedMembers[0] || {
-    name: "Anonymous",
-    initials: "",
   };
 
   useEffect(() => {
@@ -83,12 +73,12 @@ const TeamDropdown = () => {
       </div>
       {isOpen && (
         <div className="origin-top-right absolute right-0 mt-2 w-60 rounded-md shadow-lg border border-gray-200 bg-white z-10">
-          <div className="py-1">
+          <div className="py-2">
             {selectedMembers.map((member) => (
               <button
                 key={member.id}
                 onClick={() => handleToggleMember(member)}
-                className="flex items-center justify-between w-full text-left px-4 py-2 text-sm font-medium"
+                className="flex items-center justify-between w-full text-left px-4 py-2 text-sm font-medium bg-[#eedaa1] hover:bg-[#ecd38e]"
               >
                 <div className="flex items-center gap-3">
                   <span className="bg-primary-500 text-black w-6 h-6 text-xs rounded-full font-bold flex items-center justify-center">
