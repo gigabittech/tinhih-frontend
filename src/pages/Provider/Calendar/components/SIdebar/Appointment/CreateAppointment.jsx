@@ -1,22 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import AppointmentInput from "./components/AppointmentInput";
 import Button from "../../../../../../components/ui/Button";
 import { Plus, X } from "lucide-react";
 import useCalendarPage from "../../../../../../FormSchema/Provider/calendarPage";
-
-// Sample data
-const clients = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    avatar: "https://randomuser.me/api/portraits/women/1.jpg",
-  },
-  {
-    id: 2,
-    name: "Bob Smith",
-    avatar: "https://randomuser.me/api/portraits/men/2.jpg",
-  },
-];
+import TeamDropdown from "../TeamDropdown";
+import HeadCalendar from "../HeadCalendar";
+import AttendeesInput from "./components/AttendeesInput";
 
 const services = [
   { id: 1, name: "Haircut" },
@@ -35,13 +24,13 @@ const locations = [
 
 function SelectedItems({ items, options, labelKey, onRemove }) {
   return (
-    <div className="flex flex-wrap gap-2 mt-2">
+    <div className="grid grid-cols-2 gap-2 mt-2">
       {items.map((id) => {
         const item = options.find((opt) => opt.id === id);
         return (
           <div
             key={id}
-            className="flex items-center gap-1 bg-gray-100 px-2 py-1 text-sm"
+            className="flex items-center justify-between bg-gray-100 px-4 py-2 text-sm"
           >
             <span>{item?.[labelKey]}</span>
             <button
@@ -61,23 +50,15 @@ function SelectedItems({ items, options, labelKey, onRemove }) {
 }
 
 function CreateAppointment({ onClose }) {
-  const { openCreateClient, openCreateService, openCreateLocation } =
-    useCalendarPage();
-  const [selectedClients, setSelectedClients] = useState([]);
+  const { openCreateService, openCreateLocation } = useCalendarPage();
+
   const [selectedServices, setSelectedServices] = useState([]);
   const [selectedTeamMember, setSelectedTeamMember] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState([]);
 
-  // Refs to control each dropdown's open state
-  const clientDropdownRef = useRef(null);
   const serviceDropdownRef = useRef(null);
   const teamDropdownRef = useRef(null);
   const locationDropdownRef = useRef(null);
-
-  const handleClientSelect = (ids) => {
-    setSelectedClients(ids);
-    clientDropdownRef.current?.close();
-  };
 
   const handleServiceSelect = (ids) => {
     setSelectedServices(ids);
@@ -92,10 +73,6 @@ function CreateAppointment({ onClose }) {
   const handleLocationSelect = (ids) => {
     setSelectedLocation(ids);
     locationDropdownRef.current?.close();
-  };
-
-  const handleRemoveClient = (id) => {
-    setSelectedClients(selectedClients.filter((clientId) => clientId !== id));
   };
 
   const handleRemoveService = (id) => {
@@ -117,37 +94,48 @@ function CreateAppointment({ onClose }) {
   };
 
   return (
-    <div className="grid grid-cols-1">
+    <div className="grid grid-cols-1 relative">
+      <div className=" py-4 px-5 border-b border-gray-200 bg-white">
+        <div className="flex justify-between items-center gap-3">
+          <button className="border border-gray-300 py-2 rounded font-semibold hover:bg-gray-50 transition-colors ">
+            <HeadCalendar />
+          </button>
+          <TeamDropdown />
+        </div>
+      </div>
       <div className="px-7 py-5 grid grid-cols-1 gap-4">
         <h2 className="font-bold text-lg">Appointment details</h2>
-
         {/* Clients */}
+
+        <AttendeesInput />
+
+        {/* Team Member */}
         <div>
           <AppointmentInput
-            ref={clientDropdownRef}
-            label="Attendees"
-            options={clients}
-            selectedValues={selectedClients}
-            onChange={handleClientSelect}
+            ref={teamDropdownRef}
+            label="Team member"
+            options={teamMembers}
+            selectedValues={selectedTeamMember}
+            onChange={handleTeamMemberSelect}
             labelKey="name"
             valueKey="id"
             NewButtonComponent={() => (
               <Button
-                onClick={openCreateClient}
+                onClick={openCreateService}
                 variant="ghost"
                 className="w-full justify-start font-bold text-primary-800 rounded-none"
               >
                 <Plus size={16} />
-                <span>New Client</span>
+                <span>Add Team Member</span>
               </Button>
             )}
           />
-          {selectedClients.length > 0 && (
+          {selectedTeamMember.length > 0 && (
             <SelectedItems
-              items={selectedClients}
-              options={clients}
+              items={selectedTeamMember}
+              options={teamMembers}
               labelKey="name"
-              onRemove={handleRemoveClient}
+              onRemove={handleRemoveTeamMember}
             />
           )}
         </div>
@@ -183,37 +171,6 @@ function CreateAppointment({ onClose }) {
           )}
         </div>
 
-        {/* Team Member */}
-        <div>
-          <AppointmentInput
-            ref={teamDropdownRef}
-            label="Team member"
-            options={teamMembers}
-            selectedValues={selectedTeamMember}
-            onChange={handleTeamMemberSelect}
-            labelKey="name"
-            valueKey="id"
-            NewButtonComponent={() => (
-              <Button
-                onClick={openCreateService}
-                variant="ghost"
-                className="w-full justify-start font-bold text-primary-800 rounded-none"
-              >
-                <Plus size={16} />
-                <span>Add Team Member</span>
-              </Button>
-            )}
-          />
-          {selectedTeamMember.length > 0 && (
-            <SelectedItems
-              items={selectedTeamMember}
-              options={teamMembers}
-              labelKey="name"
-              onRemove={handleRemoveTeamMember}
-            />
-          )}
-        </div>
-
         {/* Location */}
         <div>
           <AppointmentInput
@@ -245,7 +202,7 @@ function CreateAppointment({ onClose }) {
           )}
         </div>
       </div>
-      <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-200 bg-white">
+      <div className="fixed bottom-0 left-0 right-0 p-6 border-t border-gray-200 bg-white">
         <div className="grid grid-cols-2 gap-3">
           <button
             onClick={onClose}
@@ -253,10 +210,7 @@ function CreateAppointment({ onClose }) {
           >
             Cancel
           </button>
-          <button
-            className="bg-primary-600 text-white py-2 rounded font-semibold hover:bg-primary-700 transition-colors"
-            disabled={!selectedClients.length || !selectedServices.length}
-          >
+          <button className="bg-primary-600 text-white py-2 rounded font-semibold hover:bg-primary-700 transition-colors">
             Create
           </button>
         </div>

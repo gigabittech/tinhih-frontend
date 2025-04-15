@@ -4,12 +4,7 @@ import { useCalendarStore } from "../../../FormSchema/Provider/calendarStore";
 import ShortCalendar, {
   getMonthSlots,
 } from "../../../components/ui/ShortCalendar";
-import MonthlyCalendar from "./components/FullCalendar/MonthlyCalendar";
-import Sidebar from "./components/SIdebar/Sidebar";
-import useCalendarPage from "../../../FormSchema/Provider/calendarPage";
-import CreateNewClient from "./components/SIdebar/NewClient/CreateNewClient";
-import CreateService from "./components/SIdebar/Services/CreateService";
-import CreateLocation from "./components/SIdebar/Location/CreateLocation";
+import MonthlyCalendar from "./components/FullCalendar/MonthlyCalendar";  
 
 function CalendarPage() {
   const {
@@ -19,14 +14,6 @@ function CalendarPage() {
     setSelectedDate,
     setGoToToday,
   } = useCalendarStore();
-  const {
-    closeCreateClient,
-    isClientCreate,
-    isServiceCreate,
-    closeCreateService,
-    isLocationCreate,
-    closeCreateLocation,
-  } = useCalendarPage();
 
   const dateSlots = getMonthSlots(
     selectedDate.getFullYear(),
@@ -50,11 +37,6 @@ function CalendarPage() {
           <MonthlyCalendar dateSlots={dateSlots} selectedDate={selectedDate} />
         </section>
       </div>
-      <Sidebar />
-
-      <CreateNewClient isOpen={isClientCreate} onClose={closeCreateClient} />
-      <CreateService isOpen={isServiceCreate} onClose={closeCreateService} />
-      <CreateLocation isOpen={isLocationCreate} onClose={closeCreateLocation} />
     </div>
   );
 }

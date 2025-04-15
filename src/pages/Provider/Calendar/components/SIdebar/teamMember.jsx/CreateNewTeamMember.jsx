@@ -3,15 +3,10 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
-  ModalHeader,
 } from "../../../../../../components/ui/Modal";
-import { createNewClientSchema as validationSchema } from "../../../../../../FormSchema/Provider/createNewClient";
-import { Form, Formik } from "formik";
-import Button from "../../../../../../components/ui/Button";
 import Input from "../../../../../../components/ui/Input";
-import { UserRoundPlus } from "lucide-react";
 
-function CreateNewClient({ isOpen, onClose }) {
+function CreateNewTeamMember({ isOpen, onClose }) {
   const initialValues = {
     first_name: "",
     last_name: "",
@@ -20,12 +15,9 @@ function CreateNewClient({ isOpen, onClose }) {
     phone_number: "",
     members: [],
   };
-
   const submitHandler = (values) => {
     console.log(values);
   };
-
-  
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <Formik
@@ -84,4 +76,4 @@ function CreateNewClient({ isOpen, onClose }) {
   );
 }
 
-export default CreateNewClient;
+export default CreateNewTeamMember;

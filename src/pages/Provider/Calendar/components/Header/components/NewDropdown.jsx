@@ -1,50 +1,60 @@
-import React from "react";
-import Dropdown from "../../../../../../components/ui/Dropdown";
+import React, { useState } from "react";
 import Button from "../../../../../../components/ui/Button";
 import { Plus } from "lucide-react";
-import useCalendarPage from "../../../../../../FormSchema/Provider/calendarPage";
+import Sidebar from "../../SIdebar/Sidebar";
 
 function NewDropdown() {
-  const { openCalendarSideBar, closeCalendarSideBar } = useCalendarPage();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenSidebar, setIsOpenSidebar] = useState(false);
+  const [sidebarContent, setSiderbarContent] = useState("");
 
   const options = [
-    { label: "Appointment", onClick: openCalendarSideBar },
+    { label: "Appointment" },
     { label: "Task" },
     { label: "Reminder" },
     { label: "Meeting" },
     { label: "Out of office" },
   ];
 
+  const handleSidebar = (contentName) => {
+    setIsOpen(false);
+    setIsOpenSidebar(true);
+    setSiderbarContent(contentName);
+  };
+
   return (
-    <div className="hidden md:block">
-      <Dropdown
-        className="w-[7.5rem] right-0"
-        trigger={() => (
-          <Button size="header" className="font-bold gap-1">
-            <Plus size={18} className="relative -top-px" />
-            <span>New</span>
-          </Button>
-        )}
-        menuRenderer={(closeMenu, _, onSelect) => (
-          <ui className="list-none py-1 block">
-            {options?.map((item, index) => (
-              <li key={index}>
-                <Button
-                  onClick={() => {
-                    closeMenu();
-                    item?.onClick();
-                  }}
-                  variant="ghost"
-                  size="none"
-                  className="px-4 py-1.5 w-full font-medium rounded-none 
-                justify-between gap-x-5 bg-transparent"
-                >
-                  {item?.label}
-                </Button>
-              </li>
-            ))}
-          </ui>
-        )}
+    <div className="relative hidden md:block">
+      <Button
+        size="header"
+        className="font-bold gap-1"
+        onClick={() => setIsOpen((prev) => !prev)}
+      >
+        <Plus size={18} className="relative -top-px" />
+        <span>New</span>
+      </Button>
+
+      <div
+        className={`absolute top-6 right-0 mt-2 bg-white shadow-xl rounded z-10 transform transition-all duration-200 ease-out origin-top-right py-2 ${
+          isOpen
+            ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+        }`}
+      >
+        {options.map((option, index) => (
+          <button
+            key={index}
+            onClick={() => handleSidebar(option?.label)}
+            className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm"
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+      <Sidebar
+        isOpen={isOpenSidebar}
+        onClose={() => setIsOpenSidebar(false)}
+        contentName={sidebarContent}
+        setSiderbarContent={setSiderbarContent}
       />
     </div>
   );
