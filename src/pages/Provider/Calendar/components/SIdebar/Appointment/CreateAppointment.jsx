@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import AppointmentInput from "./components/AppointmentInput";
 import Button from "../../../../../../components/ui/Button";
 import { Plus, X } from "lucide-react";
@@ -6,11 +6,7 @@ import useCalendarPage from "../../../../../../FormSchema/Provider/calendarPage"
 import TeamDropdown from "../TeamDropdown";
 import HeadCalendar from "../HeadCalendar";
 import AttendeesInput from "./components/AttendeesInput";
-
-const services = [
-  { id: 1, name: "Haircut" },
-  { id: 2, name: "Coloring" },
-];
+import ServicesInput from "./components/ServicesInput";
 
 const teamMembers = [
   { id: 1, name: "Sarah Miller", role: "Stylist" },
@@ -51,19 +47,12 @@ function SelectedItems({ items, options, labelKey, onRemove }) {
 
 function CreateAppointment({ onClose }) {
   const { openCreateService, openCreateLocation } = useCalendarPage();
-
-  const [selectedServices, setSelectedServices] = useState([]);
   const [selectedTeamMember, setSelectedTeamMember] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState([]);
 
-  const serviceDropdownRef = useRef(null);
   const teamDropdownRef = useRef(null);
   const locationDropdownRef = useRef(null);
 
-  const handleServiceSelect = (ids) => {
-    setSelectedServices(ids);
-    serviceDropdownRef.current?.close();
-  };
 
   const handleTeamMemberSelect = (ids) => {
     setSelectedTeamMember(ids);
@@ -75,11 +64,6 @@ function CreateAppointment({ onClose }) {
     locationDropdownRef.current?.close();
   };
 
-  const handleRemoveService = (id) => {
-    setSelectedServices(
-      selectedServices.filter((serviceId) => serviceId !== id)
-    );
-  };
 
   const handleRemoveTeamMember = (id) => {
     setSelectedTeamMember(
@@ -142,35 +126,7 @@ function CreateAppointment({ onClose }) {
           </div>
 
           {/* Services */}
-          <div>
-            <AppointmentInput
-              ref={serviceDropdownRef}
-              label="Services"
-              options={services}
-              selectedValues={selectedServices}
-              onChange={handleServiceSelect}
-              labelKey="name"
-              valueKey="id"
-              NewButtonComponent={() => (
-                <Button
-                  onClick={openCreateService}
-                  variant="ghost"
-                  className="w-full justify-start font-bold text-primary-800 rounded-none"
-                >
-                  <Plus size={16} />
-                  <span>New Service</span>
-                </Button>
-              )}
-            />
-            {selectedServices.length > 0 && (
-              <SelectedItems
-                items={selectedServices}
-                options={services}
-                labelKey="name"
-                onRemove={handleRemoveService}
-              />
-            )}
-          </div>
+          <ServicesInput />
 
           {/* Location */}
           <div>
