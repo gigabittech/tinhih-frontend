@@ -4,7 +4,7 @@ export default function useServices() {
   const [openServices, setOpenServices] = useState(false);
   const [selectedServices, setSelectedServices] = useState([]);
 
-  const handleServiceselect = (service) => {
+  const handleServicesSelect = (service) => {
     const alreadySelected = selectedServices.some((c) => c.id === service.id);
     if (alreadySelected) {
       setSelectedServices(selectedServices.filter((c) => c.id !== service.id));
@@ -23,7 +23,7 @@ export default function useServices() {
     openServices,
     setOpenServices,
     selectedServices,
-    handleServiceselect,
+    handleServicesSelect,
     handleRemoveService,
   };
 }

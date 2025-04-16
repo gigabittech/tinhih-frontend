@@ -39,7 +39,7 @@ function ServicesInput({
   openServices,
   setOpenServices,
   selectedServices,
-  handleServiceselect,
+  handleServiceSelect,
   handleRemoveService,
   openCreateService,
 }) {
@@ -75,7 +75,7 @@ function ServicesInput({
               );
               return (
                 <div
-                  onClick={() => handleServiceselect(service)}
+                  onClick={() => handleServiceSelect(service)}
                   key={service.id}
                   className={`px-5 py-2 grid items-center gap-1 cursor-pointer hover:bg-gray-100 ${
                     isSelected ? "bg-blue-100" : ""
