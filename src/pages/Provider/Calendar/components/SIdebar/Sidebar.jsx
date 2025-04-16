@@ -43,7 +43,7 @@ function Sidebar({ isOpen, onClose, contentName,setSiderbarContent }) {
       <CreateService isOpen={isServiceCreate} onClose={closeCreateService} />
       <CreateLocation isOpen={isLocationCreate} onClose={closeCreateLocation} />
       <SideModal isOpen={isOpen} onClose={onClose}>
-        <div>
+        <div className=" relative">
           {contentName === "Appointment" && (
             <CreateAppointment onClose={onClose} />
           )}

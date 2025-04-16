@@ -106,7 +106,7 @@ function AttendeesInput() {
               onMouseEnter={() => setShowDeleteButton(true)}
               onMouseLeave={() => setShowDeleteButton(false)}
               key={client.id}
-              className="flex justify-between items-center gap-2 hover:bg-gray-200 p-5"
+              className="flex justify-between items-center gap-2 hover:bg-gray-200 px-3 py-5"
             >
               <div className="flex items-center gap-5">
                 <p className="flex justify-center items-center w-8 h-8 rounded-full bg-primary-500">

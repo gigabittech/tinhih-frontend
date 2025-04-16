@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import AppointmentInput from "./components/AppointmentInput";
 import Button from "../../../../../../components/ui/Button";
 import { Plus, X } from "lucide-react";
@@ -6,11 +6,7 @@ import useCalendarPage from "../../../../../../FormSchema/Provider/calendarPage"
 import TeamDropdown from "../TeamDropdown";
 import HeadCalendar from "../HeadCalendar";
 import AttendeesInput from "./components/AttendeesInput";
-
-const services = [
-  { id: 1, name: "Haircut" },
-  { id: 2, name: "Coloring" },
-];
+import ServicesInput from "./components/ServicesInput";
 
 const teamMembers = [
   { id: 1, name: "Sarah Miller", role: "Stylist" },
@@ -51,19 +47,12 @@ function SelectedItems({ items, options, labelKey, onRemove }) {
 
 function CreateAppointment({ onClose }) {
   const { openCreateService, openCreateLocation } = useCalendarPage();
-
-  const [selectedServices, setSelectedServices] = useState([]);
   const [selectedTeamMember, setSelectedTeamMember] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState([]);
 
-  const serviceDropdownRef = useRef(null);
   const teamDropdownRef = useRef(null);
   const locationDropdownRef = useRef(null);
 
-  const handleServiceSelect = (ids) => {
-    setSelectedServices(ids);
-    serviceDropdownRef.current?.close();
-  };
 
   const handleTeamMemberSelect = (ids) => {
     setSelectedTeamMember(ids);
@@ -75,11 +64,6 @@ function CreateAppointment({ onClose }) {
     locationDropdownRef.current?.close();
   };
 
-  const handleRemoveService = (id) => {
-    setSelectedServices(
-      selectedServices.filter((serviceId) => serviceId !== id)
-    );
-  };
 
   const handleRemoveTeamMember = (id) => {
     setSelectedTeamMember(
@@ -94,8 +78,8 @@ function CreateAppointment({ onClose }) {
   };
 
   return (
-    <div className="grid grid-cols-1 relative">
-      <div className=" py-4 px-5 border-b border-gray-200 bg-white">
+    <div className="relative h-screen flex flex-col">
+      <div className="py-4 px-5 border-b border-gray-200 bg-white">
         <div className="flex justify-between items-center gap-3">
           <button className="border border-gray-300 py-2 rounded font-semibold hover:bg-gray-50 transition-colors ">
             <HeadCalendar />
@@ -103,106 +87,80 @@ function CreateAppointment({ onClose }) {
           <TeamDropdown />
         </div>
       </div>
-      <div className="px-7 py-5 grid grid-cols-1 gap-4">
-        <h2 className="font-bold text-lg">Appointment details</h2>
-        {/* Clients */}
+      <div className="flex-1 overflow-y-auto pb-20">
+        <div className="px-7 py-5 grid grid-cols-1 gap-4">
+          <h2 className="font-bold text-lg">Appointment details</h2>
+          {/* Clients */}
 
-        <AttendeesInput />
+          <AttendeesInput />
 
-        {/* Team Member */}
-        <div>
-          <AppointmentInput
-            ref={teamDropdownRef}
-            label="Team member"
-            options={teamMembers}
-            selectedValues={selectedTeamMember}
-            onChange={handleTeamMemberSelect}
-            labelKey="name"
-            valueKey="id"
-            NewButtonComponent={() => (
-              <Button
-                onClick={openCreateService}
-                variant="ghost"
-                className="w-full justify-start font-bold text-primary-800 rounded-none"
-              >
-                <Plus size={16} />
-                <span>Add Team Member</span>
-              </Button>
-            )}
-          />
-          {selectedTeamMember.length > 0 && (
-            <SelectedItems
-              items={selectedTeamMember}
+          {/* Team Member */}
+          <div>
+            <AppointmentInput
+              ref={teamDropdownRef}
+              label="Team member"
               options={teamMembers}
+              selectedValues={selectedTeamMember}
+              onChange={handleTeamMemberSelect}
               labelKey="name"
-              onRemove={handleRemoveTeamMember}
+              valueKey="id"
+              NewButtonComponent={() => (
+                <Button
+                  onClick={openCreateService}
+                  variant="ghost"
+                  className="w-full justify-start font-bold text-primary-800 rounded-none"
+                >
+                  <Plus size={16} />
+                  <span>Add Team Member</span>
+                </Button>
+              )}
             />
-          )}
-        </div>
-
-        {/* Services */}
-        <div>
-          <AppointmentInput
-            ref={serviceDropdownRef}
-            label="Services"
-            options={services}
-            selectedValues={selectedServices}
-            onChange={handleServiceSelect}
-            labelKey="name"
-            valueKey="id"
-            NewButtonComponent={() => (
-              <Button
-                onClick={openCreateService}
-                variant="ghost"
-                className="w-full justify-start font-bold text-primary-800 rounded-none"
-              >
-                <Plus size={16} />
-                <span>New Service</span>
-              </Button>
+            {selectedTeamMember.length > 0 && (
+              <SelectedItems
+                items={selectedTeamMember}
+                options={teamMembers}
+                labelKey="name"
+                onRemove={handleRemoveTeamMember}
+              />
             )}
-          />
-          {selectedServices.length > 0 && (
-            <SelectedItems
-              items={selectedServices}
-              options={services}
-              labelKey="name"
-              onRemove={handleRemoveService}
-            />
-          )}
-        </div>
+          </div>
 
-        {/* Location */}
-        <div>
-          <AppointmentInput
-            ref={locationDropdownRef}
-            label="Location"
-            options={locations}
-            selectedValues={selectedLocation}
-            onChange={handleLocationSelect}
-            labelKey="name"
-            valueKey="id"
-            NewButtonComponent={() => (
-              <Button
-                onClick={openCreateLocation}
-                variant="ghost"
-                className="w-full justify-start font-bold text-primary-800 rounded-none"
-              >
-                <Plus size={16} />
-                <span>New Location</span>
-              </Button>
-            )}
-          />
-          {selectedLocation.length > 0 && (
-            <SelectedItems
-              items={selectedLocation}
+          {/* Services */}
+          <ServicesInput />
+
+          {/* Location */}
+          <div>
+            <AppointmentInput
+              ref={locationDropdownRef}
+              label="Location"
               options={locations}
+              selectedValues={selectedLocation}
+              onChange={handleLocationSelect}
               labelKey="name"
-              onRemove={handleRemoveLocation}
+              valueKey="id"
+              NewButtonComponent={() => (
+                <Button
+                  onClick={openCreateLocation}
+                  variant="ghost"
+                  className="w-full justify-start font-bold text-primary-800 rounded-none"
+                >
+                  <Plus size={16} />
+                  <span>New Location</span>
+                </Button>
+              )}
             />
-          )}
+            {selectedLocation.length > 0 && (
+              <SelectedItems
+                items={selectedLocation}
+                options={locations}
+                labelKey="name"
+                onRemove={handleRemoveLocation}
+              />
+            )}
+          </div>
         </div>
       </div>
-      <div className="fixed bottom-0 left-0 right-0 p-6 border-t border-gray-200 bg-white">
+      <div className="fixed bottom-0 right-0 left-0 p-6 border-t mt-20 border-gray-200 bg-white">
         <div className="grid grid-cols-2 gap-3">
           <button
             onClick={onClose}

@@ -8,7 +8,7 @@ function SideModal({ isOpen, onClose, children}) {
       <Overlay isOpen={isOpen} onClick={onClose} className="z-[200]" />
       <div
         className={cn(
-          "z-[201] w-screen sm:w-[590px] h-svh fixed right-0 top-0 bg-base-100 trans",
+          "z-[201] w-screen sm:w-[590px] fixed right-0 top-0 bottom-0 bg-base-100 trans",
           isOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
