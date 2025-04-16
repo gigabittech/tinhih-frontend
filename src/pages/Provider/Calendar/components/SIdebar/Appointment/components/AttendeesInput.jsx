@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import useCalendarPage from "../../../../../../../FormSchema/Provider/calendarPage";
-import { FaPlus } from "react-icons/fa";
 import { RxCross1 } from "react-icons/rx";
+import Input from "./Input";
+import CreateButton from "./CreateButton";
 
 const clients = [
   {
@@ -16,26 +16,16 @@ const clients = [
   },
 ];
 
-function AttendeesInput() {
-  const [openClients, setOpenClients] = useState(false);
+function AttendeesInput({
+  openClients,
+  handleRemoveClient,
+  handleClientSelect,
+  setOpenClients,
+  selectedClients,
+  openCreateClient,
+}) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
-  const [selectedClients, setSelectedClients] = useState([]);
   const dropdownRef = useRef(null);
-  const { openCreateClient } = useCalendarPage();
-
-  const handleClientSelect = (client) => {
-    const alreadySelected = selectedClients.some((c) => c.id === client.id);
-    if (alreadySelected) {
-      setSelectedClients(selectedClients.filter((c) => c.id !== client.id));
-    } else {
-      setSelectedClients([...selectedClients, client]);
-    }
-    setOpenClients(false);
-  };
-
-  const handleRemoveClient = (id) => {
-    setSelectedClients(selectedClients.filter((client) => client.id !== id));
-  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -48,17 +38,15 @@ function AttendeesInput() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [setOpenClients]);
 
   return (
     <div ref={dropdownRef} className="grid">
-      <label className="text-[#464646] text-sm">Attendees</label>
-      <input
+      <Input
+        label={"Attendees"}
+        placeholder={"Choose clients and their relationships"}
         onClick={() => setOpenClients(true)}
-        type="text"
-        readOnly
-        className="border border-[#9b9b9b] rounded px-3 py-1 outline-none cursor-pointer"
-        placeholder="Choose clients and their relationships"
+        isOpen={openClients}
       />
       <div className=" relative">
         {openClients && (
@@ -87,15 +75,7 @@ function AttendeesInput() {
                 </div>
               );
             })}
-            <div className="px-5 py-3 hover:bg-gray-100 border-t border-gray-300">
-              <button
-                onClick={openCreateClient}
-                className="text-sm flex items-center gap-3 text-primary-800 font-bold"
-              >
-                <FaPlus />
-                New Client
-              </button>
-            </div>
+            <CreateButton onClick={openCreateClient} create={"New Client"} />
           </div>
         )}
       </div>

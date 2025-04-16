@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import useCalendarPage from "../../../../../../../FormSchema/Provider/calendarPage";
-import { FaPlus } from "react-icons/fa";
+import React, { useEffect, useRef } from "react";
 import { RxCross1 } from "react-icons/rx";
 import { LuDot } from "react-icons/lu";
+import Input from "./Input";
+import CreateButton from "./CreateButton";
 
 const services = [
   {
@@ -35,27 +35,15 @@ const services = [
   },
 ];
 
-function ServicesInput() {
-  const [openServices, setOpenServices] = useState(false);
-  const [selectedServices, setSelectedServices] = useState([]);
+function ServicesInput({
+  openServices,
+  setOpenServices,
+  selectedServices,
+  handleServiceselect,
+  handleRemoveService,
+  openCreateService,
+}) {
   const dropdownRef = useRef(null);
-  const { openCreateClient } = useCalendarPage();
-
-  const handleServiceselect = (service) => {
-    const alreadySelected = selectedServices.some((c) => c.id === service.id);
-    if (alreadySelected) {
-      setSelectedServices(selectedServices.filter((c) => c.id !== service.id));
-    } else {
-      setSelectedServices([...selectedServices, service]);
-    }
-    setOpenServices(false);
-  };
-
-  const handleRemoveService = (id) => {
-    setSelectedServices(
-      selectedServices.filter((service) => service.id !== id)
-    );
-  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -68,17 +56,15 @@ function ServicesInput() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [setOpenServices]);
 
   return (
     <div ref={dropdownRef} className="grid">
-      <label className="text-[#464646] text-sm">Services</label>
-      <input
+      <Input
+        label={"Services"}
+        placeholder={"Choose Services"}
         onClick={() => setOpenServices(true)}
-        type="text"
-        readOnly
-        className="border border-[#9b9b9b] rounded px-3 py-1 outline-none cursor-pointer"
-        placeholder="Choose Services"
+        isOpen={openServices}
       />
       <div className=" relative">
         {openServices && (
@@ -99,20 +85,12 @@ function ServicesInput() {
                   <div className="flex text-sm items-center text-gray-500">
                     <p>{service.duration}</p>
                     <LuDot />
-                    <p>{service.currency+" "+service.price}</p>
+                    <p>{service.currency + " " + service.price}</p>
                   </div>
                 </div>
               );
             })}
-            <div className="px-5 py-3 hover:bg-gray-100 border-t border-gray-300">
-              <button
-                onClick={openCreateClient}
-                className="text-sm flex items-center gap-3 text-primary-800 font-bold"
-              >
-                <FaPlus />
-                New Service
-              </button>
-            </div>
+            <CreateButton onClick={openCreateService} create={"New Service"} />
           </div>
         )}
       </div>

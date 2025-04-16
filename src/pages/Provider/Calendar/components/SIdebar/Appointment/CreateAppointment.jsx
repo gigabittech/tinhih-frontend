@@ -7,6 +7,8 @@ import TeamDropdown from "../TeamDropdown";
 import HeadCalendar from "../HeadCalendar";
 import AttendeesInput from "./components/AttendeesInput";
 import ServicesInput from "./components/ServicesInput";
+import useAttendees from "./utils/useAttendees";
+import useServices from "./utils/useServices";
 
 const teamMembers = [
   { id: 1, name: "Sarah Miller", role: "Stylist" },
@@ -46,13 +48,27 @@ function SelectedItems({ items, options, labelKey, onRemove }) {
 }
 
 function CreateAppointment({ onClose }) {
-  const { openCreateService, openCreateLocation } = useCalendarPage();
+  const {
+    openClients,
+    handleRemoveClient,
+    handleClientSelect,
+    setOpenClients,
+    selectedClients,
+  } = useAttendees();
+  const {
+    openServices,
+    setOpenServices,
+    selectedServices,
+    handleServiceselect,
+    handleRemoveService,
+  } = useServices();
+  const { openCreateClient, openCreateService, openCreateLocation } =
+    useCalendarPage();
   const [selectedTeamMember, setSelectedTeamMember] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState([]);
 
   const teamDropdownRef = useRef(null);
   const locationDropdownRef = useRef(null);
-
 
   const handleTeamMemberSelect = (ids) => {
     setSelectedTeamMember(ids);
@@ -63,7 +79,6 @@ function CreateAppointment({ onClose }) {
     setSelectedLocation(ids);
     locationDropdownRef.current?.close();
   };
-
 
   const handleRemoveTeamMember = (id) => {
     setSelectedTeamMember(
@@ -92,7 +107,14 @@ function CreateAppointment({ onClose }) {
           <h2 className="font-bold text-lg">Appointment details</h2>
           {/* Clients */}
 
-          <AttendeesInput />
+          <AttendeesInput
+            selectedClients={selectedClients}
+            openClients={openClients}
+            setOpenClients={setOpenClients}
+            handleClientSelect={handleClientSelect}
+            handleRemoveClient={handleRemoveClient}
+            openCreateClient={openCreateClient}
+          />
 
           {/* Team Member */}
           <div>
@@ -126,7 +148,14 @@ function CreateAppointment({ onClose }) {
           </div>
 
           {/* Services */}
-          <ServicesInput />
+          <ServicesInput
+            selectedServices={selectedServices}
+            setOpenServices={setOpenServices}
+            openServices={openServices}
+            handleRemoveService={handleRemoveService}
+            handleServiceselect={handleServiceselect}
+            openCreateService={openCreateService}
+          />
 
           {/* Location */}
           <div>
