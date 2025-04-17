@@ -7,11 +7,10 @@ import TeamDropdown from "../TeamDropdown";
 import HeadCalendar from "../HeadCalendar";
 import AttendeesInput from "./components/AttendeesInput";
 import ServicesInput from "./components/ServicesInput";
-
-const teamMembers = [
-  { id: 1, name: "Sarah Miller", role: "Stylist" },
-  { id: 2, name: "Mike Chen", role: "Barber" },
-];
+import useAttendees from "./utils/useAttendees";
+import useServices from "./utils/useServices";
+import TeamMembersInput from "./components/TeamMembersInput";
+import useTeamMembers from "./utils/useTeamMembers";
 
 const locations = [
   { id: 1, name: "Main Salon" },
@@ -46,29 +45,39 @@ function SelectedItems({ items, options, labelKey, onRemove }) {
 }
 
 function CreateAppointment({ onClose }) {
-  const { openCreateService, openCreateLocation } = useCalendarPage();
-  const [selectedTeamMember, setSelectedTeamMember] = useState([]);
+  const {
+    openClients,
+    handleRemoveClient,
+    handleClientSelect,
+    setOpenClients,
+    selectedClients,
+  } = useAttendees();
+
+  const {
+    openServices,
+    setOpenServices,
+    selectedServices,
+    handleServiceSelect,
+    handleRemoveService,
+  } = useServices();
+
+  const {
+    openTeamMembers,
+    setOpenTeamMembers,
+    selectedTeamMembers,
+    handleTeamMemberSelect,
+    handleRemoveTeamMember,
+  } = useTeamMembers();
+
+  const { openCreateClient, openCreateService, openCreateLocation } =
+    useCalendarPage();
   const [selectedLocation, setSelectedLocation] = useState([]);
 
-  const teamDropdownRef = useRef(null);
   const locationDropdownRef = useRef(null);
-
-
-  const handleTeamMemberSelect = (ids) => {
-    setSelectedTeamMember(ids);
-    teamDropdownRef.current?.close();
-  };
 
   const handleLocationSelect = (ids) => {
     setSelectedLocation(ids);
     locationDropdownRef.current?.close();
-  };
-
-
-  const handleRemoveTeamMember = (id) => {
-    setSelectedTeamMember(
-      selectedTeamMember.filter((memberId) => memberId !== id)
-    );
   };
 
   const handleRemoveLocation = (id) => {
@@ -92,41 +101,34 @@ function CreateAppointment({ onClose }) {
           <h2 className="font-bold text-lg">Appointment details</h2>
           {/* Clients */}
 
-          <AttendeesInput />
+          <AttendeesInput
+            selectedClients={selectedClients}
+            openClients={openClients}
+            setOpenClients={setOpenClients}
+            handleClientSelect={handleClientSelect}
+            handleRemoveClient={handleRemoveClient}
+            openCreateClient={openCreateClient}
+          />
 
           {/* Team Member */}
-          <div>
-            <AppointmentInput
-              ref={teamDropdownRef}
-              label="Team member"
-              options={teamMembers}
-              selectedValues={selectedTeamMember}
-              onChange={handleTeamMemberSelect}
-              labelKey="name"
-              valueKey="id"
-              NewButtonComponent={() => (
-                <Button
-                  onClick={openCreateService}
-                  variant="ghost"
-                  className="w-full justify-start font-bold text-primary-800 rounded-none"
-                >
-                  <Plus size={16} />
-                  <span>Add Team Member</span>
-                </Button>
-              )}
-            />
-            {selectedTeamMember.length > 0 && (
-              <SelectedItems
-                items={selectedTeamMember}
-                options={teamMembers}
-                labelKey="name"
-                onRemove={handleRemoveTeamMember}
-              />
-            )}
-          </div>
+          <TeamMembersInput
+            selectedTeamMembers={selectedTeamMembers}
+            openTeamMembers={openTeamMembers}
+            setOpenTeamMembers={setOpenTeamMembers}
+            handleTeamMemberSelect={handleTeamMemberSelect}
+            handleRemoveTeamMember={handleRemoveTeamMember}
+            openCreateTeamMember={openCreateClient}
+          />
 
           {/* Services */}
-          <ServicesInput />
+          <ServicesInput
+            selectedServices={selectedServices}
+            setOpenServices={setOpenServices}
+            openServices={openServices}
+            handleRemoveService={handleRemoveService}
+            handleServiceselect={handleServiceSelect}
+            openCreateService={openCreateService}
+          />
 
           {/* Location */}
           <div>
