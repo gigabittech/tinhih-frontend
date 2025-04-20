@@ -38,7 +38,7 @@ const useUserStore = create((set) => ({
         });
         console.log(response.data);
         
-
+        
         updateState(set, "user", {
           loading: false,
           success: true,
@@ -78,6 +78,8 @@ const useUserStore = create((set) => ({
           error: false,
           message: "User logged in successfully",
         });
+
+        Notify("User logged in successfully")
 
         await useUserStore.getState().getUser();
       }
