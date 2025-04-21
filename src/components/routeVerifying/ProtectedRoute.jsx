@@ -27,7 +27,7 @@ function ProtectedRoute({
     return <Navigate to="/login" replace />;
   }
 
-  if (shouldHaveNoWorkspace && !workspaces?.workspaces?.length) {
+  if (shouldHaveNoWorkspace && workspaces?.workspaces?.length) {
     return role === "provider" ? (
       <Navigate to="/calendar" replace />
     ) : (
@@ -35,7 +35,7 @@ function ProtectedRoute({
     );
   }
 
-  if (!shouldHaveNoWorkspace && workspaces?.workspaces?.length) {
+  if (!shouldHaveNoWorkspace && !workspaces?.workspaces?.length) {
     return <Navigate to="/Onboarding" replace />;
   }
 
