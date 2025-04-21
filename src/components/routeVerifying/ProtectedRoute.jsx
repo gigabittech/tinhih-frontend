@@ -13,21 +13,27 @@ function ProtectedRoute({
   const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
-    // Only proceed with checks after workspaces have loaded
     if (!loading) {
-      setShouldRender(true);
+      // Wait an extra frame to ensure workspace state is settled
+      const timer = setTimeout(() => {
+        setShouldRender(true);
+      }, 100); // small delay (can adjust)
+      return () => clearTimeout(timer);
     }
-  }, [loading]);
+  }, [loading, workspaces]);
 
   if (!shouldRender) {
-    return null; // or a loading spinner
+    return null; // Or a loading spinner
   }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  if (shouldHaveNoWorkspace && workspaces?.workspaces?.length) {
+  const hasWorkspace = workspaces?.workspaces?.length > 0;
+
+  // If user shouldn't have workspace but does, redirect
+  if (shouldHaveNoWorkspace && hasWorkspace) {
     return role === "provider" ? (
       <Navigate to="/calendar" replace />
     ) : (
@@ -35,7 +41,8 @@ function ProtectedRoute({
     );
   }
 
-  if (!shouldHaveNoWorkspace && !workspaces?.workspaces?.length) {
+  // If user should have workspace but doesn't, redirect
+  if (!shouldHaveNoWorkspace && !hasWorkspace) {
     return <Navigate to="/Onboarding" replace />;
   }
 
@@ -47,3 +54,4 @@ function ProtectedRoute({
 }
 
 export default ProtectedRoute;
+
