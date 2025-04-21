@@ -11,7 +11,7 @@ function useWorkspace() {
       try {
         const token = localStorage.getItem("auth-token");
         const response = await axios.get(
-          `${import.meta.env.VITE_APP_SERVER_URL}/workspaces`,
+          `${import.meta.env.VITE_APP_SERVER_URL}/workspaces/user`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

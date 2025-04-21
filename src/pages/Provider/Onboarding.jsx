@@ -5,10 +5,12 @@ import axios from "axios";
 import countryNames from "../../data/countyNames";
 import professions from "../../data/professtions";
 import { Notify } from "../../components/ui/Toaster";
+import { useNavigate } from "react-router";
 
 export default function Onboarding() {
   const [step, setStep] = React.useState(1);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -37,8 +39,12 @@ export default function Onboarding() {
           },
         }
       );
-      const result = response.data;
-      Notify(result.message);
+      if (response.status === 200) {
+        const result = response.data;
+
+        Notify(result.message);
+        navigate("/calendar");
+      }
     } catch (error) {
       console.error("Submission failed:", error);
     } finally {
