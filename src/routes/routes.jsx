@@ -8,7 +8,7 @@ const Register = lazy(() =>
 const CalendarPage = lazy(() =>
   import("../pages/Provider/Calendar/CalendarPage")
 );
-const Onboarding = lazy(() => import("../pages/Provider/Onboarding"));
+const Onboarding = lazy(() => import("../pages/Provider/onboarding/Onboarding"));
 const Layout = lazy(() => import("../layout/Layout"));
 const NotFoundRoute = lazy(() => import("../pages/NotFoundRoute"));
 
