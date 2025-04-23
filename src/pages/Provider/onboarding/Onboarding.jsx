@@ -2,9 +2,9 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { BiSolidUser } from "react-icons/bi";
 import axios from "axios";
-import countryNames from "../../data/countyNames";
-import professions from "../../data/professtions";
-import { Notify } from "../../components/ui/Toaster";
+import countryNames from "../../../data/countyNames";
+import professions from "../../../data/professtions";
+import { Notify } from "../../../components/ui/Toaster";
 
 export default function Onboarding() {
   const [step, setStep] = React.useState(1);
