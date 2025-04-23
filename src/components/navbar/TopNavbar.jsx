@@ -6,11 +6,14 @@ import useUserStore from "../../store/global/userStore";
 import Avatar from "../ui/Avatar";
 import { FaPlus } from "react-icons/fa6";
 import useToggleWorkspace from "../../hook/toggleWorkspace";
+import { Modal, ModalBody, ModalHeader } from "../ui/Modal";
+import { PiCirclesThreeFill } from "react-icons/pi";
 
 function TopNavbar() {
-  const [expand, setExpand] = useState();
+  const [expand, setExpand] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const hanldeLogOut = useUserStore((state) => state.logoutHandler);
-  const { full_name, email, currentWorkspace, workspaces } = useUserStore(
+  const { email, currentWorkspace, workspaces } = useUserStore(
     (state) => state.user
   );
   const { toggleWorkspace } = useToggleWorkspace();
@@ -80,7 +83,10 @@ function TopNavbar() {
                     </p>
                   </div>
                 ))}
-                <div className="px-5 py-2 my-1 hover:bg-gray-100 flex items-center gap-3">
+                <div
+                  onClick={() => setOpenModal(true)}
+                  className="px-5 py-2 my-1 hover:bg-gray-100 text-primary-700 flex items-center gap-3 cursor-pointer text-sm font-bold"
+                >
                   <FaPlus />
                   New workspace
                 </div>
@@ -96,6 +102,26 @@ function TopNavbar() {
           </div>
         )}
       </div>
+      <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
+        <ModalHeader
+          icon={<PiCirclesThreeFill size={25} color="#a0a0a0" />}
+          title={"New workspace"}
+          onClose={() => setOpenModal(false)}
+        />
+        <ModalBody>
+          <div>
+
+          </div>
+          <div className="flex justify-end gap-2">
+            <button className=" border border-[#a0a0a0] text-primary-800 px-5 py-1 rounded">
+              Cancel
+            </button>
+            <button className=" border border-primary-700 bg-primary-700 text-white px-5 py-1 rounded">
+              Create
+            </button>
+          </div>
+        </ModalBody>
+      </Modal>
     </div>
   );
 }
