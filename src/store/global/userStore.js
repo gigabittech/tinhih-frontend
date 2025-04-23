@@ -117,6 +117,7 @@ const useUserStore = create((set) => ({
           error: false,
           message: "User logged out successfully",
         });
+        Notify('User logged out successfully')
       }
     } catch (error) {
       const errorInfo = error?.response?.data?.message || "Logout failed.";

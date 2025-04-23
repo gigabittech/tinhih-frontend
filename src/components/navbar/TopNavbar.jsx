@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { IoLink } from "react-icons/io5";
 import { MdOutlineLogout } from "react-icons/md";
+import useUserStore from "../../store/global/userStore";
 
 function TopNavbar() {
   const [expand, setExpand] = useState();
+  const hanldeLogOut = useUserStore((state) => state.logoutHandler);
+
   return (
     <div className="py-3 px-10">
       <div className="flex justify-end relative">
@@ -28,7 +31,10 @@ function TopNavbar() {
         </div>
         {expand && (
           <div className=" absolute bg-white top-10 z-10 rounded shadow-2xl border border-[#a0a0a039] whitespace-nowrap">
-            <div onClick={() => setExpand(false)} className=" -z-10 fixed top-0 left-0 right-0 bottom-0"></div>
+            <div
+              onClick={() => setExpand(false)}
+              className=" -z-10 fixed top-0 left-0 right-0 bottom-0"
+            ></div>
             <div className="flex gap-3 items-center p-5 border-b border-b-[#ebebeb]">
               <p className=" w-10 h-10 flex justify-center items-center font-extrabold text-xs rounded-full bg-primary-400">
                 UN
@@ -54,8 +60,8 @@ function TopNavbar() {
               </div>
             </div>
 
-            <div className=" p-5 flex items-center gap-3">
-            <MdOutlineLogout /> Sign out
+            <div onClick={hanldeLogOut} className=" p-5 flex items-center gap-3 cursor-pointer">
+              <MdOutlineLogout /> Sign out
             </div>
           </div>
         )}
