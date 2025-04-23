@@ -3,23 +3,31 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { IoLink } from "react-icons/io5";
 import { MdOutlineLogout } from "react-icons/md";
 import useUserStore from "../../store/global/userStore";
+import Avatar from "../ui/Avatar";
+import { FaPlus } from "react-icons/fa6";
+import useToggleWorkspace from "../../hook/toggleWorkspace";
 
 function TopNavbar() {
   const [expand, setExpand] = useState();
   const hanldeLogOut = useUserStore((state) => state.logoutHandler);
+  const { full_name, email, currentWorkspace, workspaces } = useUserStore(
+    (state) => state.user
+  );
+  const { toggleWorkspace } = useToggleWorkspace();
 
   return (
     <div className="py-3 px-10">
       <div className="flex justify-end relative">
+        {/* ---------profile button---------- */}
         <div
           onClick={() => setExpand(!expand)}
           className="flex items-center gap-5 bg-gray-100 p-1 rounded-full cursor-pointer"
         >
           <div className="flex items-center gap-1">
-            <p className=" w-7 h-7 flex justify-center items-center font-extrabold text-xs rounded-full bg-primary-400">
-              UN
+            <Avatar name={currentWorkspace?.businessName} />
+            <p className="text-sm font-bold">
+              {currentWorkspace?.businessName}
             </p>
-            <p className="text-sm font-bold">User Name</p>
           </div>
           <div
             className={`${
@@ -29,38 +37,60 @@ function TopNavbar() {
             <IoMdArrowDropdown />
           </div>
         </div>
+        {/* ---------dropdown---------- */}
         {expand && (
           <div className=" absolute bg-white top-10 z-10 rounded shadow-2xl border border-[#a0a0a039] whitespace-nowrap">
+            {/* ---------button to close menu---------- */}
             <div
               onClick={() => setExpand(false)}
               className=" -z-10 fixed top-0 left-0 right-0 bottom-0"
             ></div>
+            {/* ---------header---------- */}
             <div className="flex gap-3 items-center p-5 border-b border-b-[#ebebeb]">
-              <p className=" w-10 h-10 flex justify-center items-center font-extrabold text-xs rounded-full bg-primary-400">
-                UN
-              </p>
+              <Avatar name={"full name"} />
               <div>
-                <p className="text-sm font-bold">User Nameeeeeee</p>
-                <p className="text-xs">Email-Address@yahoo.com</p>
+                <p className="text-sm font-bold">full_name</p>
+                <p className="text-xs">{email}</p>
               </div>
               <span className=" bg-gray-100 p-2 text-xl rounded">
                 <IoLink />
               </span>
             </div>
-
+            {/* ---------Workspaces---------- */}
             <div className=" py-5 border-b border-b-[#ebebeb]">
               <p className="text-sm pb-5 font-extrabold text-[#7a7a7a] px-5">
                 Workspaces
               </p>
-              <div className="flex gap-1 items-center px-5 py-1 bg-amber-100">
-                <p className=" w-8 h-8 flex justify-center items-center font-extrabold text-xs rounded-full bg-primary-400">
-                  UN
-                </p>
-                <p className="text-sm font-bold">Workspace Name</p>
+              <div>
+                <div className="flex gap-1 items-center px-5 py-1 bg-amber-100">
+                  <Avatar name={currentWorkspace.businessName} />
+                  <p className="text-sm font-bold">
+                    {currentWorkspace?.businessName}
+                  </p>
+                </div>
+                {workspaces.map((workspace) => (
+                  <div
+                    onClick={() => toggleWorkspace(workspace.id)}
+                    key={workspace.id}
+                    className="flex gap-1 items-center px-5 py-1 hover:bg-amber-100 cursor-pointer"
+                  >
+                    <Avatar name={workspace?.businessName} />
+                    <p className="text-sm font-bold">
+                      {workspace?.businessName}
+                    </p>
+                  </div>
+                ))}
+                <div className="px-5 py-2 my-1 hover:bg-gray-100 flex items-center gap-3">
+                  <FaPlus />
+                  New workspace
+                </div>
               </div>
             </div>
 
-            <div onClick={hanldeLogOut} className=" p-5 flex items-center gap-3 cursor-pointer">
+            <div
+              onClick={hanldeLogOut}
+              className=" p-5 flex items-center gap-3 cursor-pointer"
+            >
               <MdOutlineLogout /> Sign out
             </div>
           </div>
