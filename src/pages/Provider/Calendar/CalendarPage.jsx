@@ -4,7 +4,8 @@ import { useCalendarStore } from "../../../FormSchema/Provider/calendarStore";
 import ShortCalendar, {
   getMonthSlots,
 } from "../../../components/ui/ShortCalendar";
-import MonthlyCalendar from "./components/FullCalendar/MonthlyCalendar";  
+import MonthlyCalendar from "./components/FullCalendar/MonthlyCalendar";
+import TopNavbar from "../../../components/navbar/TopNavbar";
 
 function CalendarPage() {
   const {
@@ -22,6 +23,7 @@ function CalendarPage() {
 
   return (
     <div className=" flex flex-col h-screen">
+      <TopNavbar />
       <CalendarHeader />
       <div className="flex gap-3 h-full md:pl-5 border-t border-outline-medium">
         <section className="hidden md:block md:w-[17rem] pt-3">

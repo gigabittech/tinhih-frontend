@@ -38,7 +38,7 @@ const useUserStore = create((set) => ({
         });
         console.log(response.data);
         
-
+        
         updateState(set, "user", {
           loading: false,
           success: true,
@@ -79,6 +79,8 @@ const useUserStore = create((set) => ({
           message: "User logged in successfully",
         });
 
+        Notify("User logged in successfully")
+
         await useUserStore.getState().getUser();
       }
     } catch (error) {
@@ -115,6 +117,7 @@ const useUserStore = create((set) => ({
           error: false,
           message: "User logged out successfully",
         });
+        Notify('User logged out successfully')
       }
     } catch (error) {
       const errorInfo = error?.response?.data?.message || "Logout failed.";
