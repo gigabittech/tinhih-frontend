@@ -12,8 +12,9 @@ import { PiCirclesThreeFill } from "react-icons/pi";
 function TopNavbar() {
   const [expand, setExpand] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openLogoutModal, setOpenLogoutModal] = useState(false);
   const hanldeLogOut = useUserStore((state) => state.logoutHandler);
-  const { email, currentWorkspace, workspaces } = useUserStore(
+  const { full_name, email, currentWorkspace, workspaces } = useUserStore(
     (state) => state.user
   );
   const { toggleWorkspace } = useToggleWorkspace();
@@ -50,9 +51,9 @@ function TopNavbar() {
             ></div>
             {/* ---------header---------- */}
             <div className="flex gap-3 items-center p-5 border-b border-b-[#ebebeb]">
-              <Avatar name={"full name"} />
+              <Avatar name={full_name} />
               <div>
-                <p className="text-sm font-bold">full_name</p>
+                <p className="text-sm font-bold">{full_name}</p>
                 <p className="text-xs">{email}</p>
               </div>
               <span className=" bg-gray-100 p-2 text-xl rounded">
@@ -94,7 +95,7 @@ function TopNavbar() {
             </div>
 
             <div
-              onClick={hanldeLogOut}
+              onClick={() => setOpenLogoutModal(true)}
               className=" p-5 flex items-center gap-3 cursor-pointer"
             >
               <MdOutlineLogout /> Sign out
@@ -109,15 +110,62 @@ function TopNavbar() {
           onClose={() => setOpenModal(false)}
         />
         <ModalBody>
-          <div>
-
+          <div className="grid grid-cols-1 gap-5">
+            <div className="grid grid-cols-2 gap-5">
+              <div className="grid">
+                <label className=" text-sm">Workspace name</label>
+                <input
+                  type="text"
+                  placeholder="Displayed to client"
+                  className="rounded px-3 py-1 border-gray-400 outline-none focus:border-primary-400 border w-full"
+                />
+              </div>
+              <div className="grid">
+                <label className=" text-sm">Country</label>
+                <input
+                  type="text"
+                  className="rounded px-3 py-1 border-gray-400 outline-none focus:border-primary-400 border w-full"
+                />
+              </div>
+            </div>
+            <div>
+              <label className=" text-sm">Profession</label>
+              <input
+                type="text"
+                className="rounded px-3 py-1 border-gray-400 outline-none focus:border-primary-400 border  w-full"
+              />
+            </div>
           </div>
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2 pt-10">
             <button className=" border border-[#a0a0a0] text-primary-800 px-5 py-1 rounded">
               Cancel
             </button>
             <button className=" border border-primary-700 bg-primary-700 text-white px-5 py-1 rounded">
               Create
+            </button>
+          </div>
+        </ModalBody>
+      </Modal>
+      <Modal isOpen={openLogoutModal} onClose={() => setOpenLogoutModal(false)}>
+        <ModalHeader
+          icon={""}
+          title={"Are you sure?"}
+          onClose={() => setOpenLogoutModal(false)}
+        />
+        <ModalBody>
+          <p className=" text-gray-500 ps-1">Sign out of this device.</p>
+          <div className="flex justify-end gap-2 pt-10">
+            <button
+              onClick={() => setOpenLogoutModal(false)}
+              className=" border border-[#a0a0a0] text-primary-800 px-5 py-1 rounded cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={hanldeLogOut}
+              className=" border border-primary-700 bg-primary-700 text-white px-5 py-1 rounded cursor-pointer"
+            >
+              Confirm
             </button>
           </div>
         </ModalBody>
