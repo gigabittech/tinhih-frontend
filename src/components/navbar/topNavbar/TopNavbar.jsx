@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { IoLink } from "react-icons/io5";
 import { MdOutlineLogout } from "react-icons/md";
-import useUserStore from "../../store/global/userStore";
-import Avatar from "../ui/Avatar";
+import useUserStore from "../../../store/global/userStore";
+import Avatar from "../../ui/Avatar";
 import { FaPlus } from "react-icons/fa6";
-import useToggleWorkspace from "../../hook/toggleWorkspace";
-import { Modal, ModalBody, ModalHeader } from "../ui/Modal";
-import { PiCirclesThreeFill } from "react-icons/pi";
+import useToggleWorkspace from "./hooks/toggleWorkspace";
+import { Modal, ModalBody, ModalHeader } from "../../ui/Modal";
+import CreateWorkspaceModal from "./components/CreateWorkspaceModal";
 
 function TopNavbar() {
   const [expand, setExpand] = useState(false);
@@ -18,6 +18,16 @@ function TopNavbar() {
     (state) => state.user
   );
   const { toggleWorkspace } = useToggleWorkspace();
+
+  const handleCreateWorkspaceModal = () => {
+    setOpenModal(true);
+    setExpand(false);
+  };
+
+  const handleLogoutModal = () => {
+    setOpenLogoutModal(true);
+    setExpand(false);
+  };
 
   return (
     <div className="py-3 px-10">
@@ -85,7 +95,7 @@ function TopNavbar() {
                   </div>
                 ))}
                 <div
-                  onClick={() => setOpenModal(true)}
+                  onClick={handleCreateWorkspaceModal}
                   className="px-5 py-2 my-1 hover:bg-gray-100 text-primary-700 flex items-center gap-3 cursor-pointer text-sm font-bold"
                 >
                   <FaPlus />
@@ -95,7 +105,7 @@ function TopNavbar() {
             </div>
 
             <div
-              onClick={() => setOpenLogoutModal(true)}
+              onClick={handleLogoutModal}
               className=" p-5 flex items-center gap-3 cursor-pointer"
             >
               <MdOutlineLogout /> Sign out
@@ -103,49 +113,10 @@ function TopNavbar() {
           </div>
         )}
       </div>
-      <Modal isOpen={openModal} onClose={() => setOpenModal(false)}>
-        <ModalHeader
-          icon={<PiCirclesThreeFill size={25} color="#a0a0a0" />}
-          title={"New workspace"}
-          onClose={() => setOpenModal(false)}
-        />
-        <ModalBody>
-          <div className="grid grid-cols-1 gap-5">
-            <div className="grid grid-cols-2 gap-5">
-              <div className="grid">
-                <label className=" text-sm">Workspace name</label>
-                <input
-                  type="text"
-                  placeholder="Displayed to client"
-                  className="rounded px-3 py-1 border-gray-400 outline-none focus:border-primary-400 border w-full"
-                />
-              </div>
-              <div className="grid">
-                <label className=" text-sm">Country</label>
-                <input
-                  type="text"
-                  className="rounded px-3 py-1 border-gray-400 outline-none focus:border-primary-400 border w-full"
-                />
-              </div>
-            </div>
-            <div>
-              <label className=" text-sm">Profession</label>
-              <input
-                type="text"
-                className="rounded px-3 py-1 border-gray-400 outline-none focus:border-primary-400 border  w-full"
-              />
-            </div>
-          </div>
-          <div className="flex justify-end gap-2 pt-10">
-            <button className=" border border-[#a0a0a0] text-primary-800 px-5 py-1 rounded">
-              Cancel
-            </button>
-            <button className=" border border-primary-700 bg-primary-700 text-white px-5 py-1 rounded">
-              Create
-            </button>
-          </div>
-        </ModalBody>
-      </Modal>
+      <CreateWorkspaceModal
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+      />
       <Modal isOpen={openLogoutModal} onClose={() => setOpenLogoutModal(false)}>
         <ModalHeader
           icon={""}

@@ -31,8 +31,8 @@ export default function Onboarding() {
   const onSubmit = async (data) => {
     const payload = {
       ...data,
-      full_name: `${data.firstName} ${data.lastName}`.trim(),
-      preferred_name: data.firstName,
+      full_name: `${data.first_name} ${data.last_name}`.trim(),
+      preferred_name: data.first_name,
       teamSize:
         data.teamSize === "Just me"
           ? "justMe"
@@ -68,7 +68,7 @@ export default function Onboarding() {
 
   const nextStep = async () => {
     if (step === 1) {
-      const isValid = await trigger(["firstName", "profession", "countryCode"]);
+      const isValid = await trigger(["first_name", "profession", "countryCode"])
       if (isValid) setStep(2);
     } else if (step === 2) {
       const isValid = await trigger(["teamSize"]);
@@ -104,12 +104,12 @@ export default function Onboarding() {
                       required: "Please enter your first name",
                     })}
                     className={`border ${
-                      errors.firstName ? "border-red-500" : "border-gray-300"
+                      errors.first_name ? "border-red-500" : "border-gray-300"
                     } rounded-md px-4 py-2 w-full`}
                   />
-                  {errors.firstName && (
+                  {errors.first_name && (
                     <p className="text-red-500 text-sm mt-1">
-                      {errors.firstName.message}
+                      {errors.first_name.message}
                     </p>
                   )}
                 </div>

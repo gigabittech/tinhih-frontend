@@ -51,7 +51,7 @@ function ModalBody({ children, className }) {
 }
 
 // sm:max-h-[310px] overflow-y-auto
-function ModalFooter({ className, children, isLoading }) {
+function ModalFooter({ className, children}) {
   return (
     <footer
       className={cn(
