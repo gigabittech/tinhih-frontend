@@ -1,7 +1,7 @@
 import React from "react";
 import { RiArrowDropDownFill } from "react-icons/ri";
 
-function Input({ label, placeholder, onClick, isOpen }) {
+function NewInput({ label, placeholder, onClick, isOpen }) {
   return (
     <div className="grid">
       <label className="text-[#464646] text-sm">{label}</label>
@@ -24,4 +24,4 @@ function Input({ label, placeholder, onClick, isOpen }) {
   );
 }
 
-export default Input;
+export default NewInput;

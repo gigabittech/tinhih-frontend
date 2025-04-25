@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
-import Input from "./Input";
 import CreateButton from "./CreateButton";
+import NewInput from "../../../../../../../components/ui/NewInput";
 
 const clients = [
   {
@@ -42,7 +42,7 @@ function AttendeesInput({
 
   return (
     <div ref={dropdownRef} className="grid">
-      <Input
+      <NewInput
         label={"Attendees"}
         placeholder={"Choose clients and their relationships"}
         onClick={() => setOpenClients(true)}

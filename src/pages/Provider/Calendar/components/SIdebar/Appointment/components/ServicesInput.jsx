@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { RxCross1 } from "react-icons/rx";
 import { LuDot } from "react-icons/lu";
-import Input from "./Input";
 import CreateButton from "./CreateButton";
+import NewInput from "../../../../../../../components/ui/NewInput";
 
 const services = [
   {
@@ -60,7 +60,7 @@ function ServicesInput({
 
   return (
     <div ref={dropdownRef} className="grid">
-      <Input
+      <NewInput
         label={"Services"}
         placeholder={"Choose Services"}
         onClick={() => setOpenServices(true)}

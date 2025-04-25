@@ -5,7 +5,7 @@ import ShortCalendar, {
   getMonthSlots,
 } from "../../../components/ui/ShortCalendar";
 import MonthlyCalendar from "./components/FullCalendar/MonthlyCalendar";
-import TopNavbar from "../../../components/navbar/TopNavbar";
+import TopNavbar from "../../../components/navbar/topNavbar/TopNavbar";
 
 function CalendarPage() {
   const {

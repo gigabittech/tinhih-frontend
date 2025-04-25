@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
 import Dropdown from "../../../../../../../components/ui/Dropdown";
-import Input from "./../../../../../../../components/ui/Input";
 import { ChevronDown } from "lucide-react";
 import { cn } from "../../../../../../../lib/utils";
+import NewInput from "../../../../../../../components/ui/NewInput";
 
 function AppointmentInput({
   options = [],
@@ -27,7 +27,7 @@ function AppointmentInput({
   return (
     <Dropdown
       inputTrigger={(isOpen) => (
-        <Input
+        <NewInput
           label={label}
           value={searchItem}
           onChange={(e) => setSearchItem(e.target.value)}

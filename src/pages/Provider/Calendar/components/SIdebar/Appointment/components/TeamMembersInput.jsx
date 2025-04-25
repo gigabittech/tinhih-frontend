@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
-import Input from "./Input";
 import CreateButton from "./CreateButton";
+import NewInput from "../../../../../../../components/ui/NewInput";
 
 const teamMembers = [
   { id: 1, name: "Sarah Miller", role: "Stylist" },
@@ -33,7 +33,7 @@ function TeamMembersInput({
 
   return (
     <div ref={dropdownRef} className="grid">
-      <Input
+      <NewInput
         label={"Team member"}
         placeholder={"Choose team members"}
         onClick={() => setOpenTeamMembers(true)}

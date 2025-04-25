@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useState } from "react";
+import axiosInstance from "../../../../lib/axiosInstanceWithToken";
 
 function useToggleWorkspace() {
   const [isLoading, setIsLoading] = useState(false);
@@ -9,18 +9,9 @@ function useToggleWorkspace() {
     setIsLoading(true);
     setError(null);
     try {
-      const token = localStorage.getItem("auth-token");
-      const res = await axios.post(
-        `${import.meta.env.VITE_APP_SERVER_URL}/workspaces/toggle`,
-        { id: id },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axiosInstance.post("/workspaces/toggle", { id: id });
       console.log(res);
-      
+
       if (res.status === 200) {
         window.location.href = "/calendar";
       }
