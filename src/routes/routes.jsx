@@ -8,7 +8,10 @@ const Register = lazy(() =>
 const CalendarPage = lazy(() =>
   import("../pages/Provider/Calendar/CalendarPage")
 );
-const Onboarding = lazy(() => import("../pages/Provider/onboarding/Onboarding"));
+const Inbox = lazy(() => import("../pages/Provider/inbox/Inbox"));
+const Onboarding = lazy(() =>
+  import("../pages/Provider/onboarding/Onboarding")
+);
 const Layout = lazy(() => import("../layout/Layout"));
 const NotFoundRoute = lazy(() => import("../pages/NotFoundRoute"));
 
@@ -16,10 +19,6 @@ import AuthRedirect from "../components/routeVerifying/AuthRedirect";
 import ProtectedRoute from "../components/routeVerifying/ProtectedRoute";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Navigate to="/login" replace />,
-  },
   {
     path: "/login",
     element: (
@@ -45,7 +44,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/calendar",
+    path: "/",
     element: (
       <ProtectedRoute allowedRoles={["provider"]}>
         <Layout />
@@ -55,6 +54,30 @@ const router = createBrowserRouter([
       {
         path: "/calendar",
         element: <CalendarPage />,
+      },
+      {
+        path: "/inbox",
+        element: <Inbox />,
+      },
+      {
+        path: "/clients",
+        element: <Inbox />,
+      },
+      {
+        path: "/billing",
+        element: <Inbox />,
+      },
+      {
+        path: "/your-team",
+        element: <Inbox />,
+      },
+      {
+        path: "/contacts",
+        element: <Inbox />,
+      },
+      {
+        path: "/settings",
+        element: <Inbox />,
       },
     ],
   },

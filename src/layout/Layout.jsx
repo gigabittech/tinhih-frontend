@@ -7,6 +7,7 @@ import Overlay from "../components/ui/Overlay";
 import NavMenu from "../components/navbar/NavMenu";
 import Submenu from "../components/navbar/Submenu";
 import { ChevronLeft } from "lucide-react";
+import TopNavbar from "../components/navbar/topNavbar/TopNavbar";
 
 function Layout() {
   const isOpenMenu = useMenuStore((state) => state.isMenuOpen);
@@ -95,7 +96,10 @@ function Layout() {
             />
           </button>
         )}
-        <Outlet />
+        <div>
+          <TopNavbar />
+          <Outlet />
+        </div>
       </div>
     </div>
   );
