@@ -11,7 +11,7 @@ const menuItems = [
   { icon: <FaUsers />, label: 'Clients', path: '/clients' },
   { icon: <FaDollarSign />, label: 'Billing', path: '/billing' },
   { icon: <FaBriefcase />, label: 'Your team', path: '/your-team' },
-  { icon: <FaAddressBook />, label: 'Contacts', path: '/contacts' },
+/*   { icon: <FaAddressBook />, label: 'Contacts', path: '/contacts' }, */
  /*  { icon: <FaFileAlt />, label: 'Templates', path: '/templates' }, */
   { icon: <FaCog />, label: 'Settings', path: '/settings' },
 ];
@@ -41,7 +41,7 @@ function NavMenu() {
 
       {/* Navigation Menu */}
       <nav>
-        <ul className="flex py-2 flex-col gap-1 overflow-x-hidden">
+        <ul className="flex py-2 flex-col overflow-x-hidden">
           {menuItems.map((item, index) => (
             <li key={index}>
               <NavLink
