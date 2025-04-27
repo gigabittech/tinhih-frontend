@@ -3,70 +3,61 @@ import { NavLink, useLocation } from "react-router";
 import { cn } from "../../lib/utils";
 import useMenuStore from "../../store/global/menuStore";
 import logoImage from "../../assets/auth/Logo.svg";
+import { FaCalendarCheck, FaInbox, FaUsers, FaDollarSign, FaBriefcase, FaAddressBook, FaFileAlt, FaCog } from "react-icons/fa";
+
+const menuItems = [
+  { icon: <FaCalendarCheck />, label: 'Calendar', path: '/calendar' },
+  { icon: <FaInbox />, label: 'Inbox', path: '/inbox' },
+  { icon: <FaUsers />, label: 'Clients', path: '/clients' },
+  { icon: <FaDollarSign />, label: 'Billing', path: '/billing' },
+  { icon: <FaBriefcase />, label: 'Your team', path: '/your-team' },
+/*   { icon: <FaAddressBook />, label: 'Contacts', path: '/contacts' }, */
+ /*  { icon: <FaFileAlt />, label: 'Templates', path: '/templates' }, */
+  { icon: <FaCog />, label: 'Settings', path: '/settings' },
+];
 
 function NavMenu() {
   const location = useLocation();
-  const menu = useMenuStore((state) => state.menu);
-  const openSubMenu = useMenuStore((state) => state.openSubMenu);
-  const colseSubMenu = useMenuStore((state) => state.closeSubMenu);
+  const closeSubMenu = useMenuStore((state) => state.closeSubMenu);
 
-  const isActiveSubmenu = useMemo(
-    () => (item) => {
-      const isSame = item?.subMenu
-        ?.map((sub) => sub?.path)
-        .includes(location.pathname);
-      return isSame;
-    },
+  const isActive = useMemo(
+    () => (path) => location.pathname.startsWith(path),
     [location.pathname]
   );
 
   return (
-    <div className="relative h-screen py-5 bg-fixed-100" onClick={colseSubMenu}>
-      <div className="flex items-center space-x-5 text-fixed-text mb-4 overflow-x-hidden">
+    <div className="relative h-screen text-white py-5 bg-fixed-100" onClick={closeSubMenu}>
+      {/* Logo and Title */}
+      <div className="flex items-center space-x-4 px-4 mb-6 overflow-hidden">
         <img
           src={logoImage}
           alt="Tinhih-logo"
-          className="w-10 relative left-2.5 shrink-0"
+          className="w-10 shrink-0"
         />
-        <h2 className="text-xl font-semibold text-nowrap">TiNHiH Portal</h2>
+        <h2 className="text-xl font-semibold text-fixed-text text-nowrap hidden md:block">
+          TiNHiH Portal
+        </h2>
       </div>
 
+      {/* Navigation Menu */}
       <nav>
-        <ul className="overflow-x-hidden">
-          {menu?.map((item, index) => (
+        <ul className="flex py-2 flex-col overflow-x-hidden">
+          {menuItems.map((item, index) => (
             <li key={index}>
-              {item?.subMenu ? (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openSubMenu(item);
-                  }}
-                  className={cn(
-                    "w-full flex items-center space-x-5 px-4 py-2.5 text-nowrap focus:outline-none trans cursor-pointer",
-                    isActiveSubmenu(item)
+              <NavLink
+                to={item.path}
+                className={({ isActive: active }) =>
+                  cn(
+                    "flex items-center gap-4 px-6 py-3 trans",
+                    active || isActive(item.path)
                       ? "bg-fixed-200 text-fixed-text"
                       : "text-fixed-text/65 hover:bg-fixed-200 focus-visible:bg-fixed-200"
-                  )}
-                >
-                  <span>{item?.icon}</span>
-                  <span>{item?.label}</span>
-                </button>
-              ) : (
-                <NavLink
-                  className={({ isActive }) =>
-                    cn(
-                      "flex items-center space-x-5 px-4 py-2.5 text-nowrap focus:outline-none trans cursor-pointer",
-                      isActive
-                        ? "bg-fixed-200 text-fixed-text"
-                        : "text-fixed-text/65 hover:bg-fixed-200 focus-visible:bg-fixed-200"
-                    )
-                  }
-                  to={item?.path}
-                >
-                  <span>{item?.icon}</span>
-                  <span>{item?.label}</span>
-                </NavLink>
-              )}
+                  )
+                }
+              >
+                <span className="text-lg">{item.icon}</span>
+                <span className="text-sm font-medium text-nowrap">{item.label}</span>
+              </NavLink>
             </li>
           ))}
         </ul>
