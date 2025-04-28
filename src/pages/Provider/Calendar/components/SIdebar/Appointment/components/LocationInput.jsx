@@ -1,37 +1,18 @@
 import React, { useEffect, useRef } from "react";
 import { RxCross1 } from "react-icons/rx";
-import { LuDot } from "react-icons/lu";
 import CreateButton from "./CreateButton";
 import NewInput from "../../../../../../../components/ui/NewInput";
 
 const locations = [
   {
     id: 1,
-    name: "Standard Appointment",
+    name: "TiNHiH Portal",
     duration: "45 mins",
-    price: 100,
-    currency: "BDT",
   },
   {
     id: 2,
-    name: "Consultation Call",
+    name: "Zoom",
     duration: "30 mins",
-    price: 80,
-    currency: "BDT",
-  },
-  {
-    id: 3,
-    name: "Therapy Session",
-    duration: "60 mins",
-    price: 150,
-    currency: "BDT",
-  },
-  {
-    id: 4,
-    name: "Follow-up Meeting",
-    duration: "20 mins",
-    price: 50,
-    currency: "BDT",
   },
 ];
 
@@ -80,11 +61,7 @@ function LocationInput({
                   }`}
                 >
                   <p className="font-bold">{service.name}</p>
-                  <div className="flex text-sm items-center text-gray-500">
-                    <p>{service.duration}</p>
-                    <LuDot />
-                    <p>{service.currency + " " + service.price}</p>
-                  </div>
+                  <p>{service.duration}</p>
                 </div>
               );
             })}
@@ -94,22 +71,20 @@ function LocationInput({
       </div>
       {selectedLocation && ( // Check if a location is selected
         <div className="grid grid-cols-1 gap-2 py-2">
-          <div className="flex justify-between items-center gap-2 px-5 py-3 border border-gray-300 rounded border-s-4 border-s-[#3078ca]">
+          <div className="flex justify-between items-center gap-2 px-5 py-3 border border-gray-300 rounded ">
             <div className="grid items-center gap-1">
               <p className="font-bold">{selectedLocation.name}</p>
-              <p className="text-sm text-gray-500">{selectedLocation.duration}</p>
-            </div>
-            <div className="flex items-center gap-5">
-              <p className="text-sm">
-                {selectedLocation.currency + " " + selectedLocation.price}{" "}
+              <p className="text-sm text-gray-500">
+                {selectedLocation.duration}
               </p>
-              <button
-                onClick={() => handleRemoveLocation()}
-                className="text-gray-600 w-6 h-6 hover:w-6 hover:h-6 hover:bg-gray-300 flex items-center justify-center rounded-full"
-              >
-                <RxCross1 size={12} />
-              </button>
             </div>
+
+            <button
+              onClick={() => handleRemoveLocation()}
+              className="text-gray-600 w-6 h-6 hover:w-6 hover:h-6 hover:bg-gray-300 flex items-center justify-center rounded-full"
+            >
+              <RxCross1 size={12} />
+            </button>
           </div>
         </div>
       )}
@@ -118,4 +93,3 @@ function LocationInput({
 }
 
 export default LocationInput;
-
