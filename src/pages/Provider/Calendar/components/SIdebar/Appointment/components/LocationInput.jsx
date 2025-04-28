@@ -4,7 +4,7 @@ import { LuDot } from "react-icons/lu";
 import CreateButton from "./CreateButton";
 import NewInput from "../../../../../../../components/ui/NewInput";
 
-const services = [
+const locations = [
   {
     id: 1,
     name: "Standard Appointment",
@@ -35,23 +35,20 @@ const services = [
   },
 ];
 
-function ServicesInput({
-  openServices,
-  setOpenServices,
-  selectedServices,
-  handleServicesSelect,
-  handleRemoveService,
-  openCreateService,
+function LocationInput({
+  openLocation,
+  setOpenLocation,
+  selectedLocation,
+  handleLocationSelect,
+  handleRemoveLocation,
+  openCreateLocation,
 }) {
   const dropdownRef = useRef(null);
-
-  console.log(selectedServices);
-  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setOpenServices(false);
+        setOpenLocation(false);
       }
     };
 
@@ -59,26 +56,24 @@ function ServicesInput({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [setOpenServices]);
+  }, [setOpenLocation]);
 
   return (
     <div ref={dropdownRef} className="grid">
       <NewInput
-        label={"Services"}
-        placeholder={"Choose Services"}
-        onClick={() => setOpenServices(true)}
-        isOpen={openServices}
+        label={"Location"}
+        placeholder={"Enter or choose Location"}
+        onClick={() => setOpenLocation(true)}
+        isOpen={openLocation}
       />
-      <div className=" relative">
-        {openServices && (
+      <div className="relative">
+        {openLocation && (
           <div className="absolute bg-white w-full shadow-2xl border border-gray-100 z-10 py-1 grid grid-cols-1 rounded">
-            {services.map((service) => {
-              const isSelected = selectedServices.some(
-                (c) => c.id === service.id
-              );
+            {locations.map((service) => {
+              const isSelected = selectedLocation?.id === service.id; // Only one location is selected
               return (
                 <div
-                  onClick={() => handleServicesSelect(service)}
+                  onClick={() => handleLocationSelect(service)}
                   key={service.id}
                   className={`px-5 py-2 grid items-center gap-1 cursor-pointer hover:bg-gray-100 ${
                     isSelected ? "bg-blue-100" : ""
@@ -93,38 +88,34 @@ function ServicesInput({
                 </div>
               );
             })}
-            <CreateButton onClick={openCreateService} create={"New Service"} />
+            <CreateButton onClick={openCreateLocation} create={"New Service"} />
           </div>
         )}
       </div>
-      {selectedServices?.length > 0 && (
+      {selectedLocation && ( // Check if a location is selected
         <div className="grid grid-cols-1 gap-2 py-2">
-          {selectedServices.map((service) => (
-            <div
-              key={service.id}
-              className="flex justify-between items-center gap-2 px-5 py-3 border border-gray-300 rounded border-s-4 border-s-[#3078ca]"
-            >
-              <div className="grid items-center gap-1">
-                <p className=" font-bold">{service.name}</p>
-                <p className="text-sm text-gray-500">{service.duration}</p>
-              </div>
-              <div className="flex items-center gap-5">
-                <p className="text-sm">
-                  {service.currency + " " + service.price}{" "}
-                </p>
-                <button
-                  onClick={() => handleRemoveService(service.id)}
-                  className="text-gray-600 w-6 h-6 hover:w-6 hover:h-6 hover:bg-gray-300 flex items-center justify-center rounded-full"
-                >
-                  <RxCross1 size={12} />
-                </button>
-              </div>
+          <div className="flex justify-between items-center gap-2 px-5 py-3 border border-gray-300 rounded border-s-4 border-s-[#3078ca]">
+            <div className="grid items-center gap-1">
+              <p className="font-bold">{selectedLocation.name}</p>
+              <p className="text-sm text-gray-500">{selectedLocation.duration}</p>
             </div>
-          ))}
+            <div className="flex items-center gap-5">
+              <p className="text-sm">
+                {selectedLocation.currency + " " + selectedLocation.price}{" "}
+              </p>
+              <button
+                onClick={() => handleRemoveLocation()}
+                className="text-gray-600 w-6 h-6 hover:w-6 hover:h-6 hover:bg-gray-300 flex items-center justify-center rounded-full"
+              >
+                <RxCross1 size={12} />
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
   );
 }
 
-export default ServicesInput;
+export default LocationInput;
+

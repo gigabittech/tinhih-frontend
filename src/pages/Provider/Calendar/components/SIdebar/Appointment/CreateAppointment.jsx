@@ -1,7 +1,4 @@
-import React, { useState, useRef } from "react";
-import AppointmentInput from "./components/AppointmentInput";
-import Button from "../../../../../../components/ui/Button";
-import { Plus, X } from "lucide-react";
+import React from "react";
 import useCalendarPage from "../../../../../../FormSchema/Provider/calendarPage";
 import TeamDropdown from "../TeamDropdown";
 import HeadCalendar from "../HeadCalendar";
@@ -11,38 +8,9 @@ import useAttendees from "./utils/useAttendees";
 import useServices from "./utils/useServices";
 import TeamMembersInput from "./components/TeamMembersInput";
 import useTeamMembers from "./utils/useTeamMembers";
+import useLocation from "./utils/useLocation";
+import LocationInput from "./components/LocationInput";
 
-const locations = [
-  { id: 1, name: "Main Salon" },
-  { id: 2, name: "Downtown Studio" },
-];
-
-function SelectedItems({ items, options, labelKey, onRemove }) {
-  return (
-    <div className="grid grid-cols-2 gap-2 mt-2">
-      {items.map((id) => {
-        const item = options.find((opt) => opt.id === id);
-        return (
-          <div
-            key={id}
-            className="flex items-center justify-between bg-gray-100 px-4 py-2 text-sm"
-          >
-            <span>{item?.[labelKey]}</span>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onRemove(id);
-              }}
-              className="text-gray-500 hover:text-gray-700"
-            >
-              <X size={14} />
-            </button>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
 function CreateAppointment({ onClose }) {
   const {
@@ -57,9 +25,17 @@ function CreateAppointment({ onClose }) {
     openServices,
     setOpenServices,
     selectedServices,
-    handleServiceSelect,
+    handleServicesSelect,
     handleRemoveService,
   } = useServices();
+
+  const {
+    openLocation,
+    setOpenLocation,
+    selectedLocation,
+    handleLocationSelect,
+    handleRemoveLocation,
+  } = useLocation();
 
   const {
     openTeamMembers,
@@ -69,22 +45,12 @@ function CreateAppointment({ onClose }) {
     handleRemoveTeamMember,
   } = useTeamMembers();
 
-  const { openCreateClient, openCreateService, openCreateLocation, openCreateTeamMember } =
-    useCalendarPage();
-  const [selectedLocation, setSelectedLocation] = useState([]);
-
-  const locationDropdownRef = useRef(null);
-
-  const handleLocationSelect = (ids) => {
-    setSelectedLocation(ids);
-    locationDropdownRef.current?.close();
-  };
-
-  const handleRemoveLocation = (id) => {
-    setSelectedLocation(
-      selectedLocation.filter((locationId) => locationId !== id)
-    );
-  };
+  const {
+    openCreateClient,
+    openCreateService,
+    openCreateLocation,
+    openCreateTeamMember,
+  } = useCalendarPage();
 
   return (
     <div className="relative h-screen flex flex-col">
@@ -123,43 +89,22 @@ function CreateAppointment({ onClose }) {
           {/* Services */}
           <ServicesInput
             selectedServices={selectedServices}
-            setOpenServices={setOpenServices}
             openServices={openServices}
+            setOpenServices={setOpenServices}
+            handleServicesSelect={handleServicesSelect}
             handleRemoveService={handleRemoveService}
-            handleServiceselect={handleServiceSelect}
             openCreateService={openCreateService}
           />
 
           {/* Location */}
-          <div>
-            <AppointmentInput
-              ref={locationDropdownRef}
-              label="Location"
-              options={locations}
-              selectedValues={selectedLocation}
-              onChange={handleLocationSelect}
-              labelKey="name"
-              valueKey="id"
-              NewButtonComponent={() => (
-                <Button
-                  onClick={openCreateLocation}
-                  variant="ghost"
-                  className="w-full justify-start font-bold text-primary-800 rounded-none"
-                >
-                  <Plus size={16} />
-                  <span>New Location</span>
-                </Button>
-              )}
-            />
-            {selectedLocation.length > 0 && (
-              <SelectedItems
-                items={selectedLocation}
-                options={locations}
-                labelKey="name"
-                onRemove={handleRemoveLocation}
-              />
-            )}
-          </div>
+          <LocationInput
+            selectedLocation={selectedLocation}
+            openLocation={openLocation}
+            setOpenLocation={setOpenLocation}
+            handleLocationSelect={handleLocationSelect}
+            handleRemoveLocation={handleRemoveLocation}
+            openCreateLocation={openCreateLocation}
+          />
         </div>
       </div>
       <div className="fixed bottom-0 right-0 left-0 p-6 border-t mt-20 border-gray-200 bg-white">
