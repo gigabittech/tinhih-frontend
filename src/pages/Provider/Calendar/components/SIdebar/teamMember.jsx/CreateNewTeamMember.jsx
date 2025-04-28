@@ -3,75 +3,134 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
+  ModalHeader,
 } from "../../../../../../components/ui/Modal";
-import Input from "../../../../../../components/ui/Input";
+import Button from "../../../../../../components/ui/Button";
+import { UserRoundPlus } from "lucide-react";
+import { BiSolidInfoCircle } from "react-icons/bi";
 
 function CreateNewTeamMember({ isOpen, onClose }) {
-  const initialValues = {
+  /* const initialValues = {
     first_name: "",
     last_name: "",
     email: "",
     id_number: "",
     phone_number: "",
     members: [],
-  };
-  const submitHandler = (values) => {
-    console.log(values);
-  };
+  }; */
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Formik
-        validationSchema={validationSchema}
-        initialValues={initialValues}
-        onSubmit={submitHandler}
-      >
-        {(formilk) => (
-          <Form>
-            <ModalHeader
-              icon={<UserRoundPlus className="text-context-light size-6" />}
-              title="New client"
-              onClose={onClose}
+      <ModalHeader
+        icon={<UserRoundPlus className="text-context-light size-6" />}
+        title="New client"
+        onClose={onClose}
+      />
+      <ModalBody className="my-3 flex flex-col gap-3">
+        <div className=" grid grid-cols-2 gap-3">
+          <div>
+            <label htmlFor="" className=" text-sm">
+              First Name*
+            </label>
+            <input
+              type="text"
+              className="border border-[#a0a0a0] w-full rounded px-2 py-1"
             />
-            <ModalBody className="my-3 flex flex-col gap-3">
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Input label="First name" name="first_name" formik={formilk} />
-                <Input label="Last name" name="last_name" formik={formilk} />
-              </div>
+          </div>
+          <div>
+            <label htmlFor="" className=" text-sm">
+              last Name*
+            </label>
+            <input
+              type="text"
+              className="border border-[#a0a0a0] w-full rounded px-2 py-1"
+            />
+          </div>
+          <div>
+            <label htmlFor="" className=" text-sm">
+              Email*
+            </label>
+            <input
+              type="text"
+              className="border border-[#a0a0a0] w-full rounded px-2 py-1"
+            />
+          </div>
+          <div>
+            <label htmlFor="" className=" text-sm">
+              Phone number
+            </label>
+            <input
+              type="text"
+              className="border border-[#a0a0a0] w-full rounded px-2 py-1"
+            />
+          </div>
+          <div>
+            <label htmlFor="" className=" text-sm">
+              Job title
+            </label>
+            <input
+              type="text"
+              className="border border-[#a0a0a0] w-full rounded px-2 py-1"
+            />
+          </div>
 
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Input label="Email" name="email" formik={formilk} />
-                <Input
-                  label="Phone number"
-                  name="phone_number"
-                  formik={formilk}
-                />
-              </div>
-
-              <Input
-                label="Identification number"
-                name="id_number"
-                className=" sm:w-1/2"
-                formik={formilk}
-              />
-            </ModalBody>
-            <ModalFooter className="justify-end">
-              <div className="w-full sm:w-auto flex flex-col-reverse sm:flex-row items-center gap-3">
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full sm:w-auto"
-                  onClick={onClose}
-                >
-                  Cancel
-                </Button>
-                <Button type="submit" className="w-full sm:w-auto">
-                  Save
-                </Button>
-              </div>
-            </ModalFooter>
-          </Form>
-        )}
-      </Formik>
+          <div>
+            <label htmlFor="" className=" text-sm">
+              License number
+            </label>
+            <input
+              type="text"
+              className="border border-[#a0a0a0] w-full rounded px-2 py-1"
+            />
+          </div>
+          <div>
+            <label htmlFor="" className=" text-sm">
+              National provider identifier(NPI)
+            </label>
+            <input
+              type="text"
+              className="border border-[#a0a0a0] w-full rounded px-2 py-1"
+            />
+          </div>
+          <div>
+            <label htmlFor="" className=" text-sm">
+              Taxonomy code
+            </label>
+            <input
+              type="text"
+              className="border border-[#a0a0a0] w-full rounded px-2 py-1"
+            />
+          </div>
+        </div>
+        <div>
+          <label htmlFor="" className=" text-sm">
+            Assign services
+          </label>
+          <input
+            type="text"
+            className="border border-[#a0a0a0] w-full rounded px-2 py-1"
+          />
+        </div>
+        <p className=" bg-amber-100 px-5 py-3 flex items-center gap-2 text-sm">
+          <BiSolidInfoCircle />
+          Adding new team members will increase your monthly subscription.
+        </p>
+      </ModalBody>
+      <ModalFooter className="justify-end">
+        <div className="w-full sm:w-auto flex flex-col-reverse sm:flex-row items-center gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full sm:w-auto"
+            onClick={onClose}
+          >
+            Cancel
+          </Button>
+          <Button type="submit" className="w-full sm:w-auto">
+            Create
+          </Button>
+        </div>
+      </ModalFooter>
     </Modal>
   );
 }

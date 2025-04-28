@@ -69,7 +69,7 @@ function CreateAppointment({ onClose }) {
     handleRemoveTeamMember,
   } = useTeamMembers();
 
-  const { openCreateClient, openCreateService, openCreateLocation } =
+  const { openCreateClient, openCreateService, openCreateLocation, openCreateTeamMember } =
     useCalendarPage();
   const [selectedLocation, setSelectedLocation] = useState([]);
 
@@ -117,7 +117,7 @@ function CreateAppointment({ onClose }) {
             setOpenTeamMembers={setOpenTeamMembers}
             handleTeamMemberSelect={handleTeamMemberSelect}
             handleRemoveTeamMember={handleRemoveTeamMember}
-            openCreateTeamMember={openCreateClient}
+            openCreateTeamMember={openCreateTeamMember}
           />
 
           {/* Services */}

@@ -9,6 +9,10 @@ const useCalendarPage = create((set) => ({
   isClientCreate: false,
   openCreateClient: () => set({ isClientCreate: true }),
   closeCreateClient: () => set({ isClientCreate: false }),
+  // add new client
+  isTeamMemberCreate: false,
+  openCreateTeamMember: () => set({ isTeamMemberCreate: true }),
+  closeCreateTeamMember: () => set({ isTeamMemberCreate: false }),
 
   // add new service
   isServiceCreate: false,
