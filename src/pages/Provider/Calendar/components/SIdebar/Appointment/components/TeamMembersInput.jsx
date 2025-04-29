@@ -2,11 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import CreateButton from "./CreateButton";
 import NewInput from "../../../../../../../components/ui/NewInput";
+import useUserStore from "../../../../../../../store/global/userStore";
 
-const teamMembers = [
-  { id: 1, name: "Sarah Miller", role: "Stylist" },
-  { id: 2, name: "Mike Chen", role: "Barber" },
-];
 function TeamMembersInput({
   openTeamMembers,
   setOpenTeamMembers,
@@ -17,6 +14,12 @@ function TeamMembersInput({
 }) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
   const dropdownRef = useRef(null);
+  const { user } = useUserStore();
+
+  const teamMembers = [
+    ...(user?.currentWorkspace?.members || []),
+    { id: user?.id, name: user?.full_name },
+  ];
 
   useEffect(() => {
     const handleClickOutside = (event) => {
