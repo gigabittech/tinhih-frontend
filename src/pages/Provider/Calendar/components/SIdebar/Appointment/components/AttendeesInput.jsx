@@ -17,7 +17,6 @@ function AttendeesInput({
   const dropdownRef = useRef(null);
   const { user } = useUserStore();
   const clients = user?.currentWorkspace?.clients;
-  console.log(clients, "hmm");
 
   useEffect(() => {
     const handleClickOutside = (event) => {

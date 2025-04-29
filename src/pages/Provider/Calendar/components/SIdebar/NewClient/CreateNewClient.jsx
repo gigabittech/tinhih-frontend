@@ -20,18 +20,17 @@ function CreateNewClient({ isOpen, onClose }) {
     formState: { errors },
     reset,
   } = useForm();
-  
 
   const onSubmit = async (data) => {
     try {
       const response = await axiosInstance.post("/clients", data);
 
-      if (!response.ok) {
-        throw new Error("Failed to create client");
-      } else {
+      if (response.status === 200) {
         Notify("Created!");
         reset();
         onClose();
+      } else {
+        throw new Error("Failed to create client");
       }
     } catch (error) {
       console.error("Error creating client:", error.message);
@@ -78,7 +77,11 @@ function CreateNewClient({ isOpen, onClose }) {
                 </p>
               )}
             </div>
-            <StatusDropdown register={register} setValue={setValue} errors={errors} />
+            <StatusDropdown
+              register={register}
+              setValue={setValue}
+              errors={errors}
+            />
             <div>
               <label className="text-sm">Phone Number*</label>
               <input
