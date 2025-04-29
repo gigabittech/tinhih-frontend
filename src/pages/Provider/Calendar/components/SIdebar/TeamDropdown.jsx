@@ -10,9 +10,6 @@ const TeamDropdown = () => {
   const [selectedMembers, setSelectedMembers] = useState([
     { id: user?.id, name: user?.full_name },
   ]);
-
-  console.log("User:", user);
-
   const dropdownRef = useRef(null);
 
   const teamMembers = [

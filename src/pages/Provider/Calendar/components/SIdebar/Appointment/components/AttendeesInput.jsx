@@ -2,19 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import CreateButton from "./CreateButton";
 import NewInput from "../../../../../../../components/ui/NewInput";
-
-const clients = [
-  {
-    id: 1,
-    name: "Alice Johnson",
-    avatar: "https://randomuser.me/api/portraits/women/1.jpg",
-  },
-  {
-    id: 2,
-    name: "Bob Smith",
-    avatar: "https://randomuser.me/api/portraits/men/2.jpg",
-  },
-];
+import useUserStore from "../../../../../../../store/global/userStore";
+import Avatar from "../../../../../../../components/ui/Avatar";
 
 function AttendeesInput({
   openClients,
@@ -26,6 +15,9 @@ function AttendeesInput({
 }) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
   const dropdownRef = useRef(null);
+  const { user } = useUserStore();
+  const clients = user?.currentWorkspace?.clients;
+  console.log(clients, "hmm");
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -54,7 +46,7 @@ function AttendeesInput({
             <p className="px-5 font-bold my-3">
               All clients and their relationships
             </p>
-            {clients.map((client) => {
+            {clients?.map((client) => {
               const isSelected = selectedClients.some(
                 (c) => c.id === client.id
               );
@@ -66,12 +58,13 @@ function AttendeesInput({
                     isSelected ? "bg-blue-100" : ""
                   }`}
                 >
-                  <img
-                    src={client.avatar}
-                    alt={client.name}
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
-                  <p className="font-medium">{client.name}</p>
+                  <Avatar name={client?.first_name + " " + client?.last_name} />
+                  <p className="font-semibold">
+                    {client?.first_name + " " + client?.last_name}
+                  </p>
+                  <p className="text-sm bg-amber-100 px-1 rounded">
+                    {client?.status}
+                  </p>
                 </div>
               );
             })}
@@ -88,11 +81,12 @@ function AttendeesInput({
               key={client.id}
               className="flex justify-between items-center gap-2 hover:bg-gray-200 px-3 py-5"
             >
-              <div className="flex items-center gap-5">
-                <p className="flex justify-center items-center w-8 h-8 rounded-full bg-primary-500">
-                  DP
-                </p>
-                <span>{client.name}</span>
+              <div className="flex items-center gap-3">
+                <Avatar name={client?.first_name + " " + client?.last_name} />
+                <div className="grid">
+                  <span className=" font-semibold">{client?.first_name + " " + client?.last_name}</span>
+                  <span className=" text-sm">{client?.status}</span>
+                </div>
               </div>
               {showDeleteButton && (
                 <button
