@@ -12,6 +12,7 @@ import { FaDoorOpen } from "react-icons/fa";
 import { BiTaskX } from "react-icons/bi";
 import { SideModal } from "../../../../../components/ui/SideModal";
 import CreateAppointment from "./Appointment/CreateAppointment";
+import CreateNewTeamMember from "./teamMember.jsx/CreateNewTeamMember";
 
 const options = [
   { label: "Appointment", icon: <FaRegCalendarCheck /> },
@@ -21,8 +22,7 @@ const options = [
   { label: "Out of office", icon: <FaDoorOpen /> },
 ];
 
-function Sidebar({ isOpen, onClose, contentName,setSiderbarContent }) {
-
+function Sidebar({ isOpen, onClose, contentName, setSiderbarContent }) {
   const {
     closeCreateClient,
     isClientCreate,
@@ -30,6 +30,8 @@ function Sidebar({ isOpen, onClose, contentName,setSiderbarContent }) {
     closeCreateService,
     isLocationCreate,
     closeCreateLocation,
+    isTeamMemberCreate,
+    closeCreateTeamMember,
   } = useCalendarPage();
 
   const handleCloseMemu = () => {
@@ -40,6 +42,10 @@ function Sidebar({ isOpen, onClose, contentName,setSiderbarContent }) {
   return (
     <div>
       <CreateNewClient isOpen={isClientCreate} onClose={closeCreateClient} />
+      <CreateNewTeamMember
+        isOpen={isTeamMemberCreate}
+        onClose={closeCreateTeamMember}
+      />
       <CreateService isOpen={isServiceCreate} onClose={closeCreateService} />
       <CreateLocation isOpen={isLocationCreate} onClose={closeCreateLocation} />
       <SideModal isOpen={isOpen} onClose={onClose}>

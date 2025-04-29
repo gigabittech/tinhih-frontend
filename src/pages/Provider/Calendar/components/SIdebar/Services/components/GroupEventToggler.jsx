@@ -4,26 +4,29 @@ import Input from "../../../../../../../components/ui/Input";
 import { cn } from "./../../../../../../../lib/utils";
 import ToggleButton from "../../../../../../../components/ui/ToggleButton";
 
-function GroupEventToggler({ formik, className }) {
+function GroupEventToggler({ className, groupEvent, setGroupEvent, maxAttendees, setMaxAttendees }) {
   return (
     <div>
       <div className="self-start">
         <div className={cn("flex", className)}>
           <div className="mt-4">
-            <ToggleButton formik={formik} name="group_event" />
+            <ToggleButton 
+              value={groupEvent} 
+              onChange={(e) => setGroupEvent(e.target.checked)} 
+            />
           </div>
           <div className="flex flex-col  px-4">
             <label htmlFor="group_event" className="cursor-pointer mb-1.5">
               <p className="leading-tight">Group event</p>
               <p className="text-sm text-context-light">
-                Set an attendee limits for the service
+                Set an attendee limit for the service
               </p>
             </label>
-            {formik.values.group_event && (
+            {groupEvent && (
               <Input
                 label="Maximum limit"
-                name="max_attendees"
-                formik={formik}
+                value={maxAttendees}
+                onChange={(e) => setMaxAttendees(e.target.value)}
               />
             )}
           </div>

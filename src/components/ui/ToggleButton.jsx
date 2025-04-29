@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "../../lib/utils";
-import { ErrorMessage } from "formik";
 
-function ToggleButton({ label, formik, name }) {
-  const [toggled, setToggled] = useState(formik ? formik.values[name] : false);
+function ToggleButton({ label, value, onChange, name }) {
+  const [toggled, setToggled] = useState(value || false);
 
   const handleToggle = () => {
-    if (formik) {
-      formik.setFieldValue(name, !formik.values[name]);
-    } else {
-      setToggled(!toggled);
-    }
+    const newValue = !toggled;
+    setToggled(newValue);
+    onChange?.(newValue);
   };
 
   return (
@@ -21,38 +18,28 @@ function ToggleButton({ label, formik, name }) {
         <div
           className={cn(
             "shadow-inner h-3.5 w-9 relative rounded-xl cursor-pointer",
-            (formik ? formik.values[name] : toggled)
-              ? "bg-primary-800"
-              : "bg-outline-dark"
+            toggled ? "bg-primary-800" : "bg-outline-dark"
           )}
           onClick={handleToggle}
         >
           <motion.div
             transition={{ type: "spring", stiffness: 500, damping: 30 }}
-            className={cn(
-              "absolute hover:ring-4 hover:ring-primary-500/40 border border-primary-400 bg-primary-500 top-1/2 transform -translate-y-1/2 size-5 rounded-full"
-            )}
-            animate={{ x: (formik ? formik.values[name] : toggled) ? 18 : 0 }}
+            className="absolute hover:ring-4 hover:ring-primary-500/40 border border-primary-400 bg-primary-500 top-1/2 transform -translate-y-1/2 size-5 rounded-full"
+            animate={{ x: toggled ? 18 : 0 }}
           />
         </div>
         <input
           type="checkbox"
           id={name}
           name={name}
-          checked={formik ? formik.values[name] : toggled}
+          checked={toggled}
           onChange={handleToggle}
           className="hidden"
         />
       </div>
-      {formik && (
-        <ErrorMessage
-          name={name}
-          component="p"
-          className="mt-1 text-xs text-error"
-        />
-      )}
     </div>
   );
 }
 
 export default ToggleButton;
+

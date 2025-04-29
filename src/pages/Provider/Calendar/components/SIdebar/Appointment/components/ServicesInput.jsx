@@ -39,11 +39,14 @@ function ServicesInput({
   openServices,
   setOpenServices,
   selectedServices,
-  handleServiceSelect,
+  handleServicesSelect,
   handleRemoveService,
   openCreateService,
 }) {
   const dropdownRef = useRef(null);
+
+  console.log(selectedServices);
+  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -75,7 +78,7 @@ function ServicesInput({
               );
               return (
                 <div
-                  onClick={() => handleServiceSelect(service)}
+                  onClick={() => handleServicesSelect(service)}
                   key={service.id}
                   className={`px-5 py-2 grid items-center gap-1 cursor-pointer hover:bg-gray-100 ${
                     isSelected ? "bg-blue-100" : ""
