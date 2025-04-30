@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import CreateButton from "./CreateButton";
 import NewInput from "../../../../../../../components/ui/NewInput";
-import useUserStore from "../../../../../../../store/global/userStore";
 import Avatar from "../../../../../../../components/ui/Avatar";
+import useClientStore from "../../../../../../../store/provider/clientStore";
 
 function AttendeesInput({
   openClients,
@@ -15,8 +15,11 @@ function AttendeesInput({
 }) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
   const dropdownRef = useRef(null);
-  const { user } = useUserStore();
-  const clients = user?.currentWorkspace?.clients;
+  const { clients, fetchClients, loading } = useClientStore();
+
+  useEffect(() => {
+    fetchClients();
+  }, [fetchClients]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -30,6 +33,8 @@ function AttendeesInput({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [setOpenClients]);
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div ref={dropdownRef} className="grid">
@@ -83,7 +88,9 @@ function AttendeesInput({
               <div className="flex items-center gap-3">
                 <Avatar name={client?.first_name + " " + client?.last_name} />
                 <div className="grid">
-                  <span className=" font-semibold">{client?.first_name + " " + client?.last_name}</span>
+                  <span className=" font-semibold">
+                    {client?.first_name + " " + client?.last_name}
+                  </span>
                   <span className=" text-sm">{client?.status}</span>
                 </div>
               </div>

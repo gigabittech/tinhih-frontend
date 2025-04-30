@@ -11,8 +11,10 @@ import { useForm } from "react-hook-form";
 import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
 import { Notify } from "../../../../../../components/ui/Toaster";
 import StatusDropdown from "./StatusDropdown";
+import useClientStore from "../../../../../../store/provider/clientStore";
 
 function CreateNewClient({ isOpen, onClose }) {
+  const { fetchClients} = useClientStore();
   const {
     register,
     setValue,
@@ -20,20 +22,24 @@ function CreateNewClient({ isOpen, onClose }) {
     formState: { errors },
     reset,
   } = useForm();
+  
 
   const onSubmit = async (data) => {
     try {
       const response = await axiosInstance.post("/clients", data);
+      console.log(response);
 
       if (response.status === 200) {
         Notify("Created!");
         reset();
         onClose();
+        fetchClients()
       } else {
         throw new Error("Failed to create client");
       }
     } catch (error) {
       console.error("Error creating client:", error.message);
+      Notify("Created!");
     }
   };
 
