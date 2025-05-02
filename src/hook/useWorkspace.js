@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useEffect, useState, useCallback } from "react";
+import axiosInstance from "../lib/axiosInstanceWithToken";
 
 function useWorkspace() {
   const [workspaces, setWorkspaces] = useState([]);
@@ -9,14 +9,9 @@ function useWorkspace() {
   const fetchWorkspaces = useCallback(async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("auth-token");
-      const response = await axios.get(
-        `${import.meta.env.VITE_APP_SERVER_URL}/workspaces/user`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const response = await axiosInstance.get(
+        `workspaces/user`,
+       
       );
       setWorkspaces(response.data);
       setError("");

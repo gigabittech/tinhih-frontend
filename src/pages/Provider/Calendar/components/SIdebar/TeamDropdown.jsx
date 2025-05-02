@@ -1,18 +1,20 @@
 import { useState, useRef, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import { ImCheckmark } from "react-icons/im";
+import useUserStore from "../../../../../store/global/userStore";
+import Avatar from "../../../../../components/ui/Avatar";
 
 const TeamDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useUserStore();
   const [selectedMembers, setSelectedMembers] = useState([
-    { id: 1, name: "Wendy Smith", initials: "WS" },
+    { id: user?.id, name: user?.full_name },
   ]);
-
   const dropdownRef = useRef(null);
 
   const teamMembers = [
-    { id: 1, name: "Wendy Smith", initials: "WS" },
-    { id: 3, name: "Noah Jenkins", initials: "NJ" },
+    ...(user?.currentWorkspace?.members || []),
+    { id: user?.id, name: user?.full_name },
   ];
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
@@ -54,16 +56,13 @@ const TeamDropdown = () => {
             selectedMembers.map((member, index) => (
               <div
                 key={member.id}
-                className="w-7 h-7 rounded-full border-2 border-white bg-primary-500 text-xs font-bold flex items-center justify-center text-white"
                 style={{ zIndex: selectedMembers.length - index }}
               >
-                {member.initials}
+                <Avatar name={member.name} />
               </div>
             ))
           ) : (
-            <div className="w-7 h-7 rounded-full bg-gray-300 text-xs font-bold flex items-center justify-center">
-              ?
-            </div>
+            <Avatar name={"?"} />
           )}
         </div>
 
@@ -81,9 +80,7 @@ const TeamDropdown = () => {
                 className="flex items-center justify-between w-full text-left px-4 py-2 text-sm font-medium bg-[#eedaa1] hover:bg-[#ecd38e]"
               >
                 <div className="flex items-center gap-3">
-                  <span className="bg-primary-500 text-black w-6 h-6 text-xs rounded-full font-bold flex items-center justify-center">
-                    {member.initials}
-                  </span>
+                  <Avatar name={member.name} />
                   {member.name}
                 </div>
                 <span className="w-3 h-3 flex items-center justify-center rounded-full bg-gray-400">
@@ -103,9 +100,7 @@ const TeamDropdown = () => {
                 className="flex items-center justify-between w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 <div className="flex items-center gap-3">
-                  <span className="bg-primary-500 text-black w-6 h-6 text-xs rounded-full font-bold flex items-center justify-center">
-                    {member.initials}
-                  </span>
+                  <Avatar name={member.name} />
                   {member.name}
                 </div>
               </button>
