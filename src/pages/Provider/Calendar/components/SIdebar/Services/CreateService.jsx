@@ -33,10 +33,6 @@ function CreateService({ isOpen, onClose }) {
     locations: "",
   });
 
-  const closeHandler = () => {
-    setIsDescription(false);
-    onClose();
-  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -47,10 +43,10 @@ function CreateService({ isOpen, onClose }) {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={closeHandler}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalHeader
         title="New service"
-        onClose={closeHandler}
+        onClose={onClose}
         icon={
           <svg
             className="fill-context-dark/60 size-6"
@@ -233,7 +229,7 @@ function CreateService({ isOpen, onClose }) {
             type="button"
             variant="outline"
             className="w-full sm:w-auto"
-            onClick={closeHandler}
+            onClick={onClose}
           >
             Cancel
           </Button>

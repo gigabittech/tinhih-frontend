@@ -34,7 +34,7 @@ function AttendeesInput({
     };
   }, [setOpenClients]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p></p>;
 
   return (
     <div ref={dropdownRef} className="grid">

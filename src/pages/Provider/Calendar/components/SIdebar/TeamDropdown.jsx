@@ -7,14 +7,16 @@ import Avatar from "../../../../../components/ui/Avatar";
 const TeamDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useUserStore();
+  console.log(user);
+  
   const [selectedMembers, setSelectedMembers] = useState([
-    { id: user?.id, name: user?.full_name },
+    { id: user?.id, first_name: user?.first_name, last_name: user?.last_name },
   ]);
   const dropdownRef = useRef(null);
 
   const teamMembers = [
     ...(user?.currentWorkspace?.members || []),
-    { id: user?.id, name: user?.full_name },
+    { id: user?.id, first_name: user?.first_name, last_name: user?.last_name },
   ];
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
@@ -58,7 +60,9 @@ const TeamDropdown = () => {
                 key={member.id}
                 style={{ zIndex: selectedMembers.length - index }}
               >
-                <Avatar name={member.name} />
+                <Avatar
+                  name={member?.first_name + " " + member?.last_name}
+                />
               </div>
             ))
           ) : (
@@ -80,8 +84,12 @@ const TeamDropdown = () => {
                 className="flex items-center justify-between w-full text-left px-4 py-2 text-sm font-medium bg-[#eedaa1] hover:bg-[#ecd38e]"
               >
                 <div className="flex items-center gap-3">
-                  <Avatar name={member.name} />
-                  {member.name}
+                  <Avatar
+                    name={
+                      member?.first_name + " " + member?.last_name
+                    }
+                  />
+                  {member?.first_name + " " + member?.last_name}
                 </div>
                 <span className="w-3 h-3 flex items-center justify-center rounded-full bg-gray-400">
                   <ImCheckmark size={10} color="#ffffff" />
@@ -100,8 +108,12 @@ const TeamDropdown = () => {
                 className="flex items-center justify-between w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 <div className="flex items-center gap-3">
-                  <Avatar name={member.name} />
-                  {member.name}
+                  <Avatar
+                    name={
+                      member?.first_name + " " + member?.last_name
+                    }
+                  />
+                  {member?.first_name + " " + member?.last_name}
                 </div>
               </button>
             ))}

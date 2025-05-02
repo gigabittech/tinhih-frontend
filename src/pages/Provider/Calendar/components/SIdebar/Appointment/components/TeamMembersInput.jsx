@@ -3,6 +3,8 @@ import { RxCross1 } from "react-icons/rx";
 import CreateButton from "./CreateButton";
 import NewInput from "../../../../../../../components/ui/NewInput";
 import useUserStore from "../../../../../../../store/global/userStore";
+import useTeamMemberStore from "../../../../../../../store/provider/teamMemberStore";
+import Avatar from "../../../../../../../components/ui/Avatar";
 
 function TeamMembersInput({
   openTeamMembers,
@@ -10,15 +12,20 @@ function TeamMembersInput({
   selectedTeamMembers,
   handleTeamMemberSelect,
   handleRemoveTeamMember,
-  openCreateTeamMember
+  openCreateTeamMember,
 }) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
   const dropdownRef = useRef(null);
   const { user } = useUserStore();
+  const { members, fetchMembers, loading } = useTeamMemberStore();
+
+  useEffect(() => {
+    fetchMembers();
+  }, [fetchMembers]);
 
   const teamMembers = [
-    ...(user?.currentWorkspace?.members || []),
-    { id: user?.id, name: user?.full_name },
+    { id: user?.id, first_name: user?.first_name, last_name: user?.last_name },
+    ...(members || []),
   ];
 
   useEffect(() => {
@@ -34,6 +41,8 @@ function TeamMembersInput({
     };
   }, [setOpenTeamMembers]);
 
+  if (loading) return <p></p>;
+
   return (
     <div ref={dropdownRef} className="grid">
       <NewInput
@@ -45,9 +54,7 @@ function TeamMembersInput({
       <div className=" relative">
         {openTeamMembers && (
           <div className="absolute bg-white w-full shadow-2xl border border-gray-100 z-10 py-1 grid grid-cols-1 rounded">
-            <p className="px-5 font-bold my-3">
-              All team members
-            </p>
+            <p className="px-5 font-bold my-3">All team members</p>
             {teamMembers.map((teamMembers) => {
               const isSelected = selectedTeamMembers.some(
                 (c) => c.id === teamMembers.id
@@ -60,12 +67,19 @@ function TeamMembersInput({
                     isSelected ? "bg-blue-100" : ""
                   }`}
                 >
-                  <img
+                  {/*  <img
                     src={teamMembers.avatar}
-                    alt={teamMembers.name}
+                    alt={teamMembers.first_name + " " + teamMembers.last_name}
                     className="w-8 h-8 rounded-full object-cover"
+                  /> */}
+                  <Avatar
+                    name={
+                      teamMembers?.first_name + " " + teamMembers?.last_name
+                    }
                   />
-                  <p className="font-medium">{teamMembers.name}</p>
+                  <p className="font-medium">
+                    {teamMembers?.first_name + " " + teamMembers?.last_name}
+                  </p>
                 </div>
               );
             })}
@@ -86,10 +100,12 @@ function TeamMembersInput({
               className="flex justify-between items-center gap-2 hover:bg-gray-200 px-3 py-2"
             >
               <div className="flex items-center gap-5">
-                <p className="flex justify-center items-center w-8 h-8 rounded-full bg-primary-500">
-                  DP
-                </p>
-                <span>{teamMembers.name}</span>
+                <Avatar
+                  name={teamMembers?.first_name + " " + teamMembers?.last_name}
+                />
+                <span>
+                  {teamMembers?.first_name + " " + teamMembers?.last_name}
+                </span>
               </div>
               {showDeleteButton && (
                 <button

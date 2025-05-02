@@ -5,7 +5,7 @@ export default function useTeamMembers() {
   const [openTeamMembers, setOpenTeamMembers] = useState(false);
   const { user } = useUserStore();
   const [selectedTeamMembers, setSelectedTeamMembers] = useState([
-    { id: user?.id, name: user?.full_name },
+    { id: user?.id, first_name: user?.first_name, last_name: user?.last_name },
   ]);
 
   const handleTeamMemberSelect = (teamMember) => {
