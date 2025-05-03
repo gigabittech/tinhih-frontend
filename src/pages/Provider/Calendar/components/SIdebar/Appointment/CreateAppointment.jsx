@@ -71,6 +71,18 @@ function CreateAppointment({ onClose }) {
   const [endTime, setEndTime] = useState("10:30 PM");
   const [repeatOption, setRepeatOption] = useState("Doesn't repeat");
 
+  const isFormValid = () => {
+    return (
+      selectedDate &&
+      startTime &&
+      endTime &&
+      selectedClients.length > 0 &&
+      selectedServices.length > 0 &&
+      selectedLocation &&
+      selectedTeamMembers.length > 0
+    );
+  };
+
   const resetForm = () => {
     setDescription("");
     setDescriptionLength(0);
@@ -129,7 +141,6 @@ function CreateAppointment({ onClose }) {
       console.error("Error creating appointment:", error);
     }
   };
-
 
   return (
     <div className="relative h-screen flex flex-col">
@@ -232,7 +243,12 @@ function CreateAppointment({ onClose }) {
           </button>
           <button
             onClick={handleCreateAppointment}
-            className="bg-primary-600 text-white py-2 rounded font-semibold hover:bg-primary-700 transition-colors"
+            disabled={!isFormValid()}
+            className={`py-2 rounded font-semibold transition-colors ${
+              isFormValid()
+                ? "bg-primary-600 text-white hover:bg-primary-700"
+                : "bg-gray-300 text-gray-600 cursor-not-allowed"
+            }`}
           >
             Create
           </button>
