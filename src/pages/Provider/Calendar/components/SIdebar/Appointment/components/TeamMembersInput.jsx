@@ -17,7 +17,7 @@ function TeamMembersInput({
   const [showDeleteButton, setShowDeleteButton] = useState(false);
   const dropdownRef = useRef(null);
   const { user } = useUserStore();
-  const { members, fetchMembers, loading } = useTeamMemberStore();
+  const { members, fetchMembers } = useTeamMemberStore();
 
   useEffect(() => {
     fetchMembers();
@@ -41,7 +41,6 @@ function TeamMembersInput({
     };
   }, [setOpenTeamMembers]);
 
-  if (loading) return <p></p>;
 
   return (
     <div ref={dropdownRef} className="grid">

@@ -30,7 +30,7 @@ function CreateNewTeamMember({ isOpen, onClose }) {
     try {
       const response = await axiosInstance.post("/members", payload);
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         Notify("Created!");
         reset();
         onClose();
@@ -48,7 +48,7 @@ function CreateNewTeamMember({ isOpen, onClose }) {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalHeader
         icon={<UserRoundPlus className="text-context-light size-6" />}
-        title="New client"
+        title="New team member"
         onClose={onClose}
       />
       <form onSubmit={handleSubmit(onSubmit)}>

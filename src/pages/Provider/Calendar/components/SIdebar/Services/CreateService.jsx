@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import {
   Modal,
   ModalBody,
@@ -10,234 +11,284 @@ import { Plus, BookText } from "lucide-react";
 import useUserStore from "./../../../../../../store/global/userStore";
 import ServiceTogggler from "./components/ServiceTogggler";
 import GroupEventToggler from "./components/GroupEventToggler";
-import currencies from "../../../../../../data/Currencies";
+import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
+import { Notify } from "../../../../../../components/ui/Toaster";
+import useServiceStore from "../../../../../../store/provider/serviceStore";
+import useTeamMemberStore from "../../../../../../store/provider/teamMemberStore";
 
 function CreateService({ isOpen, onClose }) {
-  const [isDescription, setIsDescription] = useState(false);
+  const { members, fetchMembers } = useTeamMemberStore();
+  const [selectedMembers, setSelectedMembers] = useState([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const user = useUserStore((state) => state.user);
+  const { fetchServices } = useServiceStore();
 
-  const [formData, setFormData] = useState({
-    user_id: user?.id,
-    service_name: "",
-    display_name: "",
-    code: "",
-    duration: 0,
-    price: 0,
-    description: "",
-    group_event: false,
-    max_attendees: "",
-    taxable: true,
-    bookable_online: true,
-    allow_new_clients: true,
-    team_members: "",
-    locations: "",
+  console.log(selectedMembers);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      user_id: user?.id,
+      service_name: "",
+      display_name: "",
+      code: "",
+      duration: 0,
+      price: 0,
+      description: "",
+      group_event: false,
+      max_attendees: "",
+      taxable: true,
+      bookable_online: true,
+      allow_new_clients: true,
+      team_members: selectedMembers,
+      locations: [],
+    },
   });
 
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+  useEffect(() => {
+    if (members.length > 0) {
+      const initialSelected = members.map((m) => m.id);
+      setSelectedMembers(initialSelected);
+      setValue("team_members", initialSelected);
+    }
+  }, [members, setValue]);
+
+
+  const handleMemberToggle = (id) => {
+    let updated;
+    if (selectedMembers.includes(id)) {
+      updated = selectedMembers.filter((mid) => mid !== id);
+    } else {
+      updated = [...selectedMembers, id];
+    }
+    setSelectedMembers(updated);
+    setValue("team_members", updated);
   };
+
+  const isBookableOnline = watch("bookable_online");
+  const isGroupEvent = watch("group_event");
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await axiosInstance.post("/services", data);
+
+      if (response.status === 201) {
+        Notify("Created!");
+        reset();
+        onClose();
+        fetchServices();
+      } else {
+        throw new Error("Failed to create client");
+      }
+    } catch (error) {
+      console.error("Error creating client:", error.message);
+      Notify(error?.response?.data?.message);
+    }
+  };
+
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    fetchMembers();
+  }, [fetchMembers]);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalHeader
-        title="New service"
-        onClose={onClose}
-        icon={
-          <svg
-            className="fill-context-dark/60 size-6"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M20.41 8.41L15.58 3.58C15.21 3.21 14.7 3 14.17 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V9.83C21 9.3 20.79 8.79 20.41 8.41ZM7 7H14V9H7V7ZM17 17H7V15H17V17ZM17 13H7V11H17V13Z" />
-          </svg>
-        }
-      />
-      <ModalBody className="flex flex-col gap-5 mt-5 sm:max-h-[65vh] overflow-y-auto">
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="text-sm">Service name*</label>
-            <input
-              type="text"
-              name="service_name"
-              value={formData.service_name}
-              onChange={handleInputChange}
-              className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
-            />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <ModalHeader title="New service" onClose={onClose} />
+        <ModalBody className="flex flex-col gap-5 mt-5 sm:max-h-[65vh] overflow-y-auto">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-sm">Service name*</label>
+              <input
+                {...register("service_name", { required: true })}
+                className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
+              />
+              {errors.service_name && (
+                <p className="text-red-500 text-sm">Required</p>
+              )}
+            </div>
+            <div>
+              <label className="text-sm">Display name</label>
+              <input
+                {...register("display_name")}
+                className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
+              />
+            </div>
+            <div>
+              <label className="text-sm">Code*</label>
+              <input
+                {...register("code", { required: true })}
+                className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
+              />
+              {errors.code && <p className="text-red-500 text-sm">Required</p>}
+            </div>
+            <div>
+              <label className="text-sm">Duration</label>
+              <input
+                type="number"
+                {...register("duration", { valueAsNumber: true })}
+                className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
+              />
+            </div>
+            <div>
+              <label className="text-sm">Price</label>
+              <input
+                type="number"
+                {...register("price", { valueAsNumber: true })}
+                className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
+              />
+            </div>
           </div>
-          <div>
-            <label className="text-sm">Display name</label>
-            <input
-              type="text"
-              name="display_name"
-              value={formData.display_name}
-              onChange={handleInputChange}
-              className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
-            />
-          </div>
-          <div>
-            <label className="text-sm">Code*</label>
-            <input
-              type="text"
-              name="code"
-              value={formData.code}
-              onChange={handleInputChange}
-              className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
-            />
-          </div>
-          <div>
-            <label className="text-sm">Duration</label>
-            <input
-              type="number"
-              name="duration"
-              value={formData.duration}
-              onChange={handleInputChange}
-              className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
-            />
-          </div>
-          <div>
-            <label className="text-sm">Price</label>
-            <input
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleInputChange}
-              className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
-            />
-          </div>
-        </div>
 
-        {/* descriptions start */}
-        <div>
-          {isDescription ? (
+          <div>
+            <label className="text-sm">Description</label>
             <textarea
-              cols={10}
-              rows={3}
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
+              {...register("description")}
               className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
               placeholder="Write your description here..."
             />
-          ) : (
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="text-primary-800 font-bold self-start bg-transparent p-2"
-              onClick={() => setIsDescription((prev) => !prev)}
-            >
-              <Plus size={20} className="relative -top-px" />
-              <span>Add description</span>
-            </Button>
-          )}
-        </div>
-        {/* descriptions end */}
+          </div>
 
-        <div className="">
-          <p className=" text-sm">Assign team member</p>
-          <select
-            name=""
-            id=""
-            className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
-          >
-            <option value=""></option>
-            <option value=""></option>
-          </select>
-        </div>
+          <div>
+            <p className="text-sm font-medium mb-1">Assign team member</p>
+            <div className="border border-[#a0a0a0] rounded px-3 py-2 w-full bg-white relative">
+              <div
+                onClick={() => setDropdownOpen((prev) => !prev)}
+                className="cursor-pointer flex flex-wrap gap-1 text-sm min-h-6"
+              >
+                {selectedMembers?.length === members?.length ? (
+                  <p className="bg-[#e4e4e4] rounded-full px-2">All team members</p>
+                ) : (
+                  selectedMembers?.map((id) => {
+                    const member = members.find((m) => m.id === id);
+                    return (
+                      <span key={id} className="bg-[#e4e4e4] rounded-full whitespace-nowrap px-2">
+                        {member?.first_name} {member?.last_name}
+                      </span>
+                    );
+                  })
+                )}
+              </div>
+              {dropdownOpen && (
+                <div
+                  ref={dropdownRef}
+                  className="absolute z-10 shadow-2xl border border-[#e5e5e5] mt-2 left-0 right-0 bg-white rounded max-h-60 overflow-y-auto"
+                >
+                  {/* All team members toggle */}
+                  <label className="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer font-medium border-b">
+                    <input
+                      type="checkbox"
+                      checked={selectedMembers.length === members.length}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        const updated = checked ? members.map((m) => m.id) : [];
+                        setSelectedMembers(updated);
+                        setValue("team_members", updated);
+                      }}
+                      className="mr-2"
+                    />
+                    All team members
+                  </label>
 
-        {/* missing field assign member */}
-        <div className="flex flex-col gap-5 my-2">
+                  {members.map((member) => (
+                    <label
+                      key={member.id}
+                      className="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedMembers.includes(member.id)}
+                        onChange={() => handleMemberToggle(member.id)}
+                        className="mr-2"
+                      />
+                      {member?.first_name + " " + member?.last_name}
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
           <GroupEventToggler
-            groupEvent={formData.group_event}
-            setGroupEvent={(value) =>
-              setFormData({ ...formData, group_event: value })
-            }
-            maxAttendees={formData.max_attendees}
-            setMaxAttendees={(value) =>
-              setFormData({ ...formData, max_attendees: value })
-            }
+            groupEvent={isGroupEvent}
+            setGroupEvent={(val) => setValue("group_event", val)}
+            maxAttendees={watch("max_attendees")}
+            setMaxAttendees={(val) => setValue("max_attendees", val)}
           />
 
           <ServiceTogggler
             title="Taxable"
-            description="Includes sales tax on generated invoices"
+            description="Includes sales tax"
             name="taxable"
-            value={formData.taxable}
-            onChange={(e) =>
-              setFormData({ ...formData, taxable: e.target.checked })
-            }
+            value={watch("taxable")}
+            onChange={(val) => setValue("taxable", val)}
           />
-        </div>
 
-        <div className="flex flex-col gap-5 border-y border-outline-medium my-2 py-5">
-          <div className="flex items-center gap-2 text-context-dark">
-            <BookText size={22} />
-            <p className="text-base font-bold">Online bookings</p>
-          </div>
+          <div className="flex flex-col gap-5 border-y border-outline-medium my-2 py-5">
+            <div className="flex items-center gap-2 text-context-dark">
+              <BookText size={22} />
+              <p className="text-base font-bold">Online bookings</p>
+            </div>
 
-          <p className="text-sm text-context-light">
-            Choose when online bookings can be made and by which type of clients
-          </p>
-
-          <div className="flex flex-col gap-5 mb-2">
             <ServiceTogggler
               title="Bookable online"
-              description="Clients can book this service online"
+              description="Clients can book online"
               name="bookable_online"
-              value={formData.bookable_online}
-              onChange={(e) =>
-                setFormData({ ...formData, bookable_online: e.target.checked })
-              }
+              value={isBookableOnline}
+              onChange={(val) => setValue("bookable_online", val)}
             />
 
-            {formData.bookable_online && (
+            {isBookableOnline && (
               <ServiceTogggler
                 title="Allow for new clients"
-                description="New clients can book this service"
+                description="New clients can book"
                 name="allow_new_clients"
-                value={formData.allow_new_clients}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    allow_new_clients: e.target.checked,
-                  })
-                }
+                value={watch("allow_new_clients")}
+                onChange={(val) => setValue("allow_new_clients", val)}
               />
             )}
           </div>
-        </div>
-        <div className="">
-          <p className="font-bold">Location of service</p>
-          <select
-            name=""
-            id=""
-            className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
-          >
-            <option value="">All locations</option>
-            <option value="">Video call</option>
-          </select>
-        </div>
-      </ModalBody>
-      <ModalFooter className="justify-end">
-        <div className="w-full sm:w-auto flex flex-col-reverse sm:flex-row items-center gap-3">
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full sm:w-auto"
-            onClick={onClose}
-          >
-            Cancel
-          </Button>
-          <Button type="submit" className="w-full sm:w-auto">
-            Save
-          </Button>
-        </div>
-      </ModalFooter>
+
+          <div>
+            <p className="font-bold">Location of service</p>
+            <select
+              {...register("locations")}
+              className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
+            >
+              <option value="">All locations</option>
+              <option value="video">Video call</option>
+            </select>
+          </div>
+        </ModalBody>
+        <ModalFooter className="justify-end">
+          <div className="w-full sm:w-auto flex flex-col-reverse sm:flex-row items-center gap-3">
+            <Button type="button" variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button type="submit">Save</Button>
+          </div>
+        </ModalFooter>
+      </form>
     </Modal>
   );
 }
