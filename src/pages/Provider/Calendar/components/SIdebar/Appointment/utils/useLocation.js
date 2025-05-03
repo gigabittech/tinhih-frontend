@@ -24,5 +24,6 @@ export default function useLocation() {
     selectedLocation,
     handleLocationSelect,
     handleRemoveLocation,
+    setSelectedLocation
   };
 }

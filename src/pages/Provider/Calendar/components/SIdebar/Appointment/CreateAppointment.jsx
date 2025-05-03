@@ -26,6 +26,7 @@ function CreateAppointment({ onClose }) {
     handleClientSelect,
     setOpenClients,
     selectedClients,
+    setSelectedClients,
   } = useAttendees();
 
   const {
@@ -34,6 +35,7 @@ function CreateAppointment({ onClose }) {
     selectedServices,
     handleServicesSelect,
     handleRemoveService,
+    setSelectedServices,
   } = useServices();
 
   const {
@@ -42,6 +44,7 @@ function CreateAppointment({ onClose }) {
     selectedLocation,
     handleLocationSelect,
     handleRemoveLocation,
+    setSelectedLocation,
   } = useLocation();
 
   const {
@@ -60,11 +63,42 @@ function CreateAppointment({ onClose }) {
     openCreateLocation,
     openCreateTeamMember,
   } = useCalendarPage();
+
   const { user } = useUserStore();
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [startTime, setStartTime] = useState("09:30 PM");
   const [endTime, setEndTime] = useState("10:30 PM");
   const [repeatOption, setRepeatOption] = useState("Doesn't repeat");
+
+  const resetForm = () => {
+    setDescription("");
+    setDescriptionLength(0);
+    setOpenDescription(false);
+
+    setSelectedClients([]);
+    setOpenClients(false);
+
+    setSelectedServices([]);
+    setOpenServices(false);
+
+    setSelectedLocation(null);
+    setOpenLocation(false);
+
+    setSelectedTeamMembers([
+      {
+        id: user?.id,
+        first_name: user?.first_name,
+        last_name: user?.last_name,
+      },
+    ]);
+    setOpenTeamMembers(false);
+
+    setSelectedDate(new Date());
+    setStartTime("09:30 PM");
+    setEndTime("10:30 PM");
+    setRepeatOption("Doesn't repeat");
+  };
 
   const handleDescription = (e) => {
     const value = e.target.value;
@@ -87,20 +121,15 @@ function CreateAppointment({ onClose }) {
       const response = await axiosInstance.post("/appointments", payload);
       console.log("Appointment created:", response.data);
       if (response.status === 201) {
-        onClose();
         Notify("Appointment created");
+        resetForm();
+        onClose();
       }
     } catch (error) {
       console.error("Error creating appointment:", error);
     }
   };
 
-  console.log({ selectedDate, startTime, endTime, repeatOption });
-  console.log("clients:", selectedClients);
-  console.log("members:", selectedTeamMembers);
-  console.log("services:", selectedServices);
-  console.log("location:", [selectedLocation]);
-  console.log("des:", description);
 
   return (
     <div className="relative h-screen flex flex-col">

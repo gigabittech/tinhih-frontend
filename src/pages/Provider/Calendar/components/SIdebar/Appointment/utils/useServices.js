@@ -25,5 +25,6 @@ export default function useServices() {
     selectedServices,
     handleServicesSelect,
     handleRemoveService,
+    setSelectedServices
   };
 }
