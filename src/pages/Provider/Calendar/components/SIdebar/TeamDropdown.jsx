@@ -1,24 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import { ImCheckmark } from "react-icons/im";
-import useUserStore from "../../../../../store/global/userStore";
 import Avatar from "../../../../../components/ui/Avatar";
-import useTeamMemberStore from "../../../../../store/provider/teamMemberStore";
 
-const TeamDropdown = () => {
+const TeamDropdown = ({ selectedMembers, setSelectedMembers, teamMembers }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useUserStore();
-  const { members, fetchMembers } = useTeamMemberStore();
 
-  const [selectedMembers, setSelectedMembers] = useState([
-    { id: user?.id, first_name: user?.first_name, last_name: user?.last_name },
-  ]);
   const dropdownRef = useRef(null);
-
-  const teamMembers = [
-    ...(members || []),
-    { id: user?.id, first_name: user?.first_name, last_name: user?.last_name },
-  ];
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
 
@@ -33,10 +21,6 @@ const TeamDropdown = () => {
     setSelectedMembers(updated);
     setIsOpen(false);
   };
-
-  useEffect(() => {
-    fetchMembers();
-  }, [fetchMembers]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {

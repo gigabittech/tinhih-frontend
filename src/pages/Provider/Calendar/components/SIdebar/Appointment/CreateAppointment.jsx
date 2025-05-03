@@ -41,9 +41,11 @@ function CreateAppointment({ onClose }) {
   } = useLocation();
 
   const {
+    teamMembers,
     openTeamMembers,
     setOpenTeamMembers,
     selectedTeamMembers,
+    setSelectedTeamMembers,
     handleTeamMemberSelect,
     handleRemoveTeamMember,
   } = useTeamMembers();
@@ -60,7 +62,6 @@ function CreateAppointment({ onClose }) {
     setDescription(value);
     setDescriptionLength(value.length);
   };
-  
 
   console.log("clients:", selectedClients);
   console.log("members:", selectedTeamMembers);
@@ -75,7 +76,11 @@ function CreateAppointment({ onClose }) {
           <button className="border border-gray-300 py-2 rounded font-semibold hover:bg-gray-50 transition-colors ">
             <HeadCalendar />
           </button>
-          <TeamDropdown />
+          <TeamDropdown
+            teamMembers={teamMembers}
+            selectedMembers={selectedTeamMembers}
+            setSelectedMembers={setSelectedTeamMembers}
+          />
         </div>
       </div>
       <div className="flex-1 overflow-y-auto pb-20">
@@ -94,6 +99,7 @@ function CreateAppointment({ onClose }) {
 
           {/* Team Member */}
           <TeamMembersInput
+            teamMembers={teamMembers}
             selectedTeamMembers={selectedTeamMembers}
             openTeamMembers={openTeamMembers}
             setOpenTeamMembers={setOpenTeamMembers}

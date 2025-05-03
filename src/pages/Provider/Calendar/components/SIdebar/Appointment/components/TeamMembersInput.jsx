@@ -2,11 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import CreateButton from "./CreateButton";
 import NewInput from "../../../../../../../components/ui/NewInput";
-import useUserStore from "../../../../../../../store/global/userStore";
-import useTeamMemberStore from "../../../../../../../store/provider/teamMemberStore";
 import Avatar from "../../../../../../../components/ui/Avatar";
 
 function TeamMembersInput({
+  teamMembers,
   openTeamMembers,
   setOpenTeamMembers,
   selectedTeamMembers,
@@ -16,17 +15,6 @@ function TeamMembersInput({
 }) {
   const [showDeleteButton, setShowDeleteButton] = useState(0);
   const dropdownRef = useRef(null);
-  const { user } = useUserStore();
-  const { members, fetchMembers } = useTeamMemberStore();
-
-  useEffect(() => {
-    fetchMembers();
-  }, [fetchMembers]);
-
-  const teamMembers = [
-    { id: user?.id, first_name: user?.first_name, last_name: user?.last_name },
-    ...(members || []),
-  ];
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -102,10 +90,12 @@ function TeamMembersInput({
                   name={teamMember?.first_name + " " + teamMember?.last_name}
                 />
                 <span>
-                  {(teamMember?.first_name + " " + teamMember?.last_name).slice(0,15)}
-                  {
-                    (teamMember?.first_name + " " + teamMember?.last_name).length>15 && "...."
-                  }
+                  {(teamMember?.first_name + " " + teamMember?.last_name).slice(
+                    0,
+                    15
+                  )}
+                  {(teamMember?.first_name + " " + teamMember?.last_name)
+                    .length > 15 && "...."}
                 </span>
               </div>
               {showDeleteButton === teamMember.id && (

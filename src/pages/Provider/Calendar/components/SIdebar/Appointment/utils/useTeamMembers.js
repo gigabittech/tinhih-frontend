@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useUserStore from "../../../../../../../store/global/userStore";
+import useTeamMemberStore from "../../../../../../../store/provider/teamMemberStore";
 
 export default function useTeamMembers() {
   const [openTeamMembers, setOpenTeamMembers] = useState(false);
@@ -7,6 +8,17 @@ export default function useTeamMembers() {
   const [selectedTeamMembers, setSelectedTeamMembers] = useState([
     { id: user?.id, first_name: user?.first_name, last_name: user?.last_name },
   ]);
+
+  const { members, fetchMembers } = useTeamMemberStore();
+
+  useEffect(() => {
+    fetchMembers();
+  }, [fetchMembers]);
+
+  const teamMembers = [
+    { id: user?.id, first_name: user?.first_name, last_name: user?.last_name },
+    ...(members || []),
+  ];
 
   const handleTeamMemberSelect = (teamMember) => {
     const alreadySelected = selectedTeamMembers.some(
@@ -28,9 +40,11 @@ export default function useTeamMembers() {
     );
   };
   return {
+    teamMembers,
     openTeamMembers,
     setOpenTeamMembers,
     selectedTeamMembers,
+    setSelectedTeamMembers,
     handleTeamMemberSelect,
     handleRemoveTeamMember,
   };
