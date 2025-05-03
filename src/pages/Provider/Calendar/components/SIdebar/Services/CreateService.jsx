@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Modal,
@@ -15,15 +15,21 @@ import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
 import { Notify } from "../../../../../../components/ui/Toaster";
 import useServiceStore from "../../../../../../store/provider/serviceStore";
 import useTeamMemberStore from "../../../../../../store/provider/teamMemberStore";
+import MultiSelectDropdown from "./components/MultiSelectDropdown";
+
+const locations = [
+  { id: 1, display_name: "Phone call" },
+  { id: 2, display_name: "Video call" },
+];
 
 function CreateService({ isOpen, onClose }) {
   const { members, fetchMembers } = useTeamMemberStore();
   const [selectedMembers, setSelectedMembers] = useState([]);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const [selectedLocations, setSelectedLocations] = useState([]);
+
   const user = useUserStore((state) => state.user);
   const { fetchServices } = useServiceStore();
-
-  console.log(selectedMembers);
 
   const {
     register,
@@ -47,30 +53,17 @@ function CreateService({ isOpen, onClose }) {
       bookable_online: true,
       allow_new_clients: true,
       team_members: selectedMembers,
-      locations: [],
+      locations: selectedLocations,
     },
   });
 
+  useEffect(() => {
+    setValue("team_members", selectedMembers)
+  }, [selectedMembers, setValue]);
 
   useEffect(() => {
-    if (members.length > 0) {
-      const initialSelected = members.map((m) => m.id);
-      setSelectedMembers(initialSelected);
-      setValue("team_members", initialSelected);
-    }
-  }, [members, setValue]);
-
-
-  const handleMemberToggle = (id) => {
-    let updated;
-    if (selectedMembers.includes(id)) {
-      updated = selectedMembers.filter((mid) => mid !== id);
-    } else {
-      updated = [...selectedMembers, id];
-    }
-    setSelectedMembers(updated);
-    setValue("team_members", updated);
-  };
+    setValue("locations", selectedLocations);
+  }, [selectedLocations, setValue]);
 
   const isBookableOnline = watch("bookable_online");
   const isGroupEvent = watch("group_event");
@@ -92,20 +85,6 @@ function CreateService({ isOpen, onClose }) {
       Notify(error?.response?.data?.message);
     }
   };
-
-  const dropdownRef = useRef(null);
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setDropdownOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   useEffect(() => {
     fetchMembers();
@@ -171,62 +150,20 @@ function CreateService({ isOpen, onClose }) {
 
           <div>
             <p className="text-sm font-medium mb-1">Assign team member</p>
-            <div className="border border-[#a0a0a0] rounded px-3 py-2 w-full bg-white relative">
-              <div
-                onClick={() => setDropdownOpen((prev) => !prev)}
-                className="cursor-pointer flex flex-wrap gap-1 text-sm min-h-6"
-              >
-                {selectedMembers?.length === members?.length ? (
-                  <p className="bg-[#e4e4e4] rounded-full px-2">All team members</p>
-                ) : (
-                  selectedMembers?.map((id) => {
-                    const member = members.find((m) => m.id === id);
-                    return (
-                      <span key={id} className="bg-[#e4e4e4] rounded-full whitespace-nowrap px-2">
-                        {member?.first_name} {member?.last_name}
-                      </span>
-                    );
-                  })
-                )}
-              </div>
-              {dropdownOpen && (
-                <div
-                  ref={dropdownRef}
-                  className="absolute z-10 shadow-2xl border border-[#e5e5e5] mt-2 left-0 right-0 bg-white rounded max-h-60 overflow-y-auto"
-                >
-                  {/* All team members toggle */}
-                  <label className="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer font-medium border-b">
-                    <input
-                      type="checkbox"
-                      checked={selectedMembers.length === members.length}
-                      onChange={(e) => {
-                        const checked = e.target.checked;
-                        const updated = checked ? members.map((m) => m.id) : [];
-                        setSelectedMembers(updated);
-                        setValue("team_members", updated);
-                      }}
-                      className="mr-2"
-                    />
-                    All team members
-                  </label>
-
-                  {members.map((member) => (
-                    <label
-                      key={member.id}
-                      className="flex items-center px-3 py-2 hover:bg-gray-100 cursor-pointer"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selectedMembers.includes(member.id)}
-                        onChange={() => handleMemberToggle(member.id)}
-                        className="mr-2"
-                      />
-                      {member?.first_name + " " + member?.last_name}
-                    </label>
-                  ))}
-                </div>
-              )}
-            </div>
+            <MultiSelectDropdown
+              selected={selectedMembers}
+              setSelected={(val) => {
+                setSelectedMembers(val);
+                setValue("team_members", val);
+              }}
+              options={members.map((m) => ({
+                id: m.id,
+                name: `${m.first_name} ${m.last_name}`,
+              }))}
+              labelKey="name"
+              valueKey="id"
+              label="Team members"
+            />
           </div>
 
           <GroupEventToggler
@@ -271,13 +208,20 @@ function CreateService({ isOpen, onClose }) {
 
           <div>
             <p className="font-bold">Location of service</p>
-            <select
-              {...register("locations")}
-              className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
-            >
-              <option value="">All locations</option>
-              <option value="video">Video call</option>
-            </select>
+            <MultiSelectDropdown
+              selected={selectedLocations}
+              setSelected={(val) => {
+                setSelectedLocations(val);
+                setValue("locations", val);
+              }}
+              options={locations.map((location) => ({
+                id: location.id,
+                name: `${location.display_name}`,
+              }))}
+              labelKey="name"
+              valueKey="id"
+              label="Locations"
+            />
           </div>
         </ModalBody>
         <ModalFooter className="justify-end">
