@@ -2,12 +2,17 @@ import React, { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { IoMdCalendar } from "react-icons/io";
 
-const HeadCalendar = () => {
+const HeadCalendar = ({
+  selectedDate,
+  setSelectedDate,
+  startTime,
+  setStartTime,
+  endTime,
+  setEndTime,
+  repeatOption,
+  setRepeatOption,
+}) => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [startTime, setStartTime] = useState("09:30 PM");
-  const [endTime, setEndTime] = useState("10:30 PM");
-  const [repeatOption, setRepeatOption] = useState("Doesn't repeat");
   const [showCalendar, setShowCalendar] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const calendarRef = useRef(null);
@@ -117,13 +122,34 @@ const HeadCalendar = () => {
   };
 
   const timeOptions = [
-    "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM",
-    "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM",
-    "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM",
-    "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM",
-    "05:00 PM", "05:30 PM", "06:00 PM", "06:30 PM",
-    "07:00 PM", "07:30 PM", "08:00 PM", "08:30 PM",
-    "09:00 PM", "09:30 PM", "10:00 PM", "10:30 PM",
+    "09:00 AM",
+    "09:30 AM",
+    "10:00 AM",
+    "10:30 AM",
+    "11:00 AM",
+    "11:30 AM",
+    "12:00 PM",
+    "12:30 PM",
+    "01:00 PM",
+    "01:30 PM",
+    "02:00 PM",
+    "02:30 PM",
+    "03:00 PM",
+    "03:30 PM",
+    "04:00 PM",
+    "04:30 PM",
+    "05:00 PM",
+    "05:30 PM",
+    "06:00 PM",
+    "06:30 PM",
+    "07:00 PM",
+    "07:30 PM",
+    "08:00 PM",
+    "08:30 PM",
+    "09:00 PM",
+    "09:30 PM",
+    "10:00 PM",
+    "10:30 PM",
   ];
 
   const repeatOptions = [
@@ -143,7 +169,9 @@ const HeadCalendar = () => {
       >
         <IoMdCalendar size={20} className="text-gray-600" />
         <span className="grid">
-          <span className="text-sm font-medium">{formatDate(selectedDate)}</span>
+          <span className="text-sm font-medium">
+            {formatDate(selectedDate)}
+          </span>
           <span className="text-xs text-gray-500">
             {startTime} – {endTime}
           </span>

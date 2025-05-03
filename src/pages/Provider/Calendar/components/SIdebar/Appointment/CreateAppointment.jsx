@@ -11,6 +11,10 @@ import useTeamMembers from "./utils/useTeamMembers";
 import useLocation from "./utils/useLocation";
 import LocationInput from "./components/LocationInput";
 import { TiPlus } from "react-icons/ti";
+import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
+import { Notify } from "../../../../../../components/ui/Toaster";
+import useUserStore from "../../../../../../store/global/userStore";
+import formatTo24Hour from "../../../../../../hook/timeFormatTo24Hour";
 
 function CreateAppointment({ onClose }) {
   const [description, setDescription] = useState("");
@@ -56,6 +60,11 @@ function CreateAppointment({ onClose }) {
     openCreateLocation,
     openCreateTeamMember,
   } = useCalendarPage();
+  const { user } = useUserStore();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [startTime, setStartTime] = useState("09:30 PM");
+  const [endTime, setEndTime] = useState("10:30 PM");
+  const [repeatOption, setRepeatOption] = useState("Doesn't repeat");
 
   const handleDescription = (e) => {
     const value = e.target.value;
@@ -63,10 +72,34 @@ function CreateAppointment({ onClose }) {
     setDescriptionLength(value.length);
   };
 
+  const handleCreateAppointment = async () => {
+    const payload = {
+      workspace_id: user.currentWorkspace.id,
+      date: selectedDate.toISOString().split("T")[0],
+      time: formatTo24Hour(startTime),
+      attendees: selectedClients.map((c) => c.id),
+      services: selectedServices.map((s) => s.id),
+      locations: [selectedLocation?.id],
+      description: description,
+    };
+
+    try {
+      const response = await axiosInstance.post("/appointments", payload);
+      console.log("Appointment created:", response.data);
+      if (response.status === 201) {
+        onClose();
+        Notify("Appointment created");
+      }
+    } catch (error) {
+      console.error("Error creating appointment:", error);
+    }
+  };
+
+  console.log({ selectedDate, startTime, endTime, repeatOption });
   console.log("clients:", selectedClients);
   console.log("members:", selectedTeamMembers);
   console.log("services:", selectedServices);
-  console.log("location:", selectedLocation);
+  console.log("location:", [selectedLocation]);
   console.log("des:", description);
 
   return (
@@ -74,7 +107,16 @@ function CreateAppointment({ onClose }) {
       <div className="py-4 px-5 border-b border-gray-200 bg-white">
         <div className="flex justify-between items-center gap-3">
           <button className="border border-gray-300 py-2 rounded font-semibold hover:bg-gray-50 transition-colors ">
-            <HeadCalendar />
+            <HeadCalendar
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              startTime={startTime}
+              setStartTime={setStartTime}
+              endTime={endTime}
+              setEndTime={setEndTime}
+              repeatOption={repeatOption}
+              setRepeatOption={setRepeatOption}
+            />
           </button>
           <TeamDropdown
             teamMembers={teamMembers}
@@ -159,7 +201,10 @@ function CreateAppointment({ onClose }) {
           >
             Cancel
           </button>
-          <button className="bg-primary-600 text-white py-2 rounded font-semibold hover:bg-primary-700 transition-colors">
+          <button
+            onClick={handleCreateAppointment}
+            className="bg-primary-600 text-white py-2 rounded font-semibold hover:bg-primary-700 transition-colors"
+          >
             Create
           </button>
         </div>
