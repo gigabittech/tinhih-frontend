@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useCalendarPage from "../../../../../../FormSchema/Provider/calendarPage";
 import TeamDropdown from "../TeamDropdown";
 import HeadCalendar from "../HeadCalendar";
@@ -10,9 +10,12 @@ import TeamMembersInput from "./components/TeamMembersInput";
 import useTeamMembers from "./utils/useTeamMembers";
 import useLocation from "./utils/useLocation";
 import LocationInput from "./components/LocationInput";
-
+import { TiPlus } from "react-icons/ti";
 
 function CreateAppointment({ onClose }) {
+  const [description, setDescription] = useState("");
+  const [descriptionLength, setDescriptionLength] = useState(0);
+  const [openDescription, setOpenDescription] = useState(false);
   const {
     openClients,
     handleRemoveClient,
@@ -51,6 +54,19 @@ function CreateAppointment({ onClose }) {
     openCreateLocation,
     openCreateTeamMember,
   } = useCalendarPage();
+
+  const handleDescription = (e) => {
+    const value = e.target.value;
+    setDescription(value);
+    setDescriptionLength(value.length);
+  };
+  
+
+  console.log("clients:", selectedClients);
+  console.log("members:", selectedTeamMembers);
+  console.log("services:", selectedServices);
+  console.log("location:", selectedLocation);
+  console.log("des:", description);
 
   return (
     <div className="relative h-screen flex flex-col">
@@ -105,6 +121,28 @@ function CreateAppointment({ onClose }) {
             handleRemoveLocation={handleRemoveLocation}
             openCreateLocation={openCreateLocation}
           />
+          {!openDescription ? (
+            <div
+              onClick={() => setOpenDescription(true)}
+              className=" font-semibold cursor-pointer hover:bg-gray-100 p-1 flex items-center gap-1"
+            >
+              <TiPlus />
+              Add description
+            </div>
+          ) : (
+            <div>
+              <label className=" text-sm">Description</label>
+              <textarea
+                onChange={handleDescription}
+                name="description"
+                rows={5}
+                cols={5}
+                maxLength={1000}
+                className=" w-full border outline-none  rounded border-gray-400 px-2 py-1"
+              ></textarea>
+              <label className=" text-sm">{descriptionLength}/1000</label>
+            </div>
+          )}
         </div>
       </div>
       <div className="fixed bottom-0 right-0 left-0 p-6 border-t mt-20 border-gray-200 bg-white">

@@ -15,8 +15,6 @@ function LocationInput({
   const { locations, fetchLocations } = useLocationStore();
   const dropdownRef = useRef(null);
 
-  console.log(locations);
-
   useEffect(() => {
     fetchLocations();
   }, [fetchLocations]);
