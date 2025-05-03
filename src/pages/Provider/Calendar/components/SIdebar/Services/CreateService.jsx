@@ -28,6 +28,8 @@ function CreateService({ isOpen, onClose }) {
 
   const [selectedLocations, setSelectedLocations] = useState([]);
 
+  const [apiErrors, setApiErrors] = useState([]);
+
   const user = useUserStore((state) => state.user);
   const { fetchServices } = useServiceStore();
 
@@ -58,7 +60,7 @@ function CreateService({ isOpen, onClose }) {
   });
 
   useEffect(() => {
-    setValue("team_members", selectedMembers)
+    setValue("team_members", selectedMembers);
   }, [selectedMembers, setValue]);
 
   useEffect(() => {
@@ -77,12 +79,13 @@ function CreateService({ isOpen, onClose }) {
         reset();
         onClose();
         fetchServices();
+        setApiErrors([]);
       } else {
         throw new Error("Failed to create client");
       }
     } catch (error) {
       console.error("Error creating client:", error.message);
-      Notify(error?.response?.data?.message);
+      setApiErrors(error.response.data.errors);
     }
   };
 
@@ -120,6 +123,9 @@ function CreateService({ isOpen, onClose }) {
                 className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
               />
               {errors.code && <p className="text-red-500 text-sm">Required</p>}
+              {apiErrors.code && (
+                <p className="text-red-500 text-sm">{apiErrors.code}</p>
+              )}
             </div>
             <div>
               <label className="text-sm">Duration</label>
@@ -128,6 +134,7 @@ function CreateService({ isOpen, onClose }) {
                 {...register("duration", { valueAsNumber: true })}
                 className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
               />
+              {apiErrors.duration && <p className="text-red-500 text-sm">{apiErrors.duration}</p>}
             </div>
             <div>
               <label className="text-sm">Price</label>
@@ -164,6 +171,9 @@ function CreateService({ isOpen, onClose }) {
               valueKey="id"
               label="Team members"
             />
+            {apiErrors.team_members && (
+              <p className="text-red-500 text-sm">{apiErrors.team_members}</p>
+            )}
           </div>
 
           <GroupEventToggler
@@ -222,6 +232,9 @@ function CreateService({ isOpen, onClose }) {
               valueKey="id"
               label="Locations"
             />
+            {apiErrors.locations && (
+              <p className="text-red-500 text-sm">{apiErrors.locations}</p>
+            )}
           </div>
         </ModalBody>
         <ModalFooter className="justify-end">
