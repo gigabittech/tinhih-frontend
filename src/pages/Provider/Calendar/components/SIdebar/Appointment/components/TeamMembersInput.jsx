@@ -14,7 +14,7 @@ function TeamMembersInput({
   handleRemoveTeamMember,
   openCreateTeamMember,
 }) {
-  const [showDeleteButton, setShowDeleteButton] = useState(false);
+  const [showDeleteButton, setShowDeleteButton] = useState(0);
   const dropdownRef = useRef(null);
   const { user } = useUserStore();
   const { members, fetchMembers } = useTeamMemberStore();
@@ -40,7 +40,6 @@ function TeamMembersInput({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [setOpenTeamMembers]);
-
 
   return (
     <div ref={dropdownRef} className="grid">
@@ -91,24 +90,27 @@ function TeamMembersInput({
       </div>
       {selectedTeamMembers?.length > 0 && (
         <div className="grid grid-cols-2 gap-2 py-2">
-          {selectedTeamMembers.map((teamMembers) => (
+          {selectedTeamMembers.map((teamMember) => (
             <div
-              onMouseEnter={() => setShowDeleteButton(true)}
-              onMouseLeave={() => setShowDeleteButton(false)}
+              onMouseEnter={() => setShowDeleteButton(teamMember.id)}
+              onMouseLeave={() => setShowDeleteButton(0)}
               key={teamMembers.id}
               className="flex justify-between items-center gap-2 hover:bg-gray-200 px-3 py-2"
             >
               <div className="flex items-center gap-5">
                 <Avatar
-                  name={teamMembers?.first_name + " " + teamMembers?.last_name}
+                  name={teamMember?.first_name + " " + teamMember?.last_name}
                 />
                 <span>
-                  {teamMembers?.first_name + " " + teamMembers?.last_name}
+                  {(teamMember?.first_name + " " + teamMember?.last_name).slice(0,15)}
+                  {
+                    (teamMember?.first_name + " " + teamMember?.last_name).length>15 && "...."
+                  }
                 </span>
               </div>
-              {showDeleteButton && (
+              {showDeleteButton === teamMember.id && (
                 <button
-                  onClick={() => handleRemoveTeamMember(teamMembers.id)}
+                  onClick={() => handleRemoveTeamMember(teamMember.id)}
                   className="text-gray-600 w-6 h-6 hover:w-6 hover:h-6 hover:bg-gray-300 flex items-center justify-center rounded-full"
                 >
                   <RxCross1 size={12} />
