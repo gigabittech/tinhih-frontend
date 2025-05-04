@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalBody,
@@ -13,15 +13,24 @@ import { Notify } from "../../../../../../components/ui/Toaster";
 import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
 import useTeamMemberStore from "../../../../../../store/provider/teamMemberStore";
 import useUserStore from "../../../../../../store/global/userStore";
+import useServiceStore from "../../../../../../store/provider/serviceStore";
+import MultiSelectDropdown from "../Services/components/MultiSelectDropdown";
 
 function CreateNewTeamMember({ isOpen, onClose }) {
+  const [selectedServices, setSelectedServices] = useState([]);
   const { fetchMembers } = useTeamMemberStore();
   const { user } = useUserStore();
+  const { services, fetchServices } = useServiceStore();
+  
+  useEffect(() => {
+    fetchServices();
+  }, [fetchServices]);
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { isSubmitting, errors },
   } = useForm();
 
@@ -129,11 +138,20 @@ function CreateNewTeamMember({ isOpen, onClose }) {
             </div>
           </div>
           <div>
-            <label className="text-sm">Assign services</label>
-            <input
-              type="text"
-              {...register("services")}
-              className="border border-[#a0a0a0] w-full rounded px-2 py-1"
+            <p className="text-sm">Assign services</p>
+            <MultiSelectDropdown
+              selected={selectedServices}
+              setSelected={(val) => {
+                setSelectedServices(val);
+                setValue("services", val);
+              }}
+              options={services.map((service) => ({
+                id: service.id,
+                name: `${service.service_name}`,
+              }))}
+              labelKey="name"
+              valueKey="id"
+              label="Services"
             />
           </div>
           <p className="bg-amber-100 px-5 py-3 flex items-center gap-2 text-sm">
