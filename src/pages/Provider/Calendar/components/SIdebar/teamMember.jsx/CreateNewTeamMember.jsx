@@ -15,13 +15,14 @@ import useTeamMemberStore from "../../../../../../store/provider/teamMemberStore
 import useUserStore from "../../../../../../store/global/userStore";
 import useServiceStore from "../../../../../../store/provider/serviceStore";
 import MultiSelectDropdown from "../../../../../../components/ui/MultiSelectDropdown";
+import { PhoneNumberInput } from "../../../../../../components/ui/PhoneNumberInput";
 
 function CreateNewTeamMember({ isOpen, onClose }) {
   const [selectedServices, setSelectedServices] = useState([]);
   const { fetchMembers } = useTeamMemberStore();
   const { user } = useUserStore();
   const { services, fetchServices } = useServiceStore();
-  
+
   useEffect(() => {
     fetchServices();
   }, [fetchServices]);
@@ -31,6 +32,7 @@ function CreateNewTeamMember({ isOpen, onClose }) {
     handleSubmit,
     reset,
     setValue,
+    watch,
     formState: { isSubmitting, errors },
   } = useForm();
 
@@ -68,7 +70,7 @@ function CreateNewTeamMember({ isOpen, onClose }) {
               <input
                 type="text"
                 {...register("first_name", { required: true })}
-                className="border border-[#a0a0a0] w-full rounded px-2 py-1"
+                className="border border-[#a0a0a0] w-full rounded px-2 py-1 outline-none focus:border-primary-500"
               />
               {errors.first_name && (
                 <p className="text-red-500 text-xs">Required</p>
@@ -79,7 +81,7 @@ function CreateNewTeamMember({ isOpen, onClose }) {
               <input
                 type="text"
                 {...register("last_name", { required: true })}
-                className="border border-[#a0a0a0] w-full rounded px-2 py-1"
+                className="border border-[#a0a0a0] w-full rounded px-2 py-1 outline-none focus:border-primary-500"
               />
               {errors.last_name && (
                 <p className="text-red-500 text-xs">Required</p>
@@ -93,7 +95,7 @@ function CreateNewTeamMember({ isOpen, onClose }) {
                   required: true,
                   pattern: /^\S+@\S+$/i,
                 })}
-                className="border border-[#a0a0a0] w-full rounded px-2 py-1"
+                className="border border-[#a0a0a0] w-full rounded px-2 py-1 outline-none focus:border-primary-500"
               />
               {errors.email?.type === "required" && (
                 <p className="text-red-500 text-xs">Email is required</p>
@@ -102,20 +104,21 @@ function CreateNewTeamMember({ isOpen, onClose }) {
                 <p className="text-red-500 text-xs">Invalid email format</p>
               )}
             </div>
-            <div>
-              <label className="text-sm">Phone number</label>
-              <input
-                type="number"
-                {...register("phone_number")}
-                className="border border-[#a0a0a0] w-full rounded px-2 py-1"
-              />
-            </div>
+            <PhoneNumberInput
+              register={register}
+              setValue={setValue}
+              watch={watch}
+              errors={errors}
+              defaultCountry="+880"
+              label="Phone number"
+              placeholder=""
+            />
             <div>
               <label className="text-sm">Job title</label>
               <input
                 type="text"
                 {...register("job_title")}
-                className="border border-[#a0a0a0] w-full rounded px-2 py-1"
+                className="border border-[#a0a0a0] w-full rounded px-2 py-1 outline-none focus:border-primary-500"
               />
             </div>
             <div>
@@ -125,7 +128,7 @@ function CreateNewTeamMember({ isOpen, onClose }) {
               <input
                 type="text"
                 {...register("npi")}
-                className="border border-[#a0a0a0] w-full rounded px-2 py-1"
+                className="border border-[#a0a0a0] w-full rounded px-2 py-1 outline-none focus:border-primary-500"
               />
             </div>
             <div>
@@ -133,7 +136,7 @@ function CreateNewTeamMember({ isOpen, onClose }) {
               <input
                 type="text"
                 {...register("taxonomy")}
-                className="border border-[#a0a0a0] w-full rounded px-2 py-1"
+                className="border border-[#a0a0a0] w-full rounded px-2 py-1 outline-none focus:border-primary-500"
               />
             </div>
           </div>

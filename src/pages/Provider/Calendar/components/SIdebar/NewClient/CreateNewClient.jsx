@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import {
   Modal,
   ModalBody,
@@ -12,7 +12,7 @@ import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
 import { Notify } from "../../../../../../components/ui/Toaster";
 import StatusDropdown from "./StatusDropdown";
 import useClientStore from "../../../../../../store/provider/clientStore";
-import countries_data from "../../../../../../data/countryData";
+import { PhoneNumberInput } from "../../../../../../components/ui/PhoneNumberInput";
 
 function CreateNewClient({ isOpen, onClose }) {
   const {
@@ -25,22 +25,7 @@ function CreateNewClient({ isOpen, onClose }) {
   } = useForm();
   const [apiErrors, setApiErrors] = useState("");
   const { fetchClients } = useClientStore();
-  const [isDropdownOpen, setIsOpen] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(countries_data[0]);
 
-  const phone = watch("phone");
-
-  useEffect(() => {
-    setValue("countryCode", selectedCountry.code);
-    setValue("fullPhoneNumber", `${selectedCountry.code}${phone || ""}`);
-  }, [selectedCountry, phone, setValue]);
-
-  const toggleDropdown = () => setIsOpen((prev) => !prev);
-
-  const handleSelect = (country) => {
-    setSelectedCountry(country);
-    setIsOpen(false);
-  };
 
   const onSubmit = async (data) => {
     try {
@@ -107,68 +92,18 @@ function CreateNewClient({ isOpen, onClose }) {
             />
 
             <div className="w-full">
-              <label className="text-sm mb-1 block">Phone Number*</label>
-
-              <div className="flex border border-[#a0a0a0] rounded px-2 py-1 items-center focus-within:border-amber-300 relative">
-                {/* Custom Dropdown */}
-                <div className="relative w-28">
-                  <div
-                    onClick={toggleDropdown}
-                    className="cursor-pointer text-sm flex justify-between items-center"
-                  >
-                    {selectedCountry.abbreviation} {selectedCountry.code}
-                    <svg
-                      className="ml-1 h-4 w-4 inline-block"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M5.516 7.548L10 12.032l4.484-4.484L16 9.064l-6 6-6-6z" />
-                    </svg>
-                  </div>
-
-                  {isDropdownOpen && (
-                    <div className="absolute z-10 mt-2 w-60 bg-white border border-gray-300 rounded shadow max-h-48 overflow-auto text-sm">
-                      {countries_data.map((country, idx) => (
-                        <div
-                          key={idx}
-                          className="px-3 py-1 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => handleSelect(country)}
-                        >
-                          {country.abbreviation} {country.name} {country.code}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Phone Input */}
-                <input
-                  type="number"
-                  {...register("phone", {
-                    required: "Phone number is required",
-                    minLength: {
-                      value: 7,
-                      message: "Invalid phone number length",
-                    },
-                    pattern: {
-                      value: /^[0-9]+$/,
-                      message: "Phone number must contain only digits",
-                    },
-                  })}
-                  className="ml-2 flex-1 outline-none text-sm"
-                  placeholder="XXX XXXX XXX"
-                />
-              </div>
-
-              {/* Hidden Inputs */}
-              <input type="hidden" {...register("countryCode")} />
-              <input type="hidden" {...register("fullPhoneNumber")} />
-
+              <PhoneNumberInput
+                register={register}
+                setValue={setValue}
+                watch={watch}
+                errors={errors}
+                defaultCountry="+880"
+                label="Phone number"
+                placeholder="XXX XXXX XXX" 
+              />
               {/* Errors */}
-              {errors.phone && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.phone.message}
-                </p>
+              {apiErrors.phone && (
+                <p className="text-red-500 text-sm mt-1">{apiErrors.phone}</p>
               )}
             </div>
 
