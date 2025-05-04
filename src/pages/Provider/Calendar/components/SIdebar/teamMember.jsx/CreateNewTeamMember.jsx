@@ -14,7 +14,7 @@ import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
 import useTeamMemberStore from "../../../../../../store/provider/teamMemberStore";
 import useUserStore from "../../../../../../store/global/userStore";
 import useServiceStore from "../../../../../../store/provider/serviceStore";
-import MultiSelectDropdown from "../Services/components/MultiSelectDropdown";
+import MultiSelectDropdown from "../../../../../../components/ui/MultiSelectDropdown";
 
 function CreateNewTeamMember({ isOpen, onClose }) {
   const [selectedServices, setSelectedServices] = useState([]);

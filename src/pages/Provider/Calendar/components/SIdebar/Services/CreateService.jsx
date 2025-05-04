@@ -15,7 +15,7 @@ import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
 import { Notify } from "../../../../../../components/ui/Toaster";
 import useServiceStore from "../../../../../../store/provider/serviceStore";
 import useTeamMemberStore from "../../../../../../store/provider/teamMemberStore";
-import MultiSelectDropdown from "./components/MultiSelectDropdown";
+import MultiSelectDropdown from "../../../../../../components/ui/MultiSelectDropdown";
 import useLocationStore from "../../../../../../store/provider/locationStore";
 
 function CreateService({ isOpen, onClose }) {
