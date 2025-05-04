@@ -2,19 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { RxCross1 } from "react-icons/rx";
 import CreateButton from "./CreateButton";
 import NewInput from "../../../../../../../components/ui/NewInput";
-
-const locations = [
-  {
-    id: 1,
-    name: "TiNHiH Portal",
-    duration: "45 mins",
-  },
-  {
-    id: 2,
-    name: "Zoom",
-    duration: "30 mins",
-  },
-];
+import useLocationStore from "../../../../../../../store/provider/locationStore";
 
 function LocationInput({
   openLocation,
@@ -24,7 +12,12 @@ function LocationInput({
   handleRemoveLocation,
   openCreateLocation,
 }) {
+  const { locations, fetchLocations } = useLocationStore();
   const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    fetchLocations();
+  }, [fetchLocations]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -50,22 +43,35 @@ function LocationInput({
       <div className="relative">
         {openLocation && (
           <div className="absolute bg-white w-full shadow-2xl border border-gray-100 z-10 py-1 grid grid-cols-1 rounded">
-            {locations.map((service) => {
-              const isSelected = selectedLocation?.id === service.id; // Only one location is selected
+            {locations.map((location) => {
+              const isSelected = selectedLocation?.id === location.id; // Only one location is selected
               return (
                 <div
-                  onClick={() => handleLocationSelect(service)}
-                  key={service.id}
+                  onClick={() => handleLocationSelect(location)}
+                  key={location.id}
                   className={`px-5 py-2 grid items-center gap-1 cursor-pointer hover:bg-gray-100 ${
                     isSelected ? "bg-blue-100" : ""
                   }`}
                 >
-                  <p className="font-bold">{service.name}</p>
-                  <p>{service.duration}</p>
+                  <p className="font-bold">{location.display_name}</p>
+                  {location?.type?.id === 1 && (
+                    <p className="text-xs">
+                      {`${location?.address}, ${location?.city}, ${location?.state}, ${location?.country}`}
+                    </p>
+                  )}
+                  {location.type.id === 2 && (
+                    <p className=" text-xs">{location.phone}</p>
+                  )}
+                  {location.type.id > 2 && (
+                    <p className=" text-xs">{location.link}</p>
+                  )}
                 </div>
               );
             })}
-            <CreateButton onClick={openCreateLocation} create={"New Service"} />
+            <CreateButton
+              onClick={openCreateLocation}
+              create={"New Location"}
+            />
           </div>
         )}
       </div>
@@ -73,10 +79,18 @@ function LocationInput({
         <div className="grid grid-cols-1 gap-2 py-2">
           <div className="flex justify-between items-center gap-2 px-5 py-3 border border-gray-300 rounded ">
             <div className="grid items-center gap-1">
-              <p className="font-bold">{selectedLocation.name}</p>
-              <p className="text-sm text-gray-500">
-                {selectedLocation.duration}
-              </p>
+              <p className="font-bold">{selectedLocation.display_name}</p>
+              {selectedLocation.type.id === 1 && (
+                <p className="text-xs">
+                  {`${selectedLocation?.address}, ${selectedLocation?.city}, ${selectedLocation?.state}, ${selectedLocation?.country}`}
+                </p>
+              )}
+              {selectedLocation.type.id === 2 && (
+                <p className=" text-xs">{selectedLocation?.phone}</p>
+              )}
+              {selectedLocation.type.id > 2 && (
+                <p className=" text-xs">{selectedLocation?.link}</p>
+              )}
             </div>
 
             <button

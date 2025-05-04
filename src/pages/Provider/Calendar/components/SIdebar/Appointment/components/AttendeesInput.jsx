@@ -15,7 +15,7 @@ function AttendeesInput({
 }) {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
   const dropdownRef = useRef(null);
-  const { clients, fetchClients, loading } = useClientStore();
+  const { clients, fetchClients } = useClientStore();
 
   useEffect(() => {
     fetchClients();
@@ -33,8 +33,6 @@ function AttendeesInput({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [setOpenClients]);
-
-  if (loading) return <p>Loading...</p>;
 
   return (
     <div ref={dropdownRef} className="grid">

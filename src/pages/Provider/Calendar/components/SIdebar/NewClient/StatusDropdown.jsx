@@ -12,7 +12,7 @@ const statusOptions = [
 
 function StatusDropdown({ register, setValue, errors }) {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState({ label: "Active", value: "active", color: "bg-green-500" });
+  const [selected, setSelected] = useState();
 
   const handleSelect = (option) => {
     setSelected(option);

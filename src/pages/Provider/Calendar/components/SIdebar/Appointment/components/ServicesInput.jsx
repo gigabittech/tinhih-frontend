@@ -3,37 +3,7 @@ import { RxCross1 } from "react-icons/rx";
 import { LuDot } from "react-icons/lu";
 import CreateButton from "./CreateButton";
 import NewInput from "../../../../../../../components/ui/NewInput";
-
-const services = [
-  {
-    id: 1,
-    name: "Standard Appointment",
-    duration: "45 mins",
-    price: 100,
-    currency: "BDT",
-  },
-  {
-    id: 2,
-    name: "Consultation Call",
-    duration: "30 mins",
-    price: 80,
-    currency: "BDT",
-  },
-  {
-    id: 3,
-    name: "Therapy Session",
-    duration: "60 mins",
-    price: 150,
-    currency: "BDT",
-  },
-  {
-    id: 4,
-    name: "Follow-up Meeting",
-    duration: "20 mins",
-    price: 50,
-    currency: "BDT",
-  },
-];
+import useServiceStore from "../../../../../../../store/provider/serviceStore";
 
 function ServicesInput({
   openServices,
@@ -44,9 +14,12 @@ function ServicesInput({
   openCreateService,
 }) {
   const dropdownRef = useRef(null);
+  const { services, fetchServices } = useServiceStore();
 
-  console.log(selectedServices);
-  
+  useEffect(() => {
+    fetchServices();
+  }, [fetchServices]);
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -84,11 +57,11 @@ function ServicesInput({
                     isSelected ? "bg-blue-100" : ""
                   }`}
                 >
-                  <p className="font-bold">{service.name}</p>
+                  <p className="font-bold">{service.service_name}</p>
                   <div className="flex text-sm items-center text-gray-500">
-                    <p>{service.duration}</p>
+                    <p>{service.duration} mins</p>
                     <LuDot />
-                    <p>{service.currency + " " + service.price}</p>
+                    <p>{"BDT" + " " + service.price}</p>
                   </div>
                 </div>
               );
@@ -105,12 +78,12 @@ function ServicesInput({
               className="flex justify-between items-center gap-2 px-5 py-3 border border-gray-300 rounded border-s-4 border-s-[#3078ca]"
             >
               <div className="grid items-center gap-1">
-                <p className=" font-bold">{service.name}</p>
-                <p className="text-sm text-gray-500">{service.duration}</p>
+                <p className=" font-bold">{service?.service_name}</p>
+                <p className="text-sm text-gray-500">{service.duration} mins</p>
               </div>
               <div className="flex items-center gap-5">
                 <p className="text-sm">
-                  {service.currency + " " + service.price}{" "}
+                  {"BDT" + " " + service.price}{" "}
                 </p>
                 <button
                   onClick={() => handleRemoveService(service.id)}

@@ -14,7 +14,7 @@ import StatusDropdown from "./StatusDropdown";
 import useClientStore from "../../../../../../store/provider/clientStore";
 
 function CreateNewClient({ isOpen, onClose }) {
-  const { fetchClients} = useClientStore();
+  const { fetchClients } = useClientStore();
   const {
     register,
     setValue,
@@ -22,24 +22,22 @@ function CreateNewClient({ isOpen, onClose }) {
     formState: { errors },
     reset,
   } = useForm();
-  
 
   const onSubmit = async (data) => {
     try {
       const response = await axiosInstance.post("/clients", data);
-      console.log(response);
 
       if (response.status === 200) {
         Notify("Created!");
         reset();
         onClose();
-        fetchClients()
+        fetchClients();
       } else {
         throw new Error("Failed to create client");
       }
     } catch (error) {
       console.error("Error creating client:", error.message);
-      Notify("Created!");
+      Notify(error?.response?.data?.message );
     }
   };
 
@@ -91,7 +89,7 @@ function CreateNewClient({ isOpen, onClose }) {
             <div>
               <label className="text-sm">Phone Number*</label>
               <input
-                type="tel"
+                type="number"
                 {...register("phone", { required: "Phone number is required" })}
                 className="border border-[#a0a0a0] w-full rounded px-2 py-1 outline-none focus:border-amber-200"
               />

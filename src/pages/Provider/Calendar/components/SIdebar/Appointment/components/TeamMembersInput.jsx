@@ -2,24 +2,19 @@ import React, { useEffect, useRef, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import CreateButton from "./CreateButton";
 import NewInput from "../../../../../../../components/ui/NewInput";
-import useUserStore from "../../../../../../../store/global/userStore";
+import Avatar from "../../../../../../../components/ui/Avatar";
 
 function TeamMembersInput({
+  teamMembers,
   openTeamMembers,
   setOpenTeamMembers,
   selectedTeamMembers,
   handleTeamMemberSelect,
   handleRemoveTeamMember,
-  openCreateTeamMember
+  openCreateTeamMember,
 }) {
-  const [showDeleteButton, setShowDeleteButton] = useState(false);
+  const [showDeleteButton, setShowDeleteButton] = useState(0);
   const dropdownRef = useRef(null);
-  const { user } = useUserStore();
-
-  const teamMembers = [
-    ...(user?.currentWorkspace?.members || []),
-    { id: user?.id, name: user?.full_name },
-  ];
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -45,9 +40,7 @@ function TeamMembersInput({
       <div className=" relative">
         {openTeamMembers && (
           <div className="absolute bg-white w-full shadow-2xl border border-gray-100 z-10 py-1 grid grid-cols-1 rounded">
-            <p className="px-5 font-bold my-3">
-              All team members
-            </p>
+            <p className="px-5 font-bold my-3">All team members</p>
             {teamMembers.map((teamMembers) => {
               const isSelected = selectedTeamMembers.some(
                 (c) => c.id === teamMembers.id
@@ -60,12 +53,19 @@ function TeamMembersInput({
                     isSelected ? "bg-blue-100" : ""
                   }`}
                 >
-                  <img
+                  {/*  <img
                     src={teamMembers.avatar}
-                    alt={teamMembers.name}
+                    alt={teamMembers.first_name + " " + teamMembers.last_name}
                     className="w-8 h-8 rounded-full object-cover"
+                  /> */}
+                  <Avatar
+                    name={
+                      teamMembers?.first_name + " " + teamMembers?.last_name
+                    }
                   />
-                  <p className="font-medium">{teamMembers.name}</p>
+                  <p className="font-medium">
+                    {teamMembers?.first_name + " " + teamMembers?.last_name}
+                  </p>
                 </div>
               );
             })}
@@ -78,22 +78,29 @@ function TeamMembersInput({
       </div>
       {selectedTeamMembers?.length > 0 && (
         <div className="grid grid-cols-2 gap-2 py-2">
-          {selectedTeamMembers.map((teamMembers) => (
+          {selectedTeamMembers.map((teamMember) => (
             <div
-              onMouseEnter={() => setShowDeleteButton(true)}
-              onMouseLeave={() => setShowDeleteButton(false)}
+              onMouseEnter={() => setShowDeleteButton(teamMember.id)}
+              onMouseLeave={() => setShowDeleteButton(0)}
               key={teamMembers.id}
               className="flex justify-between items-center gap-2 hover:bg-gray-200 px-3 py-2"
             >
               <div className="flex items-center gap-5">
-                <p className="flex justify-center items-center w-8 h-8 rounded-full bg-primary-500">
-                  DP
-                </p>
-                <span>{teamMembers.name}</span>
+                <Avatar
+                  name={teamMember?.first_name + " " + teamMember?.last_name}
+                />
+                <span>
+                  {(teamMember?.first_name + " " + teamMember?.last_name).slice(
+                    0,
+                    15
+                  )}
+                  {(teamMember?.first_name + " " + teamMember?.last_name)
+                    .length > 15 && "...."}
+                </span>
               </div>
-              {showDeleteButton && (
+              {showDeleteButton === teamMember.id && (
                 <button
-                  onClick={() => handleRemoveTeamMember(teamMembers.id)}
+                  onClick={() => handleRemoveTeamMember(teamMember.id)}
                   className="text-gray-600 w-6 h-6 hover:w-6 hover:h-6 hover:bg-gray-300 flex items-center justify-center rounded-full"
                 >
                   <RxCross1 size={12} />

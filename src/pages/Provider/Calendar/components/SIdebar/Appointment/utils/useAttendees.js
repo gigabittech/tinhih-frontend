@@ -24,6 +24,7 @@ export default function useAttendees() {
     setOpenClients,
     handleRemoveClient,
     handleClientSelect,
-    selectedClients
+    selectedClients,
+    setSelectedClients
   };
 }
