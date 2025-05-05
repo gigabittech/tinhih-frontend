@@ -1,4 +1,4 @@
-import React from "react";
+import React, {  useState } from "react";
 import {
   Modal,
   ModalBody,
@@ -12,16 +12,20 @@ import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
 import { Notify } from "../../../../../../components/ui/Toaster";
 import StatusDropdown from "./StatusDropdown";
 import useClientStore from "../../../../../../store/provider/clientStore";
+import { PhoneNumberInput } from "../../../../../../components/ui/PhoneNumberInput";
 
 function CreateNewClient({ isOpen, onClose }) {
-  const { fetchClients } = useClientStore();
   const {
     register,
     setValue,
     handleSubmit,
+    watch,
     formState: { errors },
     reset,
   } = useForm();
+  const [apiErrors, setApiErrors] = useState("");
+  const { fetchClients } = useClientStore();
+
 
   const onSubmit = async (data) => {
     try {
@@ -37,7 +41,7 @@ function CreateNewClient({ isOpen, onClose }) {
       }
     } catch (error) {
       console.error("Error creating client:", error.message);
-      Notify(error?.response?.data?.message );
+      setApiErrors(error?.response?.data?.errors);
     }
   };
 
@@ -86,17 +90,23 @@ function CreateNewClient({ isOpen, onClose }) {
               setValue={setValue}
               errors={errors}
             />
-            <div>
-              <label className="text-sm">Phone Number*</label>
-              <input
-                type="number"
-                {...register("phone", { required: "Phone number is required" })}
-                className="border border-[#a0a0a0] w-full rounded px-2 py-1 outline-none focus:border-amber-200"
+
+            <div className="w-full">
+              <PhoneNumberInput
+                register={register}
+                setValue={setValue}
+                watch={watch}
+                errors={errors}
+                defaultCountry="+880"
+                label="Phone number"
+                placeholder="XXX XXXX XXX" 
               />
-              {errors.phone && (
-                <p className="text-red-500 text-sm">{errors.phone.message}</p>
+              {/* Errors */}
+              {apiErrors.phone && (
+                <p className="text-red-500 text-sm mt-1">{apiErrors.phone}</p>
               )}
             </div>
+
             <div>
               <label className="text-sm">Email*</label>
               <input
@@ -112,6 +122,9 @@ function CreateNewClient({ isOpen, onClose }) {
               />
               {errors.email && (
                 <p className="text-red-500 text-sm">{errors.email.message}</p>
+              )}
+              {apiErrors.email && (
+                <p className="text-red-500 text-sm">{apiErrors.email}</p>
               )}
             </div>
           </div>

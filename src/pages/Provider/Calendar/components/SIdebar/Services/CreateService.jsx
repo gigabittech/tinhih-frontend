@@ -15,12 +15,8 @@ import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
 import { Notify } from "../../../../../../components/ui/Toaster";
 import useServiceStore from "../../../../../../store/provider/serviceStore";
 import useTeamMemberStore from "../../../../../../store/provider/teamMemberStore";
-import MultiSelectDropdown from "./components/MultiSelectDropdown";
-
-const locations = [
-  { id: 1, display_name: "Phone call" },
-  { id: 2, display_name: "Video call" },
-];
+import MultiSelectDropdown from "../../../../../../components/ui/MultiSelectDropdown";
+import useLocationStore from "../../../../../../store/provider/locationStore";
 
 function CreateService({ isOpen, onClose }) {
   const { members, fetchMembers } = useTeamMemberStore();
@@ -31,7 +27,12 @@ function CreateService({ isOpen, onClose }) {
   const [apiErrors, setApiErrors] = useState([]);
 
   const user = useUserStore((state) => state.user);
+  const { locations, fetchLocations } = useLocationStore();
   const { fetchServices } = useServiceStore();
+
+  useEffect(() => {
+    fetchLocations();
+  }, [fetchLocations]);
 
   const {
     register,
@@ -134,7 +135,9 @@ function CreateService({ isOpen, onClose }) {
                 {...register("duration", { valueAsNumber: true })}
                 className="border border-[#a0a0a0] rounded px-3 py-1 w-full"
               />
-              {apiErrors.duration && <p className="text-red-500 text-sm">{apiErrors.duration}</p>}
+              {apiErrors.duration && (
+                <p className="text-red-500 text-sm">{apiErrors.duration}</p>
+              )}
             </div>
             <div>
               <label className="text-sm">Price</label>

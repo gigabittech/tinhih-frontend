@@ -251,7 +251,7 @@ function CreateAppointment({ onClose }) {
             }`}
           >
             Create
-          </button>
+          </button> 
         </div>
       </div>
     </div>

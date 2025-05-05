@@ -12,6 +12,7 @@ import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
 import useUserStore from "../../../../../../store/global/userStore";
 import { Notify } from "../../../../../../components/ui/Toaster";
 import useLocationStore from "../../../../../../store/provider/locationStore";
+import { PhoneNumberInput } from "../../../../../../components/ui/PhoneNumberInput";
 
 const CreateLocation = ({ isOpen, onClose }) => {
   const [locationTypes, setLocationTypes] = useState([]);
@@ -27,6 +28,7 @@ const CreateLocation = ({ isOpen, onClose }) => {
     handleSubmit,
     setValue,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
   const dropdownRef = useRef();
@@ -112,7 +114,7 @@ const CreateLocation = ({ isOpen, onClose }) => {
               </p>
               <div
                 onClick={() => setOpenDropdown(!openDropdown)}
-                className="w-full border rounded-md px-3 py-2 text-sm focus:outline-none focus:border-primary-500 min-h-[38px] cursor-pointer"
+                className=" w-full border rounded-md px-3 py-2 text-sm focus:border-primary-500 min-h-[38px] cursor-pointer"
               >
                 <span>
                   {selectedLocationType.name ||
@@ -129,7 +131,7 @@ const CreateLocation = ({ isOpen, onClose }) => {
                     <div
                       key={type.id}
                       onClick={() => handleSelect(type)}
-                      className="flex items-center gap-3 px-5 py-2 hover:bg-[#f0f0f0] cursor-pointer"
+                      className="flex items-center gap-3 px-5 py-2 hover:bg-[#f0f0f0] cursor-pointer "
                     >
                       <IoLocation size={25} />
                       <div className="grid grid-cols-1">
@@ -151,7 +153,7 @@ const CreateLocation = ({ isOpen, onClose }) => {
               <input
                 {...register("display_name", { required: true })}
                 type="text"
-                className="w-full border rounded-md px-3 py-2 text-sm"
+                className=" outline-none focus:border-primary-500 w-full border rounded-md px-3 py-2 text-sm"
               />
               {errors.display_name && (
                 <p className="text-red-500 text-xs">Display name is required</p>
@@ -170,7 +172,7 @@ const CreateLocation = ({ isOpen, onClose }) => {
                   {...register("address")}
                   type="text"
                   placeholder="E.g. 721 Broadway"
-                  className="w-full border rounded-md px-3 py-2 text-sm text-gray-500 placeholder-gray-400"
+                  className=" outline-none focus:border-primary-500 w-full border rounded-md px-3 py-2 text-sm text-gray-500 placeholder-gray-400"
                 />
               </div>
 
@@ -183,7 +185,7 @@ const CreateLocation = ({ isOpen, onClose }) => {
                     {...register("suburb")}
                     type="text"
                     placeholder="E.g. Brooklyn"
-                    className="w-full border rounded-md px-3 py-2 text-sm text-gray-500 placeholder-gray-400"
+                    className=" outline-none focus:border-primary-500 w-full border rounded-md px-3 py-2 text-sm text-gray-500 placeholder-gray-400"
                   />
                 </div>
                 <div>
@@ -194,7 +196,7 @@ const CreateLocation = ({ isOpen, onClose }) => {
                     {...register("city")}
                     type="text"
                     placeholder="E.g. New York"
-                    className="w-full border rounded-md px-3 py-2 text-sm text-gray-500 placeholder-gray-400"
+                    className=" outline-none focus:border-primary-500 w-full border rounded-md px-3 py-2 text-sm text-gray-500 placeholder-gray-400"
                   />
                 </div>
               </div>
@@ -208,7 +210,7 @@ const CreateLocation = ({ isOpen, onClose }) => {
                     {...register("state")}
                     type="text"
                     placeholder="NY"
-                    className="w-full border rounded-md px-3 py-2 text-sm text-gray-500 placeholder-gray-400"
+                    className=" outline-none focus:border-primary-500 w-full border rounded-md px-3 py-2 text-sm text-gray-500 placeholder-gray-400"
                   />
                 </div>
                 <div>
@@ -219,7 +221,7 @@ const CreateLocation = ({ isOpen, onClose }) => {
                     {...register("zip_code")}
                     type="text"
                     placeholder="10003"
-                    className="w-full border rounded-md px-3 py-2 text-sm text-gray-500 placeholder-gray-400"
+                    className=" outline-none focus:border-primary-500 w-full border rounded-md px-3 py-2 text-sm text-gray-500 placeholder-gray-400"
                   />
                 </div>
                 <div>
@@ -228,7 +230,7 @@ const CreateLocation = ({ isOpen, onClose }) => {
                   </label>
                   <select
                     {...register("country")}
-                    className="w-full border rounded-md px-3 py-2 text-sm text-gray-500"
+                    className=" outline-none focus:border-primary-500 w-full border rounded-md px-3 py-2 text-sm text-gray-500"
                   >
                     <option>United States</option>
                   </select>
@@ -239,18 +241,16 @@ const CreateLocation = ({ isOpen, onClose }) => {
 
           {/* phone call */}
           {selectedLocationType.id === 2 && (
-            <div className="flex flex-col my-3">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Phone number
-              </label>
-              <input
-                {...register("phone", { required: true })}
-                type="number"
-                className="w-full border rounded-md px-3 py-2 text-sm text-gray-500 placeholder-gray-400"
+            <div className="my-3">
+              <PhoneNumberInput
+                register={register}
+                setValue={setValue}
+                watch={watch}
+                errors={errors}
+                defaultCountry="+880"
+                label="Phone number"
+                placeholder=""
               />
-              {errors.phone && (
-                <p className="text-red-500 text-xs">Phone number is required</p>
-              )}
             </div>
           )}
 
@@ -263,7 +263,7 @@ const CreateLocation = ({ isOpen, onClose }) => {
               <input
                 {...register("link", { required: true })}
                 type="url"
-                className="w-full border rounded-md px-3 py-2 text-sm text-gray-500 placeholder-gray-400"
+                className=" outline-none focus:border-primary-500 w-full border rounded-md px-3 py-2 text-sm text-gray-500 placeholder-gray-400"
               />
               {errors.phone && (
                 <p className="text-red-500 text-xs">Link is required</p>
