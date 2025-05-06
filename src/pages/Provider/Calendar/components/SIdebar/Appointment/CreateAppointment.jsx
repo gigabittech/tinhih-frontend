@@ -15,6 +15,7 @@ import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
 import { Notify } from "../../../../../../components/ui/Toaster";
 import useUserStore from "../../../../../../store/global/userStore";
 import formatTo24Hour from "../../../../../../hook/timeFormatTo24Hour";
+import useAppointmentStore from "../../../../../../store/provider/appointmentsStore";
 
 function CreateAppointment({ onClose }) {
   const [description, setDescription] = useState("");
@@ -65,6 +66,7 @@ function CreateAppointment({ onClose }) {
   } = useCalendarPage();
 
   const { user } = useUserStore();
+  const {  fetchAppointments } = useAppointmentStore();
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [startTime, setStartTime] = useState("09:30 PM");
@@ -136,6 +138,7 @@ function CreateAppointment({ onClose }) {
         Notify("Appointment created");
         resetForm();
         onClose();
+        fetchAppointments()
       }
     } catch (error) {
       console.error("Error creating appointment:", error);

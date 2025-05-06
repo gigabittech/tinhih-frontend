@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { cn } from "../../../../../lib/utils";
+import useAppointmentStore from "../../../../../store/provider/appointmentsStore";
+import { BsDot } from "react-icons/bs";
 
-function MonthlyCalendar({ dateSlots = [], selectedDate }) {
+function MonthlyCalendar({ dateSlots = [], selectedDate, onDateSelect }) {
+  const { appointments, fetchAppointments } = useAppointmentStore();
+
+  useState(() => {
+    fetchAppointments();
+  }, [fetchAppointments]);
+
+  console.log(appointments);
+
   return (
     <section className="h-full">
       {/* Calendar Header */}
@@ -21,24 +31,42 @@ function MonthlyCalendar({ dateSlots = [], selectedDate }) {
         {dateSlots?.map(({ date, currentMonth }, index) => {
           const isToday = date.toDateString() === new Date().toDateString();
           const isSelected =
-            date.toDateString() === selectedDate.toDateString();
+            date.toDateString() === selectedDate?.toDateString();
+          const dateToday = date.toISOString().split("T")[0];
+          const hasAppointments = appointments.filter(
+            (app) => app.date === dateToday
+          );
 
           return (
             <div
               key={index}
               className={cn(
-                "p-2 text-[13px] border-t border-r border-outline-light flex items-start justify-end text-base-content",
+                "p-2 text-[13px] border-t border-r border-outline-light flex items-start justify-end text-base-content cursor-pointer relative",
                 currentMonth ? "" : "bg-action-lighter text-context-lighter",
                 isToday ? "font-extrabold text-sm text-primary-700" : "",
                 isSelected ? "text-primary-700 font-extrabold" : ""
               )}
+              onClick={() => onDateSelect?.(date)}
             >
+              {hasAppointments.length > 0 && (
+                <div className=" text-start  absolute top-10 left-0 right-0 grid grid-cols-1 gap-1">
+                  {hasAppointments.slice(0, 3).map((app) => (
+                    <div className="flex items-center bg-amber-300 rounded px-1">
+                      <p>{app.date}</p>
+                      <BsDot />
+                      <p>{app.time}</p>
+                    </div>
+                  ))}
+                  {hasAppointments.length > 3 && (
+                    <p className="px-1">+{hasAppointments.length - 3} more</p>
+                  )}
+                </div>
+              )}
               <span
                 className={cn(
                   isSelected && "border p-1 rounded-full size-7 shrink-0"
                 )}
               >
-                {" "}
                 {date.getDate()}
               </span>
             </div>

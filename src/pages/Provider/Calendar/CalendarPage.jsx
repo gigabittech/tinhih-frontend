@@ -20,6 +20,11 @@ function CalendarPage() {
     selectedDate.getMonth()
   );
 
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+    alert(date)
+  };
+
   return (
     <div className=" flex flex-col h-screen">
       <CalendarHeader />
@@ -34,7 +39,7 @@ function CalendarPage() {
           />
         </section>
         <section className="w-full border-l border-outline-medium">
-          <MonthlyCalendar dateSlots={dateSlots} selectedDate={selectedDate} />
+          <MonthlyCalendar dateSlots={dateSlots} selectedDate={selectedDate} onDateSelect={handleDateSelect}/>
         </section>
       </div>
     </div>
