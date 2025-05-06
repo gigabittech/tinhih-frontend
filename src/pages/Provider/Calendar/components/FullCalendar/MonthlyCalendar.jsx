@@ -1,10 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { cn } from "../../../../../lib/utils";
 import useAppointmentStore from "../../../../../store/provider/appointmentsStore";
 import { BsDot } from "react-icons/bs";
 
 function MonthlyCalendar({ dateSlots = [], selectedDate, onDateSelect }) {
   const { appointments, fetchAppointments } = useAppointmentStore();
+  const [openDropdownIndex, setOpenDropdownIndex] = useState(null);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpenDropdownIndex(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useState(() => {
     fetchAppointments();
@@ -42,23 +55,49 @@ function MonthlyCalendar({ dateSlots = [], selectedDate, onDateSelect }) {
               key={index}
               className={cn(
                 "p-2 text-[13px] border-t border-r border-outline-light flex items-start justify-end text-base-content cursor-pointer relative",
-                currentMonth ? "" : "bg-action-lighter text-context-lighter",
-                isToday ? "font-extrabold text-sm text-primary-700" : "",
-                isSelected ? "text-primary-700 font-extrabold" : ""
+                currentMonth ? "" : "bg-action-lighter ",
+                isToday ? "font-extrabold text-sm " : "",
+                isSelected ? " font-extrabold" : ""
               )}
               onClick={() => onDateSelect?.(date)}
             >
               {hasAppointments.length > 0 && (
                 <div className=" text-start  absolute top-10 left-0 right-0 grid grid-cols-1 gap-1">
                   {hasAppointments.slice(0, 3).map((app) => (
-                    <div className="flex items-center bg-amber-300 rounded px-1">
+                    <div className="flex items-center bg-blue-400 rounded px-1">
                       <p>{app.date}</p>
                       <BsDot />
                       <p>{app.time}</p>
                     </div>
                   ))}
                   {hasAppointments.length > 3 && (
-                    <p className="px-1">+{hasAppointments.length - 3} more</p>
+                    <div className="relative" ref={dropdownRef}>
+                      <p
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpenDropdownIndex(
+                            index === openDropdownIndex ? null : index
+                          );
+                        }}
+                        className="px-1 cursor-pointer text-primary-600 font-bold underline"
+                      >
+                        +{hasAppointments.length - 3} more
+                      </p>
+
+                      {openDropdownIndex === index && (
+                        <div className="absolute z-10 top-full left-0 grid grid-cols-1 gap-2 bg-white shadow-lg rounded p-2 border border-gray-400">
+                          {hasAppointments.slice(3).map((app, i) => (
+                            <div key={i}>
+                              <div className="flex items-center bg-blue-400 rounded px-1">
+                                <p>{app.date}</p>
+                                <BsDot />
+                                <p>{app.time}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   )}
                 </div>
               )}
