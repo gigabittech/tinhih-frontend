@@ -23,7 +23,6 @@ function MonthlyCalendar({ dateSlots = [], selectedDate, onDateSelect }) {
     fetchAppointments();
   }, [fetchAppointments]);
 
-  console.log(appointments);
 
   return (
     <section className="h-full">
