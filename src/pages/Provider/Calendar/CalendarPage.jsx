@@ -9,6 +9,8 @@ import Sidebar from "./components/SIdebar/Sidebar";
 
 function CalendarPage() {
   const [openSideModal, setOpenSideModal] = useState(false);
+  const [contentName, setContentName] = useState("Appointment");
+  const [appointmentId, setAppointmentId] = useState(0);
   const {
     currentDate,
     setCurrentDate,
@@ -32,12 +34,19 @@ function CalendarPage() {
     setSelectedDate(new Date());
   };
 
+  const handleSeeDetails = (id) => {
+    setContentName("details");
+    setAppointmentId(id);
+  };
+
   return (
     <div className=" flex flex-col h-screen">
       <Sidebar
         isOpen={openSideModal}
         onClose={handleSideModal}
-        contentName={"Appointment"}
+        contentName={contentName ? contentName : "Appointment"}
+        setSiderbarContent={setContentName}
+        appointmentId={appointmentId}
       />
       <CalendarHeader />
       <div className="flex gap-3 h-full md:pl-5 border-t border-outline-medium">
@@ -55,6 +64,7 @@ function CalendarPage() {
             dateSlots={dateSlots}
             selectedDate={selectedDate}
             onDateSelect={handleDateSelect}
+            seeDetails={handleSeeDetails}
           />
         </section>
       </div>
