@@ -23,7 +23,7 @@ function MonthlyCalendar({ dateSlots = [], selectedDate, onDateSelect }) {
     fetchAppointments();
   }, [fetchAppointments]);
 
-
+ 
   return (
     <section className="h-full">
       {/* Calendar Header */}
@@ -58,12 +58,12 @@ function MonthlyCalendar({ dateSlots = [], selectedDate, onDateSelect }) {
                 isToday ? "font-extrabold text-sm " : "",
                 isSelected ? " font-extrabold" : ""
               )}
-              onClick={() => onDateSelect?.(date)}
+              onClick={() => onDateSelect(date)}
             >
               {hasAppointments.length > 0 && (
                 <div className=" text-start  absolute top-10 left-0 right-0 grid grid-cols-1 gap-1">
                   {hasAppointments.slice(0, 3).map((app) => (
-                    <div className="flex items-center bg-blue-400 rounded px-1">
+                    <div  className="flex items-center bg-blue-400 rounded px-1 z-50">
                       <p>{app.date}</p>
                       <BsDot />
                       <p>{app.time}</p>
@@ -84,7 +84,7 @@ function MonthlyCalendar({ dateSlots = [], selectedDate, onDateSelect }) {
                       </p>
 
                       {openDropdownIndex === index && (
-                        <div className="absolute z-10 top-full left-0 grid grid-cols-1 gap-2 bg-white shadow-lg rounded p-2 border border-gray-400">
+                        <div className="absolute z-50 top-full left-0 grid grid-cols-1 gap-2 bg-white shadow-lg rounded p-2 border border-gray-400">
                           {hasAppointments.slice(3).map((app, i) => (
                             <div key={i}>
                               <div className="flex items-center bg-blue-400 rounded px-1">
