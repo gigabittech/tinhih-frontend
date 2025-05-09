@@ -6,11 +6,14 @@ import ShortCalendar, {
 } from "../../../components/ui/ShortCalendar";
 import MonthlyCalendar from "./components/FullCalendar/MonthlyCalendar";
 import Sidebar from "./components/SIdebar/Sidebar";
+import DeleteAppointment from "./components/SIdebar/appointmentDetails/DeleteAppointment";
 
 function CalendarPage() {
   const [openSideModal, setOpenSideModal] = useState(false);
   const [contentName, setContentName] = useState("Appointment");
   const [appointmentId, setAppointmentId] = useState(0);
+  const [openDeletePopup, setOpenDeletePopup] = useState(false);
+
   const {
     currentDate,
     setCurrentDate,
@@ -47,6 +50,12 @@ function CalendarPage() {
         contentName={contentName ? contentName : "Appointment"}
         setSiderbarContent={setContentName}
         appointmentId={appointmentId}
+        setDeletePopupOpen={() => setOpenDeletePopup(true)}
+      />
+      <DeleteAppointment
+        isOpen={openDeletePopup}
+        onClose={() => setOpenDeletePopup(false)}
+        id={appointmentId}
       />
       <CalendarHeader />
       <div className="flex gap-3 h-full md:pl-5 border-t border-outline-medium">

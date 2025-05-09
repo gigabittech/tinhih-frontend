@@ -29,6 +29,7 @@ function Sidebar({
   contentName,
   setSiderbarContent,
   appointmentId,
+  setDeletePopupOpen,
 }) {
   const {
     closeCreateClient,
@@ -61,7 +62,11 @@ function Sidebar({
             <CreateAppointment onClose={onClose} />
           )}
           {contentName === "details" && (
-            <AppointmentDetails onClose={onClose} id={appointmentId} />
+            <AppointmentDetails
+              onClose={onClose}
+              id={appointmentId}
+              setDeletePopupOpen={setDeletePopupOpen}
+            />
           )}
           {isOpen && (
             <div className="absolute top-5 -left-20">

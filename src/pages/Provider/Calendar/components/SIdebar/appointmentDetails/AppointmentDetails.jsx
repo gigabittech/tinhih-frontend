@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
 import { IoMdCalendar } from "react-icons/io";
 import { BsDot } from "react-icons/bs";
 import convertTo12HourFormat from "../../../../../../hook/timeFormatTo12Hour";
 import dateFormat from "../../../../../../hook/dateFormat";
 import { MdDeleteForever } from "react-icons/md";
-import useAppointmentStore from "../../../../../../store/provider/appointmentsStore";
-import { Notify } from "../../../../../../components/ui/Toaster";
 
-function AppointmentDetails({ id, onClose }) {
+function AppointmentDetails({ id, setDeletePopupOpen }) {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { fetchAppointments } = useAppointmentStore();
 
   useEffect(() => {
     const fetchAppointmentDetails = async () => {
@@ -33,22 +30,6 @@ function AppointmentDetails({ id, onClose }) {
       fetchAppointmentDetails();
     }
   }, [id]);
-
-  const handleDeleteApp = async () => {
-    try {
-      setLoading(true);
-      const response = await axiosInstance.delete(
-        `/appointments/${details.id}`
-      );
-      if (response.status === 200) {
-        onClose();
-        fetchAppointments();
-        Notify(response.data.message);
-      }
-    } catch (err) {
-      console.error("Error fetching appointment details:", err);
-    }
-  };
 
   if (loading) {
     return;
@@ -72,7 +53,7 @@ function AppointmentDetails({ id, onClose }) {
             </div>
           </div>
           <div className="flex items-center">
-            <span onClick={handleDeleteApp} className="bg-red-100 p-2">
+            <span onClick={setDeletePopupOpen} className="bg-red-100 p-2 cursor-pointer">
               <MdDeleteForever size={20} className="text-red-600" />
             </span>
           </div>
@@ -83,12 +64,34 @@ function AppointmentDetails({ id, onClose }) {
           <h2 className="font-bold">Attendees</h2>
         </div>
         <div className="fixed bottom-0 right-0 left-0 p-6 border-t mt-20 border-gray-200 bg-white">
+          <div className="pb-5 flex justify-between">
+            <p className=" font-semibold">Total</p>
+            <div className="flex gap-5 items-center">
+              <p className=" text-sm">
+                {details.services
+                  .reduce(
+                    (total, service) => total + Number(service.duration),
+                    0
+                  )
+                  .toFixed(2)}{" "}
+                mins
+              </p>
+              <p className=" font-semibold">
+                BDT{" "}
+                {details.services
+                  .reduce((total, service) => total + Number(service.price), 0)
+                  .toFixed(2)}
+              </p>
+            </div>
+          </div>
           <div className="grid grid-cols-2 gap-3">
+            <button className="border border-gray-300 py-2 rounded font-semibold hover:bg-gray-50 transition-colors">
+              Create note
+            </button>
             <button
-              onClick={onClose}
-              className="border border-gray-300 py-2 rounded font-semibold hover:bg-gray-50 transition-colors"
+              className={`py-2 rounded font-semibold transition-colors ${"bg-primary-600 text-white hover:bg-primary-700"}`}
             >
-              Cancel
+              Create invoice
             </button>
           </div>
         </div>
