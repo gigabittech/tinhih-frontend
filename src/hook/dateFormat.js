@@ -1,28 +1,25 @@
-import React from "react";
-
-function useDateFormat(dateToConvert) {
+function dateFormat(dateToConvert) {
   const date = new Date(dateToConvert);
 
+  const dayName = date.toLocaleDateString("en-GB", { weekday: "long" });
   const day = date.getDate();
-  const month = date.toLocaleString("default", { month: "long" });
+  const month = date.toLocaleDateString("en-GB", { month: "long" });
 
-  const getOrdinalSuffix = (n) => {
-    if (n > 3 && n < 21) return `${n}th`;
+  const ordinalSuffix = (n) => {
+    if (n > 3 && n < 21) return "th";
     switch (n % 10) {
       case 1:
-        return `${n}st`;
+        return "st";
       case 2:
-        return `${n}nd`;
+        return "nd";
       case 3:
-        return `${n}rd`;
+        return "rd";
       default:
-        return `${n}th`;
+        return "th";
     }
   };
 
-  const formatted = `${getOrdinalSuffix(day)} ${month}`;
-
-  return formatted;
+  return `${dayName}, ${day}${ordinalSuffix(day)} ${month}`;
 }
 
-export default useDateFormat;
+export default dateFormat;

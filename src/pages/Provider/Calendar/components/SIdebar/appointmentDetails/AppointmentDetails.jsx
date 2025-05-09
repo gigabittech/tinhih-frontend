@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
-import useDateFormat from "../../../../../../hook/dateFormat";
+import { IoMdCalendar } from "react-icons/io";
+import { BsDot } from "react-icons/bs";
+import convertTo12HourFormat from "../../../../../../hook/timeFormatTo12Hour";
+import dateFormat from "../../../../../../hook/dateFormat";
+import { MdDeleteForever } from "react-icons/md";
+import useAppointmentStore from "../../../../../../store/provider/appointmentsStore";
+import { Notify } from "../../../../../../components/ui/Toaster";
 
 function AppointmentDetails({ id, onClose }) {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-  const date=useDateFormat(details?.date)
+  const { fetchAppointments } = useAppointmentStore();
 
   useEffect(() => {
     const fetchAppointmentDetails = async () => {
@@ -28,19 +34,48 @@ function AppointmentDetails({ id, onClose }) {
     }
   }, [id]);
 
+  const handleDeleteApp = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.delete(
+        `/appointments/${details.id}`
+      );
+      if (response.status === 200) {
+        onClose();
+        fetchAppointments();
+        Notify(response.data.message);
+      }
+    } catch (err) {
+      console.error("Error fetching appointment details:", err);
+    }
+  };
+
   if (loading) {
     return;
   }
-  console.log(details);
-  
 
   return (
     <div className="relative h-screen flex flex-col">
-      <div className="py-4 px-5 border-b border-gray-200 bg-white">
-        <div className="flex justify-between items-center gap-3">
+      <div className="py-5 px-7 border-b border-gray-200 bg-white">
+        <div className="flex justify-between   items-center gap-3">
+          <div className="flex items-center gap-3">
+            <span className=" bg-gray-100 p-3">
+              <IoMdCalendar size={20} className="text-gray-600" />
+            </span>
             <div>
-                {date}
+              <p className=" font-bold">Name</p>
+              <div className="flex items-center gap-1 text-sm">
+                <p>{dateFormat(details?.date)}</p>
+                <BsDot />
+                <p>{convertTo12HourFormat(details.time)}</p>
+              </div>
             </div>
+          </div>
+          <div className="flex items-center">
+            <span onClick={handleDeleteApp} className="bg-red-100 p-2">
+              <MdDeleteForever size={20} className="text-red-600" />
+            </span>
+          </div>
         </div>
       </div>
       <div className="flex-1 overflow-y-auto pb-20">
