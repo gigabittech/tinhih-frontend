@@ -67,22 +67,74 @@ function AppointmentDetails({ id, setDeletePopupOpen }) {
       </div>
       <div className="flex-1 overflow-y-auto pb-20">
         <div className="px-7 py-5 grid grid-cols-1 gap-4">
-          <h2 className="font-bold">Attendees</h2>
+          
+          {/* -------------attendees--------------------- */}
           <div className=" grid grid-cols-1 gap-5">
+            <h2 className="font-bold">Attendees</h2>
             {details?.attendees
               .slice()
               .sort((a, b) =>
                 a.role === "provider" ? -1 : b.role === "provider" ? 1 : 0
               )
               .map((attendee) => (
-                <div key={attendee.email} className="flex items-center gap-1">
+                <div key={attendee.id} className="flex items-center gap-1">
                   <Avatar name={attendee.email} />
                   {attendee.email}
-                  {attendee.role === "provider" ? " (you)" : " - " + attendee.role}
+                  {attendee.role === "provider"
+                    ? " (you)"
+                    : " - " + attendee.role}
                 </div>
               ))}
           </div>
+
+          {/* ---------------services---------------------- */}
+          <div className=" grid grid-cols-1 gap-2">
+            <h2 className="font-bold">Services</h2>
+            {details?.services.map((service) => (
+              <div
+                key={service.id}
+                className="flex justify-between items-center gap-2 px-5 py-3 border border-gray-300 rounded border-s-4 border-s-[#3078ca]"
+              >
+                <div className="grid items-center gap-1">
+                  <p className=" font-bold">{service?.service_name}</p>
+                  <p className="text-sm text-gray-500">
+                    {service.duration} mins
+                  </p>
+                </div>
+                <div className="flex items-center gap-5">
+                  <p className="text-sm">{"BDT" + " " + service.price} </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* ----------- locations ------------------- */}
+          <div className=" grid grid-cols-1 gap-3">
+            <h2 className="font-bold">Locations</h2>
+            {details?.locations.map((location) => (
+              <div className="grid grid-cols-1 gap-2 py-2">
+                <div className="flex justify-between items-center gap-2 px-5 py-3 border border-gray-300 rounded ">
+                  <div className="grid items-center gap-1">
+                    <p className="font-bold">{location.display_name}</p>
+                    {location.type.id === 1 && (
+                      <p className="text-xs">
+                        {`${location?.address}, ${location?.city}, ${location?.state}, ${location?.country}`}
+                      </p>
+                    )}
+                    {location.type.id === 2 && (
+                      <p className=" text-xs">{location?.phone}</p>
+                    )}
+                    {location.type.id > 2 && (
+                      <p className=" text-xs">{location?.link}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
+
+        {/* --------------- footer ------------------- */}
         <div className="fixed bottom-0 right-0 left-0 p-6 border-t mt-20 border-gray-200 bg-white">
           <div className="pb-5 flex justify-between">
             <p className=" font-semibold">Total</p>
