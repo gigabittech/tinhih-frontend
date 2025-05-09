@@ -8,7 +8,7 @@ import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
 import useAppointmentStore from "../../../../../../store/provider/appointmentsStore";
 import { MdDeleteForever } from "react-icons/md";
 
-function DeleteAppointment({ isOpen, onClose, id }) {
+function DeleteAppointment({ isOpen, onClose, id, closeSidebar }) {
   const { fetchAppointments } = useAppointmentStore();
 
   const handleDeleteApp = async () => {
@@ -18,6 +18,7 @@ function DeleteAppointment({ isOpen, onClose, id }) {
         onClose();
         fetchAppointments();
         Notify(response.data.message);
+        closeSidebar();
       }
     } catch (err) {
       console.error("Error fetching appointment details:", err);
@@ -36,8 +37,18 @@ function DeleteAppointment({ isOpen, onClose, id }) {
           later.
         </p>
         <div className=" py-5 flex justify-end gap-3">
-          <button onClick={onClose} className=" px-5 py-1 border rounded font-semibold">Cancel</button>
-          <button onClick={handleDeleteApp} className=" px-5 py-1 bg-red-500 text-white rounded font-semibold">Yes, delete</button>
+          <button
+            onClick={onClose}
+            className=" px-5 py-1 border rounded font-semibold"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleDeleteApp}
+            className=" px-5 py-1 bg-red-500 text-white rounded font-semibold"
+          >
+            Yes, delete
+          </button>
         </div>
       </ModalBody>
     </Modal>

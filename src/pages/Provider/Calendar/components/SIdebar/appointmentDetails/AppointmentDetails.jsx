@@ -5,10 +5,13 @@ import { BsDot } from "react-icons/bs";
 import convertTo12HourFormat from "../../../../../../hook/timeFormatTo12Hour";
 import dateFormat from "../../../../../../hook/dateFormat";
 import { MdDeleteForever } from "react-icons/md";
+import Avatar from "../../../../../../components/ui/Avatar";
 
 function AppointmentDetails({ id, setDeletePopupOpen }) {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  console.log(details);
 
   useEffect(() => {
     const fetchAppointmentDetails = async () => {
@@ -53,7 +56,10 @@ function AppointmentDetails({ id, setDeletePopupOpen }) {
             </div>
           </div>
           <div className="flex items-center">
-            <span onClick={setDeletePopupOpen} className="bg-red-100 p-2 cursor-pointer">
+            <span
+              onClick={setDeletePopupOpen}
+              className="bg-red-100 p-2 cursor-pointer"
+            >
               <MdDeleteForever size={20} className="text-red-600" />
             </span>
           </div>
@@ -62,6 +68,20 @@ function AppointmentDetails({ id, setDeletePopupOpen }) {
       <div className="flex-1 overflow-y-auto pb-20">
         <div className="px-7 py-5 grid grid-cols-1 gap-4">
           <h2 className="font-bold">Attendees</h2>
+          <div className=" grid grid-cols-1 gap-5">
+            {details?.attendees
+              .slice()
+              .sort((a, b) =>
+                a.role === "provider" ? -1 : b.role === "provider" ? 1 : 0
+              )
+              .map((attendee) => (
+                <div key={attendee.email} className="flex items-center gap-1">
+                  <Avatar name={attendee.email} />
+                  {attendee.email}
+                  {attendee.role === "provider" ? " (you)" : " - " + attendee.role}
+                </div>
+              ))}
+          </div>
         </div>
         <div className="fixed bottom-0 right-0 left-0 p-6 border-t mt-20 border-gray-200 bg-white">
           <div className="pb-5 flex justify-between">

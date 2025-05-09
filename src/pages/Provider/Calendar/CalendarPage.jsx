@@ -56,6 +56,7 @@ function CalendarPage() {
         isOpen={openDeletePopup}
         onClose={() => setOpenDeletePopup(false)}
         id={appointmentId}
+        closeSidebar={handleSideModal}
       />
       <CalendarHeader />
       <div className="flex gap-3 h-full md:pl-5 border-t border-outline-medium">
