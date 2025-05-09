@@ -35,6 +35,7 @@ function CalendarPage() {
   const handleSideModal = () => {
     setOpenSideModal(false);
     setSelectedDate(new Date());
+    setContentName("")
   };
 
   const handleSeeDetails = (id) => {
