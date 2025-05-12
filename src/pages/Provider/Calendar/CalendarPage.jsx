@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import CalendarHeader from "./components/Header/CalendarHeader";
 import { useCalendarStore } from "../../../FormSchema/Provider/calendarStore";
 import ShortCalendar, {
@@ -35,7 +35,7 @@ function CalendarPage() {
   const handleSideModal = () => {
     setOpenSideModal(false);
     setSelectedDate(new Date());
-    setContentName("")
+    setContentName("");
   };
 
   const handleSeeDetails = (id) => {

@@ -9,6 +9,7 @@ function TeamMembersInput({
   openTeamMembers,
   setOpenTeamMembers,
   selectedTeamMembers,
+  setSelectedTeamMembers,
   handleTeamMemberSelect,
   handleRemoveTeamMember,
   openCreateTeamMember,
@@ -29,6 +30,9 @@ function TeamMembersInput({
     };
   }, [setOpenTeamMembers]);
 
+  console.log(selectedTeamMembers);
+  
+
   return (
     <div ref={dropdownRef} className="grid">
       <NewInput
@@ -40,7 +44,17 @@ function TeamMembersInput({
       <div className=" relative">
         {openTeamMembers && (
           <div className="absolute bg-white w-full shadow-2xl border border-gray-100 z-10 py-1 grid grid-cols-1 rounded">
-            <p className="px-5 font-bold my-3">All team members</p>
+            <div
+              onClick={() => handleTeamMemberSelect("all")}
+              className={`px-5 py-2 flex items-center gap-5 cursor-pointer hover:bg-gray-100 ${
+                selectedTeamMembers.length === teamMembers.length
+                  ? "bg-blue-100"
+                  : ""
+              }`}
+            >
+              <Avatar name="All" />
+              <p className="font-medium">All team members</p>
+            </div>
             {teamMembers.map((teamMembers) => {
               const isSelected = selectedTeamMembers.some(
                 (c) => c.id === teamMembers.id
@@ -53,11 +67,6 @@ function TeamMembersInput({
                     isSelected ? "bg-blue-100" : ""
                   }`}
                 >
-                  {/*  <img
-                    src={teamMembers.avatar}
-                    alt={teamMembers.first_name + " " + teamMembers.last_name}
-                    className="w-8 h-8 rounded-full object-cover"
-                  /> */}
                   <Avatar
                     name={
                       teamMembers?.first_name + " " + teamMembers?.last_name
@@ -78,36 +87,58 @@ function TeamMembersInput({
       </div>
       {selectedTeamMembers?.length > 0 && (
         <div className="grid grid-cols-2 gap-2 py-2">
-          {selectedTeamMembers.map((teamMember) => (
+          {selectedTeamMembers.length === teamMembers.length ? (
             <div
-              onMouseEnter={() => setShowDeleteButton(teamMember.id)}
+              onMouseEnter={() => setShowDeleteButton("all")}
               onMouseLeave={() => setShowDeleteButton(0)}
-              key={teamMembers.id}
               className="flex justify-between items-center gap-2 hover:bg-gray-200 px-3 py-2"
             >
               <div className="flex items-center gap-5">
-                <Avatar
-                  name={teamMember?.first_name + " " + teamMember?.last_name}
-                />
-                <span>
-                  {(teamMember?.first_name + " " + teamMember?.last_name).slice(
-                    0,
-                    15
-                  )}
-                  {(teamMember?.first_name + " " + teamMember?.last_name)
-                    .length > 15 && "...."}
-                </span>
+                <Avatar name="All" />
+                <span>All team members</span>
               </div>
-              {showDeleteButton === teamMember.id && (
+              {showDeleteButton === "all" && (
                 <button
-                  onClick={() => handleRemoveTeamMember(teamMember.id)}
+                  onClick={() => setSelectedTeamMembers([])}
                   className="text-gray-600 w-6 h-6 hover:w-6 hover:h-6 hover:bg-gray-300 flex items-center justify-center rounded-full"
                 >
                   <RxCross1 size={12} />
                 </button>
               )}
             </div>
-          ))}
+          ) : (
+            selectedTeamMembers.map((teamMember) => (
+              <div
+                onMouseEnter={() => setShowDeleteButton(teamMember.id)}
+                onMouseLeave={() => setShowDeleteButton(0)}
+                key={teamMember.id}
+                className="flex justify-between items-center gap-2 hover:bg-gray-200 px-3 py-2"
+              >
+                <div className="flex items-center gap-5">
+                  <Avatar
+                    name={teamMember?.first_name + " " + teamMember?.last_name}
+                  />
+                  <span>
+                    {(
+                      teamMember?.first_name +
+                      " " +
+                      teamMember?.last_name
+                    ).slice(0, 15)}
+                    {(teamMember?.first_name + " " + teamMember?.last_name)
+                      .length > 15 && "...."}
+                  </span>
+                </div>
+                {showDeleteButton === teamMember.id && (
+                  <button
+                    onClick={() => handleRemoveTeamMember(teamMember.id)}
+                    className="text-gray-600 w-6 h-6 hover:w-6 hover:h-6 hover:bg-gray-300 flex items-center justify-center rounded-full"
+                  >
+                    <RxCross1 size={12} />
+                  </button>
+                )}
+              </div>
+            ))
+          )}
         </div>
       )}
     </div>
