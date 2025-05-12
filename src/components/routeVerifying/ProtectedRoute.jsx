@@ -1,7 +1,7 @@
 import { Navigate } from "react-router";
 import useUserStore from "../../store/global/userStore";
-import useWorkspace from "../../hook/useWorkspace";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import useWorkspaceStore from "../../store/global/useWorkspace";
 
 function ProtectedRoute({
   allowedRoles,
@@ -9,28 +9,18 @@ function ProtectedRoute({
   children,
 }) {
   const { isAuthenticated, role } = useUserStore();
-  const { workspaces, loading } = useWorkspace();
-  const [shouldRender, setShouldRender] = useState(false);
+  const { workspaces, fetchWorkspaces } = useWorkspaceStore();
 
   useEffect(() => {
-    if (!loading) {
-      // Wait an extra frame to ensure workspace state is settled
-      const timer = setTimeout(() => {
-        setShouldRender(true);
-      }, 100); // small delay (can adjust)
-      return () => clearTimeout(timer);
-    }
-  }, [loading, workspaces]);
+    fetchWorkspaces();
+  }, [fetchWorkspaces]);
 
-  if (!shouldRender) {
-    return null; // Or a loading spinner
-  }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  const hasWorkspace = workspaces?.workspaces?.length > 0;
+  const hasWorkspace = workspaces?.length > 0;
 
   // If user shouldn't have workspace but does, redirect
   if (shouldHaveNoWorkspace && hasWorkspace) {
@@ -54,4 +44,3 @@ function ProtectedRoute({
 }
 
 export default ProtectedRoute;
-

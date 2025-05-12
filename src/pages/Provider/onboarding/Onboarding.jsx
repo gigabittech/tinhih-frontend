@@ -263,7 +263,7 @@ export default function Onboarding() {
 
   return (
     <div className="flex items-center justify-center h-screen bg-[#e2deb2] bg-opacity-50 backdrop-blur-sm">
-      <div className="fixed top-[10%] w-[40%] bg-white rounded-xl shadow-lg px-6 py-10 md:px-10">
+      <div className="fixed top-[10%] bg-white rounded-xl shadow-lg px-6 py-10 md:px-10">
         <div className="flex justify-between">
           <div className="flex items-center mb-6">
             <img src="/Logo.svg" alt="Logo" className="h-8 mr-2" />

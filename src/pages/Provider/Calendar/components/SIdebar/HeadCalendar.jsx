@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { IoMdCalendar } from "react-icons/io";
+import { useCalendarStore } from "../../../../../FormSchema/Provider/calendarStore";
 
 const HeadCalendar = ({
-  selectedDate,
-  setSelectedDate,
   startTime,
   setStartTime,
   endTime,
@@ -12,6 +11,8 @@ const HeadCalendar = ({
   repeatOption,
   setRepeatOption,
 }) => {
+  const selectedDate = useCalendarStore((state) => state.selectedDate);
+  const setSelectedDate = useCalendarStore((state) => state.setSelectedDate);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [showCalendar, setShowCalendar] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -110,7 +111,7 @@ const HeadCalendar = ({
   };
 
   const formatDate = (date) => {
-    return date.toLocaleDateString("en-US", {
+    return date?.toLocaleDateString("en-US", {
       weekday: "short",
       day: "numeric",
       month: "short",
@@ -119,6 +120,8 @@ const HeadCalendar = ({
 
   const handleDateClick = (day) => {
     setSelectedDate(day.date);
+    console.log(day);
+    
   };
 
   const timeOptions = [
@@ -210,7 +213,7 @@ const HeadCalendar = ({
             <ChevronLeft className="w-5 h-5" />
           </button>
           <h3 className="font-semibold">
-            {currentDate.toLocaleDateString("en-US", {
+            {currentDate?.toLocaleDateString("en-US", {
               month: "long",
               year: "numeric",
             })}

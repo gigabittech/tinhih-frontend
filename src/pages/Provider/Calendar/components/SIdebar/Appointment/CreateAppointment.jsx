@@ -15,11 +15,15 @@ import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
 import { Notify } from "../../../../../../components/ui/Toaster";
 import useUserStore from "../../../../../../store/global/userStore";
 import formatTo24Hour from "../../../../../../hook/timeFormatTo24Hour";
+import useAppointmentStore from "../../../../../../store/provider/appointmentsStore";
+import { useCalendarStore } from "../../../../../../FormSchema/Provider/calendarStore";
 
 function CreateAppointment({ onClose }) {
   const [description, setDescription] = useState("");
   const [descriptionLength, setDescriptionLength] = useState(0);
   const [openDescription, setOpenDescription] = useState(false);
+  const selectedDate = useCalendarStore((state) => state.selectedDate);
+  const setSelectedDate = useCalendarStore((state) => state.setSelectedDate);
   const {
     openClients,
     handleRemoveClient,
@@ -65,8 +69,8 @@ function CreateAppointment({ onClose }) {
   } = useCalendarPage();
 
   const { user } = useUserStore();
+  const { fetchAppointments } = useAppointmentStore();
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const [startTime, setStartTime] = useState("09:30 PM");
   const [endTime, setEndTime] = useState("10:30 PM");
   const [repeatOption, setRepeatOption] = useState("Doesn't repeat");
@@ -121,7 +125,7 @@ function CreateAppointment({ onClose }) {
   const handleCreateAppointment = async () => {
     const payload = {
       workspace_id: user.currentWorkspace.id,
-      date: selectedDate.toISOString().split("T")[0],
+      date: selectedDate?.toISOString()?.split("T")[0],
       time: formatTo24Hour(startTime),
       attendees: selectedClients.map((c) => c.id),
       services: selectedServices.map((s) => s.id),
@@ -136,6 +140,7 @@ function CreateAppointment({ onClose }) {
         Notify("Appointment created");
         resetForm();
         onClose();
+        fetchAppointments();
       }
     } catch (error) {
       console.error("Error creating appointment:", error);
@@ -148,8 +153,6 @@ function CreateAppointment({ onClose }) {
         <div className="flex justify-between items-center gap-3">
           <button className="border border-gray-300 py-2 rounded font-semibold hover:bg-gray-50 transition-colors ">
             <HeadCalendar
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
               startTime={startTime}
               setStartTime={setStartTime}
               endTime={endTime}
@@ -251,7 +254,7 @@ function CreateAppointment({ onClose }) {
             }`}
           >
             Create
-          </button> 
+          </button>
         </div>
       </div>
     </div>
