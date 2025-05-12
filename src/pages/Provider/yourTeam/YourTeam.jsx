@@ -18,7 +18,7 @@ function YourTeam() {
           <h2 className="text-lg font-semibold whitespace-nowrap">4 Team members</h2>
           <input
             type="text"
-            placeholder="Search by client name, client ID or phone number"
+            placeholder="Search team member"
             className="w-96 border rounded px-3 py-2"
           />
         </div>
