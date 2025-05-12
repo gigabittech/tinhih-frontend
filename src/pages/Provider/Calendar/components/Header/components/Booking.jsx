@@ -21,9 +21,15 @@ function Booking() {
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(bookingLink).then(() => {
-      setCopiedLink(bookingLink); 
+      setCopiedLink(bookingLink);
       alert("Copied");
     });
+  };
+
+  const handleClose = () => {
+    setOpenBookingPopup(false);
+    setActiveTab("link");
+    setCopiedLink("");
   };
 
   return (
@@ -37,14 +43,11 @@ function Booking() {
         <Link2 size={18} />
         <span>Booking</span>
       </Button>
-      <Modal
-        onClose={() => setOpenBookingPopup(false)}
-        isOpen={openBookingPopup}
-      >
+      <Modal onClose={handleClose} isOpen={openBookingPopup}>
         <ModalHeader
           icon={<IoLink size={22} />}
           title={"Share your booking link"}
-          onClose={() => setOpenBookingPopup(false)}
+          onClose={handleClose}
         />
         <ModalBody>
           <div>
@@ -133,7 +136,7 @@ function Booking() {
           </div>
           <div className=" py-5 flex justify-end gap-3">
             <button
-              onClick={() => setOpenBookingPopup(false)}
+              onClick={handleClose}
               className=" px-5 py-1 border rounded font-semibold cursor-pointer"
             >
               Close
