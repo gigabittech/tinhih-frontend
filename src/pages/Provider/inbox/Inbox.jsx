@@ -9,7 +9,7 @@ function Inbox() {
     <div>
       <header className=" border-b border-[#dedede] px-10 pb-5">
         <div className="flex items-center gap-3 text-2xl">
-          <span className=" p-3 bg-amber-100 text-[#6e6e6e]">
+          <span className=" p-2 bg-amber-100 text-[#6e6e6e]">
             {" "}
             <MdInbox />
           </span>

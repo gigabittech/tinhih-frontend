@@ -54,8 +54,8 @@ function CreateAppointment({ onClose }) {
   const {
     teamMembers,
     openTeamMembers,
-    setOpenTeamMembers,
     selectedTeamMembers,
+    setOpenTeamMembers,
     setSelectedTeamMembers,
     handleTeamMemberSelect,
     handleRemoveTeamMember,
@@ -186,6 +186,7 @@ function CreateAppointment({ onClose }) {
           <TeamMembersInput
             teamMembers={teamMembers}
             selectedTeamMembers={selectedTeamMembers}
+            setSelectedTeamMembers={setSelectedTeamMembers}
             openTeamMembers={openTeamMembers}
             setOpenTeamMembers={setOpenTeamMembers}
             handleTeamMemberSelect={handleTeamMemberSelect}

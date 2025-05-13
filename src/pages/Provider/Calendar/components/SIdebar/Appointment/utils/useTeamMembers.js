@@ -21,18 +21,34 @@ export default function useTeamMembers() {
   ];
 
   const handleTeamMemberSelect = (teamMember) => {
-    const alreadySelected = selectedTeamMembers.some(
-      (c) => c.id === teamMember.id
-    );
-    if (alreadySelected) {
-      setSelectedTeamMembers(
-        selectedTeamMembers.filter((c) => c.id !== teamMember.id)
-      );
+  // If user clicks "all"
+  if (teamMember === "all") {
+    const allSelected =
+      selectedTeamMembers.length === teamMembers.length;
+
+    if (allSelected) {
+      setSelectedTeamMembers([]);
     } else {
-      setSelectedTeamMembers([...selectedTeamMembers, teamMember]);
+      setSelectedTeamMembers(teamMembers);
     }
+
     setOpenTeamMembers(false);
-  };
+    return;
+  }
+
+  const alreadySelected = selectedTeamMembers.some(
+    (c) => c.id === teamMember.id
+  );
+  if (alreadySelected) {
+    setSelectedTeamMembers(
+      selectedTeamMembers.filter((c) => c.id !== teamMember.id)
+    );
+  } else {
+    setSelectedTeamMembers([...selectedTeamMembers, teamMember]);
+  }
+
+  setOpenTeamMembers(false);
+};
 
   const handleRemoveTeamMember = (id) => {
     setSelectedTeamMembers(
@@ -42,8 +58,8 @@ export default function useTeamMembers() {
   return {
     teamMembers,
     openTeamMembers,
-    setOpenTeamMembers,
     selectedTeamMembers,
+    setOpenTeamMembers,
     setSelectedTeamMembers,
     handleTeamMemberSelect,
     handleRemoveTeamMember,
