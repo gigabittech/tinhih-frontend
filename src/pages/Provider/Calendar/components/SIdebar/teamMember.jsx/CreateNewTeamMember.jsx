@@ -37,6 +37,7 @@ function CreateNewTeamMember({ isOpen, onClose }) {
   } = useForm();
 
   const onSubmit = async (data) => {
+    data.phone_number = data.fullPhoneNumber;
     const payload = { workspace_id: user?.currentWorkspace?.id, ...data };
     try {
       const response = await axiosInstance.post("/members", payload);
