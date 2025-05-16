@@ -29,8 +29,6 @@ function TeamMembersInput({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [setOpenTeamMembers]);
-
-  console.log(selectedTeamMembers);
   
 
   return (

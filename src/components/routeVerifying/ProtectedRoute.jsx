@@ -2,20 +2,31 @@ import { Navigate } from "react-router";
 import useUserStore from "../../store/global/userStore";
 import { useEffect } from "react";
 import useWorkspaceStore from "../../store/global/useWorkspace";
+import AppLoader from "../global/AppLoader";
 
 function ProtectedRoute({
   allowedRoles,
   shouldHaveNoWorkspace = false,
   children,
 }) {
-  const { isAuthenticated, role } = useUserStore();
-  const { workspaces, fetchWorkspaces } = useWorkspaceStore();
+  const { isAuthenticated, role, hydrated } = useUserStore();
+  const {
+    workspaces,
+    fetchWorkspaces,
+    loading: workspaceLoading,
+  } = useWorkspaceStore();
+
+  console.log("auth", isAuthenticated);
+  console.log("loading", hydrated);
 
   useEffect(() => {
     fetchWorkspaces();
   }, [fetchWorkspaces]);
 
-
+  if (workspaceLoading || !hydrated) {
+    return <AppLoader />;
+  }
+  
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
