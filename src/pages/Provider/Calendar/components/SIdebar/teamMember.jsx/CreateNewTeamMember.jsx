@@ -19,6 +19,7 @@ import { PhoneNumberInput } from "../../../../../../components/ui/PhoneNumberInp
 
 function CreateNewTeamMember({ isOpen, onClose }) {
   const [selectedServices, setSelectedServices] = useState([]);
+  const [apiErrors, setApiErrors] = useState("");
   const { fetchMembers } = useTeamMemberStore();
   const { user } = useUserStore();
   const { services, fetchServices } = useServiceStore();
@@ -52,9 +53,10 @@ function CreateNewTeamMember({ isOpen, onClose }) {
       }
     } catch (error) {
       console.error("Error creating member:", error.message);
-      Notify(error?.response?.data?.message);
+      setApiErrors(error?.response?.data?.errors)
     }
   };
+  
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -103,6 +105,9 @@ function CreateNewTeamMember({ isOpen, onClose }) {
               )}
               {errors.email?.type === "pattern" && (
                 <p className="text-red-500 text-xs">Invalid email format</p>
+              )}
+              {apiErrors.email && (
+                <p className="text-red-500 text-xs">{apiErrors.email}</p>
               )}
             </div>
             <PhoneNumberInput

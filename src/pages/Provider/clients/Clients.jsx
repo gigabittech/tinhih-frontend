@@ -1,32 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { FaUserGroup } from "react-icons/fa6";
-import axiosInstance from "../../../lib/axiosInstanceWithToken";
 import CreateButton from "../Calendar/components/SIdebar/Appointment/components/CreateButton";
 import CreateNewClient from "../Calendar/components/SIdebar/NewClient/CreateNewClient";
+import useClientStore from "../../../store/provider/clientStore";
+import { Plus } from "lucide-react";
 
 function Clients() {
-  const [clients, setClients] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { clients, fetchClients, loading } = useClientStore();
   const [showCreateClientComponentForm, setShowCreateClientComponentForm] =
     useState(false);
 
   const [search, SetSearch] = useState("");
 
-  // Fetch clients from API
-  const fetchClients = async () => {
-    try {
-      const response = await axiosInstance.get("/clients");
-      setClients(response.data.clients);
-    } catch (error) {
-      console.error("Error fetching clients:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     fetchClients();
-  }, []);
+  }, [fetchClients]);
 
   const showCreateClientComponent = () => {
     setShowCreateClientComponentForm(true);
@@ -48,18 +36,19 @@ function Clients() {
   return (
     <div>
       <header className="border-b border-[#dedede] px-10 pb-5">
-        <div className="flex justify-between items-center gap-3 text-2xl">
-          <div class="flex items-center gap-3">
+        <div className="flex justify-between items-center gap-3">
+          <div class="flex items-center gap-3 text-2xl">
             <span className="p-2 bg-amber-100 text-[#6e6e6e]">
               <FaUserGroup />
             </span>
             <p className="font-bold">Clients</p>
           </div>
-          <CreateButton
-            create={"New client"}
+          <button
             onClick={showCreateClientComponent}
-            class="!bg-[#ffdd00]"
-          />
+            className=" bg-primary-700 font-semibold text-white px-3 py-1 rounded hover:bg-primary-800 flex items-center gap-2"
+          >
+            <Plus size={18} /> New Client
+          </button>
         </div>
       </header>
 

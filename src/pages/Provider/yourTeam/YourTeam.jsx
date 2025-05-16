@@ -3,6 +3,7 @@ import { PiBagSimpleFill } from "react-icons/pi";
 import CreateButton from "../Calendar/components/SIdebar/Appointment/components/CreateButton";
 import CreateNewTeamMember from "../Calendar/components/SIdebar/teamMember.jsx/CreateNewTeamMember";
 import useTeamMemberStore from "../../../store/provider/teamMemberStore";
+import { Plus } from "lucide-react";
 
 function YourTeam() {
   const { members, loading, fetchMembers } = useTeamMemberStore();
@@ -23,15 +24,17 @@ function YourTeam() {
   return (
     <div>
       <header className=" border-b border-[#dedede] px-10 pb-5">
-        <div className="flex justify-between items-center gap-3 text-2xl">
-          <div className="flex items-center gap-3">
+        <div className="flex justify-between items-center gap-3 ">
+          <div className="flex items-center gap-3 text-2xl">
             <span className=" p-2 bg-amber-100 text-[#6e6e6e]">
               {" "}
               <PiBagSimpleFill />
             </span>
             <p className=" font-bold">Your team</p>
           </div>
-          <CreateButton onClick={openModal} create={"New team member"} />
+          <button onClick={openModal} className=" bg-primary-700 font-semibold text-white px-3 py-1 rounded hover:bg-primary-800 flex items-center gap-2">
+           <Plus size={18}/> New team member
+          </button>
         </div>
       </header>
       <div>
