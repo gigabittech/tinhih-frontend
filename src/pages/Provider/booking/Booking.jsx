@@ -3,6 +3,8 @@ import Avatar from "../../../components/ui/Avatar";
 import useUserStore from "../../../store/global/userStore";
 import { MdArrowDropDown } from "react-icons/md";
 import SignOut from "../../../components/ui/SignOut";
+import Stepper from "./components/Stepper";
+import StepContent from "./components/StepContent";
 
 const steps = [
   "Service",
@@ -12,69 +14,6 @@ const steps = [
   "Contact details",
 ];
 
-const Stepper = ({ currentStep }) => (
-  <div className="flex items-center justify-between mb-10">
-    {steps.map((step, index) => (
-      <div key={index} className="flex items-center space-x-2">
-        <div
-          className={`w-6 h-6 rounded-full flex items-center justify-center text-sm font-semibold ${
-            currentStep === index
-              ? "bg-indigo-700 text-white"
-              : "bg-gray-400 text-white"
-          }`}
-        >
-          {index + 1}
-        </div>
-        <span
-          className={`text-sm ${
-            currentStep === index
-              ? "text-indigo-900 font-medium"
-              : "text-gray-500"
-          }`}
-        >
-          {step}
-        </span>
-        {index < steps.length - 1 && (
-          <div className="w-10 border-t border-gray-300 mx-2"></div>
-        )}
-      </div>
-    ))}
-  </div>
-);
-
-const StepContent = ({ step }) => {
-  switch (step) {
-    case 0:
-      return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-xl">
-          <Card icon="👤" title="Returning client" />
-          <Card icon="➕" title="New client" />
-        </div>
-      );
-    case 1:
-      return <div>📍 Choose a location</div>;
-    case 2:
-      return <div>👨‍⚕️ Select staff</div>;
-    case 3:
-      return <div>📅 Pick a date and time</div>;
-    case 4:
-      return <div>📧 Enter contact details</div>;
-    default:
-      return null;
-  }
-};
-
-const Card = ({ icon, title }) => (
-  <div className="border rounded-lg p-6 hover:shadow-lg cursor-pointer flex items-center justify-between">
-    <div className="flex items-center gap-4">
-      <div className="text-purple-600 bg-purple-100 p-3 rounded-lg text-xl">
-        {icon}
-      </div>
-      <span className="text-lg font-medium">{title}</span>
-    </div>
-    <div className="text-gray-500 text-xl">{">"}</div>
-  </div>
-);
 
 const Booking = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -97,25 +36,28 @@ const Booking = () => {
 
   return (
     <div className="min-h-screen bg-white p-8 relative z-0">
-      <h2 className="text-xl font-semibold mb-6 text-indigo-900">
-        Online booking appointment
-      </h2>
+      <div className=" container mx-auto">
+        <h2 className="text-xl font-semibold mb-6 text-primary-800">
+          Online booking appointment
+        </h2>
 
-      <Stepper currentStep={currentStep} />
+        <Stepper currentStep={currentStep} />
 
-      <StepContent step={currentStep} />
+        <StepContent step={currentStep} />
+      </div>
 
       {/* Navigation Buttons */}
-      <div className="mt-10 flex justify-between max-w-xl">
+      <div className="p-10 flex items-center justify-between absolute left-0 right-0 bottom-0 border-t border-gray-200">
         <button
-          className="px-4 py-2 bg-gray-200 text-gray-700 rounded disabled:opacity-50"
+          className="px-4 py-2 bg-gray-200 text-gray-700 rounded disabled:opacity-50 cursor-pointer"
           onClick={handleBack}
           disabled={currentStep === 0}
         >
           Back
         </button>
+        <p className=" text-xs text-gray-400">Powered by TiNHiH</p>
         <button
-          className="px-4 py-2 bg-indigo-700 text-white rounded disabled:opacity-50"
+          className="px-4 py-2 bg-primary-700 text-white rounded disabled:opacity-50 cursor-pointer"
           onClick={handleNext}
           disabled={currentStep === steps.length - 1}
         >
@@ -151,11 +93,21 @@ const Booking = () => {
                     : "opacity-0 scale-95 pointer-events-none"
                 }`}
           >
-            <div className="font-semibold">Aniqa Chowdhury</div>
-            <button className=" text-start cursor-pointer">
+            <div className="font-semibold">{`${
+              user.first_name + " " + user.last_name
+            }`}</div>
+            <button
+              title="Coming soon.."
+              className=" text-start cursor-pointer"
+            >
               Go to your portal
             </button>
-            <button onClick={handleSignOut} className=" text-start cursor-pointer">Sign out</button>
+            <button
+              onClick={handleSignOut}
+              className=" text-start cursor-pointer"
+            >
+              Sign out
+            </button>
           </div>
           <SignOut
             isOpen={openSignOutMenu}
