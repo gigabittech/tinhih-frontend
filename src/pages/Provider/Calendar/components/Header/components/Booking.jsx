@@ -29,7 +29,9 @@ function Booking() {
   const businessName = user?.currentWorkspace.businessName;
   const workspace_id = user?.currentWorkspace.id;
 
-  const bookingLink = `http://localhost:5173/${businessName}/${user?.first_name}?uid=${user?.id}&workspace_id=${workspace_id}`;
+  const bookingLink = `${import.meta.env.VITE_APP_LIVE_URL}/${businessName}/${
+    user?.first_name
+  }?uid=${user?.id}&workspace_id=${workspace_id}`;
 
   useEffect(() => {
     fetchServices();
@@ -126,19 +128,19 @@ function Booking() {
             <div className="grid grid-cols-2 gap-4 mt-4">
               <div>
                 <p className="text-sm">Team</p>
-               <SelectDropdown
-              selected={selectedMembers}
-              setSelected={(val) => {
-                setSelectedMembers(val);
-              }}
-              options={members.map((m) => ({
-                id: m.id,
-                name: `${m.first_name} ${m.last_name}`,
-              }))}
-              labelKey="name"
-              valueKey="id"
-              label="Team members"
-            />
+                <SelectDropdown
+                  selected={selectedMembers}
+                  setSelected={(val) => {
+                    setSelectedMembers(val);
+                  }}
+                  options={members.map((m) => ({
+                    id: m.id,
+                    name: `${m.first_name} ${m.last_name}`,
+                  }))}
+                  labelKey="name"
+                  valueKey="id"
+                  label="Team members"
+                />
               </div>
               <div>
                 <p className="text-sm">Services</p>
