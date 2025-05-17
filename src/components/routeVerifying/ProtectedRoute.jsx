@@ -16,9 +16,6 @@ function ProtectedRoute({
     loading: workspaceLoading,
   } = useWorkspaceStore();
 
-  console.log("auth", isAuthenticated);
-  console.log("loading", hydrated);
-
   useEffect(() => {
     fetchWorkspaces();
   }, [fetchWorkspaces]);
