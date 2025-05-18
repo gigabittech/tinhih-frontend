@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../../../../components/ui/Button";
 import { Link2 } from "lucide-react";
 import {
@@ -11,18 +11,40 @@ import { MdOutlineAddLink } from "react-icons/md";
 import { MdOutlineSmartButton } from "react-icons/md";
 import { ImEmbed } from "react-icons/im";
 import { FaCopy } from "react-icons/fa";
+import useUserStore from "../../../../../../store/global/userStore";
+import { Notify } from "../../../../../../components/ui/Toaster";
+import useServiceStore from "../../../../../../store/provider/serviceStore";
+import useTeamMemberStore from "../../../../../../store/provider/teamMemberStore";
+import SelectDropdown from "../../../../../../components/ui/SelectDropdown";
 
 function Booking() {
   const [openBookingPopup, setOpenBookingPopup] = useState(false);
   const [activeTab, setActiveTab] = useState("link");
   const [copiedLink, setCopiedLink] = useState("");
-  const bookingLink =
-    "https://book.carepatron.com/New/member?p=5-is1ppiSq.psLaB9tpuaA";
+  const [selectedServices, setSelectedServices] = useState([]);
+  const [selectedMembers, setSelectedMembers] = useState([]);
+  const { services, fetchServices } = useServiceStore();
+  const { members, fetchMembers } = useTeamMemberStore();
+  const { user } = useUserStore();
+  const businessName = user?.currentWorkspace.businessName;
+  const workspace_id = user?.currentWorkspace.id;
+
+  const bookingLink = `${import.meta.env.VITE_APP_LIVE_URL}/${businessName}/${
+    user?.first_name
+  }?uid=${user?.id}&workspace_id=${workspace_id}`;
+
+  useEffect(() => {
+    fetchServices();
+  }, [fetchServices]);
+
+  useEffect(() => {
+    fetchMembers();
+  }, [fetchMembers]);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(bookingLink).then(() => {
       setCopiedLink(bookingLink);
-      alert("Copied");
+      Notify("Copied");
     });
   };
 
@@ -103,22 +125,38 @@ function Booking() {
               </div>
             </div>
 
-            <div className="flex gap-4 mt-4">
-              <div className="flex-1">
-                <label className="text-sm font-medium text-gray-600">
-                  Team
-                </label>
-                <select className="w-full border px-3 py-2 rounded-md text-sm mt-1">
-                  <option>Team member1</option>
-                </select>
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div>
+                <p className="text-sm">Team</p>
+                <SelectDropdown
+                  selected={selectedMembers}
+                  setSelected={(val) => {
+                    setSelectedMembers(val);
+                  }}
+                  options={members.map((m) => ({
+                    id: m.id,
+                    name: `${m.first_name} ${m.last_name}`,
+                  }))}
+                  labelKey="name"
+                  valueKey="id"
+                  label="Team members"
+                />
               </div>
-              <div className="flex-1">
-                <label className="text-sm font-medium text-gray-600">
-                  Services
-                </label>
-                <select className="w-full border px-3 py-2 rounded-md text-sm mt-1">
-                  <option>All services</option>
-                </select>
+              <div>
+                <p className="text-sm">Services</p>
+                <SelectDropdown
+                  selected={selectedServices}
+                  setSelected={(val) => {
+                    setSelectedServices(val);
+                  }}
+                  options={services.map((service) => ({
+                    id: service.id,
+                    name: `${service.service_name}`,
+                  }))}
+                  labelKey="name"
+                  valueKey="id"
+                  label="Services"
+                />
               </div>
             </div>
 

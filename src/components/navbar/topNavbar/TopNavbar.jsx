@@ -6,15 +6,13 @@ import useUserStore from "../../../store/global/userStore";
 import Avatar from "../../ui/Avatar";
 import { FaPlus } from "react-icons/fa6";
 import useToggleWorkspace from "./hooks/toggleWorkspace";
-import { Modal, ModalBody, ModalHeader } from "../../ui/Modal";
 import CreateWorkspaceModal from "./components/CreateWorkspaceModal";
-import { AiFillBell } from "react-icons/ai";
+import SignOut from "../../ui/SignOut";
 
 function TopNavbar() {
   const [expand, setExpand] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
-  const hanldeLogOut = useUserStore((state) => state.logoutHandler);
   const { full_name, email, currentWorkspace, workspaces } = useUserStore(
     (state) => state.user
   );
@@ -33,7 +31,7 @@ function TopNavbar() {
   return (
     <div className="py-3 px-10">
       <div className="flex justify-end items-center gap-3 relative">
-      {/* <AiFillBell size={23}/> */}
+        {/* <AiFillBell size={23}/> */}
         {/* ---------profile button---------- */}
         <div
           onClick={() => setExpand(!expand)}
@@ -119,30 +117,10 @@ function TopNavbar() {
         isOpen={openModal}
         onClose={() => setOpenModal(false)}
       />
-      <Modal isOpen={openLogoutModal} onClose={() => setOpenLogoutModal(false)}>
-        <ModalHeader
-          icon={""}
-          title={"Are you sure?"}
-          onClose={() => setOpenLogoutModal(false)}
-        />
-        <ModalBody>
-          <p className=" text-gray-500 ps-1">Sign out of this device.</p>
-          <div className="flex justify-end gap-2 pt-10">
-            <button
-              onClick={() => setOpenLogoutModal(false)}
-              className=" border border-[#a0a0a0] text-primary-800 px-5 py-1 rounded cursor-pointer"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={hanldeLogOut}
-              className=" border border-primary-700 bg-primary-700 text-white px-5 py-1 rounded cursor-pointer"
-            >
-              Confirm
-            </button>
-          </div>
-        </ModalBody>
-      </Modal>
+      <SignOut
+        isOpen={openLogoutModal}
+        onClose={() => setOpenLogoutModal(false)}
+      />
     </div>
   );
 }

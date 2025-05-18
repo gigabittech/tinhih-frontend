@@ -12,7 +12,7 @@ const Inbox = lazy(() => import("../pages/Provider/inbox/Inbox"));
 const Clients = lazy(() => import("../pages/Provider/clients/Clients"));
 const Billing = lazy(() => import("../pages/Provider/billing/Billing"));
 const YourTeam = lazy(() => import("../pages/Provider/yourTeam/YourTeam"));
-//const Settings = lazy(() => import("../pages/Provider/settings/Settings"));
+const Booking = lazy(() => import("../pages/Provider/booking/Booking"));
 
 const Onboarding = lazy(() =>
   import("../pages/Provider/onboarding/Onboarding")
@@ -49,6 +49,14 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/:workspace_name/:user_name",
+    element: (
+      <ProtectedRoute>
+        <Booking />
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: "/",
     element: (
       <ProtectedRoute allowedRoles={["provider"]}>
@@ -56,10 +64,6 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      {
-        index: true,
-        element: <Navigate to="/calendar" replace />,
-      },
       {
         path: "/calendar",
         element: <CalendarPage />,

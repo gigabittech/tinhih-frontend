@@ -14,6 +14,7 @@ const useUserStore = create((set) => ({
   isAuthenticated: false,
   user: null,
   role: null,
+  hydrated: false,
   isLoading: { ...API_STATE },
   isError: { ...API_STATE },
   isSuccess: { ...API_STATE },
@@ -21,7 +22,10 @@ const useUserStore = create((set) => ({
 
   getUser: async () => {
     const token = localStorage.getItem("auth-token");
-    if (!token) return;
+    if (!token) {
+      set({ hydrated: true });
+      return;
+    }
 
     updateState(set, "user", { loading: true, success: false, error: false });
 
@@ -36,9 +40,8 @@ const useUserStore = create((set) => ({
           user: response.data?.user,
           role: response.data?.user?.role,
         });
-       // console.log(response.data);
-        
-        
+        // console.log(response.data);
+
         updateState(set, "user", {
           loading: false,
           success: true,
@@ -60,6 +63,9 @@ const useUserStore = create((set) => ({
         role: null,
       });
     }
+    finally {
+      set({ hydrated: true })
+    }
   },
 
   loginHandler: async (userData) => {
@@ -79,7 +85,7 @@ const useUserStore = create((set) => ({
           message: "User logged in successfully",
         });
 
-        Notify("User logged in successfully")
+        Notify("User logged in successfully");
 
         await useUserStore.getState().getUser();
       }
@@ -117,7 +123,7 @@ const useUserStore = create((set) => ({
           error: false,
           message: "User logged out successfully",
         });
-        Notify('User logged out successfully')
+        Notify("User logged out successfully");
       }
     } catch (error) {
       const errorInfo = error?.response?.data?.message || "Logout failed.";
