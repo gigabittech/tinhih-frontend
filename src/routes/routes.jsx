@@ -65,6 +65,10 @@ const router = createBrowserRouter([
     ),
     children: [
       {
+        index: true,
+        element: <Navigate to="/calendar" replace />,
+      },
+      {
         path: "/calendar",
         element: <CalendarPage />,
       },
