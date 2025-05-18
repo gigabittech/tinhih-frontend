@@ -29,7 +29,7 @@ function Booking() {
   const businessName = user?.currentWorkspace.businessName;
   const workspace_id = user?.currentWorkspace.id;
 
-  const bookingLink = `${import.meta.env.VITE_APP_LIVE_URL}/${businessName}/${
+  const bookingLink = `${'http://localhost:5173'}/${businessName}/${
     user?.first_name
   }?uid=${user?.id}&workspace_id=${workspace_id}`;
 

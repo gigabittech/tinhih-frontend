@@ -1,9 +1,9 @@
 import React from "react";
 
 const steps = [
+  "Staff",
   "Service",
   "Location",
-  "Staff",
   "Date and time",
   "Contact details",
 ];

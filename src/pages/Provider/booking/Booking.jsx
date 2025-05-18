@@ -7,9 +7,9 @@ import Stepper from "./components/Stepper";
 import StepContent from "./components/StepContent";
 
 const steps = [
+  "Staff",
   "Service",
   "Location",
-  "Staff",
   "Date and time",
   "Contact details",
 ];
