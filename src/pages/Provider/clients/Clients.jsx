@@ -112,8 +112,8 @@ function Clients() {
                 </tr>
               ) : (
                 clients.map((client, index) => (
-                  <tr key={index} className="border-t">
-                    <td className="ps-10">
+                  <tr key={index} className="border-t border-[#d7d7d7] hover:bg-[#f2f2f2]">
+                    <td className="ps-10 py-3">
                       <input type="checkbox" />
                     </td>
                     <td className="p-2 text-purple-600">
