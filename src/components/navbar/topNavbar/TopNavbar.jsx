@@ -8,6 +8,7 @@ import { FaPlus } from "react-icons/fa6";
 import useToggleWorkspace from "./hooks/toggleWorkspace";
 import CreateWorkspaceModal from "./components/CreateWorkspaceModal";
 import SignOut from "../../ui/SignOut";
+import QuickActions from "./components/QuickActions";
 
 function TopNavbar() {
   const [expand, setExpand] = useState(false);
@@ -29,9 +30,9 @@ function TopNavbar() {
   };
 
   return (
-    <div className="py-3 px-10">
-      <div className="flex justify-end items-center gap-3 relative">
-        {/* <AiFillBell size={23}/> */}
+    <div className="pb-7 pt-2 px-10">
+      <div className="flex justify-end items-center gap-5 relative">
+        <QuickActions/>
         {/* ---------profile button---------- */}
         <div
           onClick={() => setExpand(!expand)}
