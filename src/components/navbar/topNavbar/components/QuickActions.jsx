@@ -10,6 +10,8 @@ import {
   Video,
   CheckSquare,
 } from "lucide-react";
+import CreateNewClient from "../../../../pages/Provider/Calendar/components/SIdebar/NewClient/CreateNewClient";
+import CreateInvoice from "../../../../pages/Provider/billing/components/CreateInvoice";
 
 const options = [
   { name: "Appointment", icon: <CalendarCheck size={20} /> },
@@ -24,7 +26,21 @@ const options = [
 
 function QuickActions() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isCreateClientOpen, setIsCreateClientOpen] = useState(false);
+  const [isInvoiceOpen, setIsInvoiceOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("");
   const dropdownRef = useRef(null);
+
+  const handleOption = (name) => {
+    setIsOpen(false);
+    setSelectedOption(name);
+    if (name === "Client") {
+      setIsCreateClientOpen(true);
+    }
+    if (name === "Invoice") {
+      setIsInvoiceOpen(true);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -41,6 +57,18 @@ function QuickActions() {
 
   return (
     <div className="relative inline-block" ref={dropdownRef}>
+      {selectedOption === "Client" && (
+        <CreateNewClient
+          isOpen={isCreateClientOpen}
+          onClose={() => setIsCreateClientOpen(false)}
+        />
+      )}
+      {selectedOption === "Invoice" && (
+       <CreateInvoice
+        isOpen={isInvoiceOpen}
+        onClose={() => setIsInvoiceOpen(false)}
+      />
+      )}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="bg-primary-500 hover:bg-primary-600 p-1 rounded text-white cursor-pointer transition-colors duration-200 flex items-center justify-center"
@@ -60,9 +88,7 @@ function QuickActions() {
               <button
                 key={option}
                 className={` w-full text-left px-4 py-2 font-semibold  transition-colors duration-150 flex items-center gap-3`}
-                onClick={() => {
-                  setIsOpen(false);
-                }}
+                onClick={() => handleOption(option.name)}
               >
                 <span className=" bg-gray-100 p-1 rounded">{option.icon}</span>
                 {option.name}

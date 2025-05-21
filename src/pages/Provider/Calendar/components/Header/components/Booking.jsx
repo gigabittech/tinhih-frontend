@@ -29,7 +29,7 @@ function Booking() {
   const businessName = user?.currentWorkspace.businessName;
   const workspace_id = user?.currentWorkspace.id;
 
-  const bookingLink = `${'http://localhost:5173'}/${businessName}/${
+  const bookingLink = `${window.location.origin}/${businessName}/${
     user?.first_name
   }?uid=${user?.id}&workspace_id=${workspace_id}`;
 
