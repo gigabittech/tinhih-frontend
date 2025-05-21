@@ -102,7 +102,7 @@ function QuickActions() {
           onClose={() => setIsInvoiceOpen(false)}
         />
       )}
-      {isNoteOpen && <Note onClose={() => setIsNoteOpen(false)} />}
+       <Note isOpen={isNoteOpen} onClose={() => setIsNoteOpen(false)} />
     </div>
   );
 }
