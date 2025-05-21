@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import CreateNewClient from "../../../../pages/Provider/Calendar/components/SIdebar/NewClient/CreateNewClient";
 import CreateInvoice from "../../../../pages/Provider/billing/components/CreateInvoice";
+import Note from "./Note";
 
 const options = [
   { name: "Appointment", icon: <CalendarCheck size={20} /> },
@@ -28,6 +29,7 @@ function QuickActions() {
   const [isOpen, setIsOpen] = useState(false);
   const [isCreateClientOpen, setIsCreateClientOpen] = useState(false);
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(false);
+  const [isNoteOpen, setIsNoteOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const dropdownRef = useRef(null);
 
@@ -39,6 +41,9 @@ function QuickActions() {
     }
     if (name === "Invoice") {
       setIsInvoiceOpen(true);
+    }
+    if (name === "Note") {
+      setIsNoteOpen(true);
     }
   };
 
@@ -57,18 +62,6 @@ function QuickActions() {
 
   return (
     <div className="relative inline-block" ref={dropdownRef}>
-      {selectedOption === "Client" && (
-        <CreateNewClient
-          isOpen={isCreateClientOpen}
-          onClose={() => setIsCreateClientOpen(false)}
-        />
-      )}
-      {selectedOption === "Invoice" && (
-       <CreateInvoice
-        isOpen={isInvoiceOpen}
-        onClose={() => setIsInvoiceOpen(false)}
-      />
-      )}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="bg-primary-500 hover:bg-primary-600 p-1 rounded text-white cursor-pointer transition-colors duration-200 flex items-center justify-center"
@@ -97,6 +90,19 @@ function QuickActions() {
           </div>
         </div>
       )}
+      {selectedOption === "Client" && (
+        <CreateNewClient
+          isOpen={isCreateClientOpen}
+          onClose={() => setIsCreateClientOpen(false)}
+        />
+      )}
+      {selectedOption === "Invoice" && (
+        <CreateInvoice
+          isOpen={isInvoiceOpen}
+          onClose={() => setIsInvoiceOpen(false)}
+        />
+      )}
+      {isNoteOpen && <Note onClose={() => setIsNoteOpen(false)} />}
     </div>
   );
 }
