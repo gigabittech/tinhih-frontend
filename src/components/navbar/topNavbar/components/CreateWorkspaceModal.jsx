@@ -17,10 +17,10 @@ function CreateWorkspaceModal({ isOpen, onClose }) {
   const onSubmit = async (data) => {
     try {
       const response = await axiosInstance.post("/workspaces", data);
-      console.log("Workspace created:", response.data);
-
-      reset();
-      onClose();
+      if (response.status === 201) {
+        reset();
+        onClose();
+      }
     } catch (error) {
       console.error("Error:", error.response?.data || error.message);
     }
@@ -57,7 +57,9 @@ function CreateWorkspaceModal({ isOpen, onClose }) {
               <div className="grid relative">
                 <label className="text-sm">Country</label>
                 <select
-                  {...register("countryCode", { required: "Country is required" })}
+                  {...register("countryCode", {
+                    required: "Country is required",
+                  })}
                   className="rounded px-3 py-1 border-gray-400 outline-none focus:border-primary-400 border w-full"
                 >
                   <option value=""></option>
