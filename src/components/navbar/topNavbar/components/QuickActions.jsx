@@ -73,7 +73,7 @@ function QuickActions() {
 
       {isOpen && (
         <div
-          className="origin-top-left absolute right-0 mt-2 rounded shadow-2xl border border-gray-50 bg-white z-10"
+          className="origin-top-left absolute right-0 mt-2 rounded shadow-2xl border border-gray-50 bg-white z-[60]"
           role="menu"
         >
           <div className="py-1">
