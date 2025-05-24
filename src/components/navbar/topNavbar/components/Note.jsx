@@ -1,4 +1,4 @@
-import { Minus, Plus, UserCircle } from "lucide-react";
+import { Calendar, Dot, Minus, Plus, UserCircle } from "lucide-react";
 import { useState } from "react";
 import { RiCloseLine, RiExpandDiagonalLine } from "react-icons/ri";
 import { Editor } from "@tinymce/tinymce-react";
@@ -6,11 +6,10 @@ import { useRef } from "react";
 
 function Note({ isOpen, onClose }) {
   const [expand, setExpand] = useState(false);
-  const [minimize, setMinimize] = useState(false);
+  const [minimize, setMinimize] = useState(true);
   const [selectedClient, setSelectedClient] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(true);
   const editorRef = useRef(null);
-  const [editorContent, setEditorContent] = useState("");
 
   const handleClose = () => {
     onClose();
@@ -28,12 +27,6 @@ function Note({ isOpen, onClose }) {
   const toggleExpand = () => {
     setExpand((prev) => !prev);
     setMinimize(false);
-  };
-
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
   };
 
   return (
@@ -136,6 +129,12 @@ function Note({ isOpen, onClose }) {
           </div>
         )}
         <div className="z-50">
+          <div className="pb-5 flex items-center gap-5">
+            <div className="flex items-center">
+              <Calendar />
+              &nbsp; Sun, 25 May <Dot /> 22:06
+            </div>
+          </div>
           <Editor
             apiKey="no-api-key"
             onInit={(_evt, editor) => (editorRef.current = editor)}
@@ -172,7 +171,6 @@ function Note({ isOpen, onClose }) {
                 "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
             }}
           />
-          <button onClick={log}>Log editor content</button>
         </div>
       </div>
     </div>
