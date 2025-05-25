@@ -1,8 +1,7 @@
-import React from "react";
-import ServiceToggler from "./ServiceTogggler";
-import Input from "../../../../../../../components/ui/Input";
-import { cn } from "./../../../../../../../lib/utils";
-import ToggleButton from "../../../../../../../components/ui/ToggleButton";
+
+import Input from "../../../../../../../../components/ui/Input";
+import ToggleButton from "../../../../../../../../components/ui/ToggleButton";
+import { cn } from "../../../../../../../../lib/utils";
 
 function GroupEventToggler({ className, groupEvent, setGroupEvent, maxAttendees, setMaxAttendees }) {
   return (

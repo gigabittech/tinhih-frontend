@@ -1,9 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import CreateNewClient from "./NewClient/CreateNewClient";
 import useCalendarPage from "../../../../../FormSchema/Provider/calendarPage";
-import CreateService from "./Services/CreateService";
-import CreateLocation from "./Location/CreateLocation";
 import { RxCross1 } from "react-icons/rx";
 import { FaRegCalendarCheck } from "react-icons/fa6";
 import { BsClockFill } from "react-icons/bs";
@@ -12,8 +9,11 @@ import { FaDoorOpen } from "react-icons/fa";
 import { BiTaskX } from "react-icons/bi";
 import { SideModal } from "../../../../../components/ui/SideModal";
 import CreateAppointment from "./Appointment/CreateAppointment";
-import CreateNewTeamMember from "./teamMember.jsx/CreateNewTeamMember";
-import AppointmentDetails from "./appointmentDetails/AppointmentDetails";
+import AppointmentDetails from "./Appointment/appointmentDetails/AppointmentDetails";
+import CreateNewClient from "./ModalsToCreate/NewClient/CreateNewClient";
+import CreateNewTeamMember from "./ModalsToCreate/teamMember.jsx/CreateNewTeamMember";
+import CreateService from "./ModalsToCreate/Services/CreateService";
+import CreateLocation from "./ModalsToCreate/Location/CreateLocation";
 
 const options = [
   { label: "Appointment", icon: <FaRegCalendarCheck /> },

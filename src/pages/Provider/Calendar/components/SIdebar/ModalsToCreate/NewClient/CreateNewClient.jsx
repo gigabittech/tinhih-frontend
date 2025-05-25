@@ -4,15 +4,15 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-} from "../../../../../../components/ui/Modal";
-import Button from "../../../../../../components/ui/Button";
+} from "../../../../../../../components/ui/Modal";
+import Button from "../../../../../../../components/ui/Button";
 import { UserRoundPlus } from "lucide-react";
 import { useForm } from "react-hook-form";
-import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
-import { Notify } from "../../../../../../components/ui/Toaster";
+import axiosInstance from "../../../../../../../lib/axiosInstanceWithToken";
+import { Notify } from "../../../../../../../components/ui/Toaster";
 import StatusDropdown from "./StatusDropdown";
-import useClientStore from "../../../../../../store/provider/clientStore";
-import { PhoneNumberInput } from "../../../../../../components/ui/PhoneNumberInput";
+import useClientStore from "../../../../../../../store/provider/clientStore";
+import { PhoneNumberInput } from "../../../../../../../components/ui/PhoneNumberInput";
 
 function CreateNewClient({ isOpen, onClose }) {
   const {

@@ -1,6 +1,6 @@
 import React from "react";
-import ToggleButton from "../../../../../../../components/ui/ToggleButton";
-import { cn } from "../../../../../../../lib/utils";
+import ToggleButton from "../../../../../../../../components/ui/ToggleButton";
+import { cn } from "../../../../../../../../lib/utils";
 
 function ServiceToggler({ value, onChange, title, description, name, className }) {
   return (

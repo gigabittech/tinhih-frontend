@@ -5,14 +5,14 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
-} from "../../../../../../components/ui/Modal";
+} from "../../../../../../../components/ui/Modal";
 import { IoLocation } from "react-icons/io5";
-import Button from "../../../../../../components/ui/Button";
-import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
-import useUserStore from "../../../../../../store/global/userStore";
-import { Notify } from "../../../../../../components/ui/Toaster";
-import useLocationStore from "../../../../../../store/provider/locationStore";
-import { PhoneNumberInput } from "../../../../../../components/ui/PhoneNumberInput";
+import Button from "../../../../../../../components/ui/Button";
+import axiosInstance from "../../../../../../../lib/axiosInstanceWithToken";
+import useUserStore from "../../../../../../../store/global/userStore";
+import { Notify } from "../../../../../../../components/ui/Toaster";
+import useLocationStore from "../../../../../../../store/provider/locationStore";
+import { PhoneNumberInput } from "../../../../../../../components/ui/PhoneNumberInput";
 
 const CreateLocation = ({ isOpen, onClose }) => {
   const [locationTypes, setLocationTypes] = useState([]);

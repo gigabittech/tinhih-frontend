@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
 import { IoMdCalendar } from "react-icons/io";
 import { BsDot } from "react-icons/bs";
-import convertTo12HourFormat from "../../../../../../hook/timeFormatTo12Hour";
-import dateFormat from "../../../../../../hook/dateFormat";
 import { MdDeleteForever } from "react-icons/md";
-import Avatar from "../../../../../../components/ui/Avatar";
+import axiosInstance from "../../../../../../../lib/axiosInstanceWithToken";
+import convertTo12HourFormat from "../../../../../../../hook/timeFormatTo12Hour";
+import dateFormat from "../../../../../../../hook/dateFormat";
 
 function AppointmentDetails({ id, setDeletePopupOpen }) {
   const [details, setDetails] = useState(null);

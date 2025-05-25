@@ -6,7 +6,7 @@ import ShortCalendar, {
 } from "../../../components/ui/ShortCalendar";
 import MonthlyCalendar from "./components/FullCalendar/MonthlyCalendar";
 import Sidebar from "./components/SIdebar/Sidebar";
-import DeleteAppointment from "./components/SIdebar/appointmentDetails/DeleteAppointment";
+import DeleteAppointment from "./components/SIdebar/Appointment/appointmentDetails/DeleteAppointment";
 
 function CalendarPage() {
   const [openSideModal, setOpenSideModal] = useState(false);
