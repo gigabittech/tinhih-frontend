@@ -113,14 +113,9 @@ function Meeting({ onClose }) {
           >
             Cancel
           </button>
-          <button
-            /*  onClick={handleCreateAppointment}
-            disabled={!isFormValid()} */
-            className={`py-2 rounded font-semibold transition-colors ${
-              /*  isFormValid()
-                ? "bg-primary-600 text-white hover:bg-primary-700" */
-              /* : */ "bg-gray-300 text-gray-600 cursor-not-allowed"
-            }`}
+           <button
+            /*  onClick={handleCreateAppointment} */
+            className="py-2 rounded font-semibold transition-colors  bg-gray-300 text-gray-600 cursor-not-allowed"
           >
             Create
           </button>
