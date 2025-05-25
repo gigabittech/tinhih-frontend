@@ -4,7 +4,7 @@ import useMenuStore from "../store/global/menuStore";
 import { cn } from "./../lib/utils";
 import useIsMobile from "./../hook/useIsMobile";
 import Overlay from "../components/ui/Overlay";
-import NavMenu from "../components/navbar/NavMenu";
+import NavMenu from "../components/navbar/navMenu/NavMenu";
 import Submenu from "../components/navbar/Submenu";
 import { ChevronLeft } from "lucide-react";
 import TopNavbar from "../components/navbar/topNavbar/TopNavbar";

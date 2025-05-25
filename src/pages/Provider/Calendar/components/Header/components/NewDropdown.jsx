@@ -47,7 +47,7 @@ function NewDropdown() {
       </Button>
 
       <div
-        className={`absolute top-6 z-10 right-0 mt-2 bg-white shadow-xl rounded  transform transition-all duration-200 ease-out origin-top-right py-2 ${
+        className={`absolute top-6 z-[203] right-0 mt-2 bg-white shadow-xl rounded  transform transition-all duration-200 ease-out origin-top-right py-2 ${
           isOpen
             ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
             : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
