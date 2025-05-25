@@ -14,6 +14,10 @@ import CreateNewClient from "./ModalsToCreate/NewClient/CreateNewClient";
 import CreateNewTeamMember from "./ModalsToCreate/teamMember.jsx/CreateNewTeamMember";
 import CreateService from "./ModalsToCreate/Services/CreateService";
 import CreateLocation from "./ModalsToCreate/Location/CreateLocation";
+import Task from "./task/Task";
+import Reminder from "./reminder/Reminder";
+import Meeting from "./meeting/Meeting";
+import OutOfOffice from "./outOfOffice/OutOfOffice";
 
 const options = [
   { label: "Appointment", icon: <FaRegCalendarCheck /> },
@@ -61,6 +65,10 @@ function Sidebar({
           {contentName === "Appointment" && (
             <CreateAppointment onClose={onClose} />
           )}
+          {contentName === "Task" && <Task onClose={onClose} />}
+          {contentName === "Reminder" && <Reminder onClose={onClose} />}
+          {contentName === "Meeting" && <Meeting onClose={onClose} />}
+          {contentName === "Out of office" && <OutOfOffice onClose={onClose} />}
           {contentName === "details" && (
             <AppointmentDetails
               onClose={onClose}
