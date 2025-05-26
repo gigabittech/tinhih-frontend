@@ -13,6 +13,17 @@ const Clients = lazy(() => import("../pages/Provider/clients/Clients"));
 const Billing = lazy(() => import("../pages/Provider/billing/Billing"));
 const YourTeam = lazy(() => import("../pages/Provider/yourTeam/YourTeam"));
 const Booking = lazy(() => import("../pages/Provider/booking/Booking"));
+const Trash = lazy(() => import("../pages/Provider/trash/Trash"));
+const Settings = lazy(() => import("../pages/Provider/settings/Settings"));
+const PersonalLayout = lazy(() =>
+  import("../pages/Provider/settings/personal/PersonalLayout")
+);
+const Details = lazy(() =>
+  import("../pages/Provider/settings/personal/Details")
+);
+const ServicesAvailability = lazy(() =>
+  import("../pages/Provider/settings/personal/ServicesAvailability")
+);
 
 const Onboarding = lazy(() =>
   import("../pages/Provider/onboarding/Onboarding")
@@ -49,7 +60,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/:workspace_name/:user_name",
+    path: "/booking/:workspace_name/:user_name",
     element: (
       <ProtectedRoute>
         <Booking />
@@ -73,6 +84,10 @@ const router = createBrowserRouter([
         element: <CalendarPage />,
       },
       {
+        path: "/calendar/settings",
+        element: <Settings />,
+      },
+      {
         path: "/inbox",
         element: <Inbox />,
       },
@@ -89,8 +104,78 @@ const router = createBrowserRouter([
         element: <YourTeam />,
       },
       {
-        path: "/settings",
-        element: <YourTeam />,
+        path: "/trash",
+        element: <Trash />,
+      },
+      /* -------personal----------- */
+      {
+        path: "/settings/personal",
+        element: <PersonalLayout />,
+        children: [
+          {
+            path: "details",
+            element: <Details />,
+          },
+          {
+            path: "ServicesAvailability",
+            element: <ServicesAvailability />,
+          },
+        ],
+      },
+      /* -------workspaces----------- */
+      {
+        path: "/settings/workspaces",
+        element: <PersonalLayout />,
+        children: [
+          {
+            path: "details",
+            element: <Details />,
+          },
+        ],
+      },
+      /* ------billing----------- */
+      {
+        path: "/settings/billing",
+        element: <PersonalLayout />,
+        children: [
+          {
+            path: "details",
+            element: <Details />,
+          },
+        ],
+      },
+      /* -------insurance----------- */
+      {
+        path: "/settings/insurance",
+        element: <PersonalLayout />,
+        children: [
+          {
+            path: "payers",
+            element: <Details />,
+          },
+        ],
+      },
+      /* -------scheduling----------- */
+      {
+        path: "/settings/scheduling",
+        element: <PersonalLayout />,
+        children: [
+          {
+            path: "locations",
+            element: <Details />,
+          },
+        ],
+      },
+      /* -------workflow----------- */
+      {
+        path: "/settings/workflow",
+        element: <PersonalLayout />,
+        children: [
+          {
+            path: "templates",
+            element: <Details />,
+          },
+        ],
       },
     ],
   },

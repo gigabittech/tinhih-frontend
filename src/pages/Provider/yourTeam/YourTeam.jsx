@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { PiBagSimpleFill } from "react-icons/pi";
-import CreateNewTeamMember from "../Calendar/components/SIdebar/teamMember.jsx/CreateNewTeamMember";
 import useTeamMemberStore from "../../../store/provider/teamMemberStore";
 import { Plus } from "lucide-react";
+import CreateNewTeamMember from "../Calendar/components/SIdebar/ModalsToCreate/teamMember.jsx/CreateNewTeamMember";
 
 function YourTeam() {
   const { members, loading, fetchMembers } = useTeamMemberStore();

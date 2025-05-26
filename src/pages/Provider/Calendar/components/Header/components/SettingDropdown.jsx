@@ -3,13 +3,10 @@ import { Settings, NotepadText, Plug, Link2, Download } from "lucide-react";
 
 import Dropdown from "../../../../../../components/ui/Dropdown";
 import Button from "../../../../../../components/ui/Button";
+import { Link } from "react-router";
 
 function SettingDropdown() {
   const options = [
-    {
-      icon: <Settings size={18} />,
-      label: "Settings",
-    },
     {
       icon: <NotepadText size={18} />,
       label: "Set availability",
@@ -63,6 +60,21 @@ function SettingDropdown() {
 
           <li className="border-t md:hidden pb-1 mt-1 border-outline-medium"></li>
 
+          <li>
+            <Link to={"/calendar/settings"}>
+              <Button
+                variant="ghost"
+                size="none"
+                className="px-4 py-1.5 w-full font-medium rounded-none justify-start
+              gap-x-5 bg-transparent gap-2"
+              >
+                <span className="w-5 shrink-0 text-context-light">
+                  <Settings size={18} />
+                </span>
+                <span> Settings</span>
+              </Button>
+            </Link>
+          </li>
           {options?.map((item, index) => (
             <li key={index}>
               <Button

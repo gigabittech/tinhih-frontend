@@ -9,7 +9,7 @@ function NewInput({ label, placeholder, onClick, isOpen }) {
         <input
           type="text"
           readOnly
-          className="border border-[#9b9b9b] rounded px-3 py-1 outline-none cursor-pointer"
+          className="border border-[#9b9b9b] rounded px-3 py-1 outline-none cursor-pointer focus:border-primary-500"
           placeholder={placeholder}
           onClick={onClick}
         />

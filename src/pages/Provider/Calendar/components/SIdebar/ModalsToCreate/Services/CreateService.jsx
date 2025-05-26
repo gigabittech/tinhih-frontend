@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-} from "../../../../../../components/ui/Modal";
-import Button from "../../../../../../components/ui/Button";
+
+import Button from "../../../../../../../components/ui/Button";
 import { Plus, BookText } from "lucide-react";
-import useUserStore from "./../../../../../../store/global/userStore";
 import ServiceTogggler from "./components/ServiceTogggler";
 import GroupEventToggler from "./components/GroupEventToggler";
-import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
-import { Notify } from "../../../../../../components/ui/Toaster";
-import useServiceStore from "../../../../../../store/provider/serviceStore";
-import useTeamMemberStore from "../../../../../../store/provider/teamMemberStore";
-import MultiSelectDropdown from "../../../../../../components/ui/MultiSelectDropdown";
-import useLocationStore from "../../../../../../store/provider/locationStore";
+import axiosInstance from "../../../../../../../lib/axiosInstanceWithToken";
+import { Notify } from "../../../../../../../components/ui/Toaster";
+import useServiceStore from "../../../../../../../store/provider/serviceStore";
+import useTeamMemberStore from "../../../../../../../store/provider/teamMemberStore";
+import MultiSelectDropdown from "../../../../../../../components/ui/MultiSelectDropdown";
+import useLocationStore from "../../../../../../../store/provider/locationStore";
+import useUserStore from "../../../../../../../store/global/userStore";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "../../../../../../../components/ui/Modal";
 
 function CreateService({ isOpen, onClose }) {
   const { members, fetchMembers } = useTeamMemberStore();

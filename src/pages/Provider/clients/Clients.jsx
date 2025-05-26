@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FaUserGroup } from "react-icons/fa6";
-import CreateButton from "../Calendar/components/SIdebar/Appointment/components/CreateButton";
-import CreateNewClient from "../Calendar/components/SIdebar/NewClient/CreateNewClient";
 import useClientStore from "../../../store/provider/clientStore";
 import { Plus } from "lucide-react";
+import CreateNewClient from "../Calendar/components/SIdebar/ModalsToCreate/NewClient/CreateNewClient";
 
 function Clients() {
   const { clients, fetchClients, loading } = useClientStore();

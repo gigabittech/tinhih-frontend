@@ -230,7 +230,7 @@ function CreateAppointment({ onClose }) {
                 rows={5}
                 cols={5}
                 maxLength={1000}
-                className=" w-full border outline-none  rounded border-gray-400 px-2 py-1"
+                className=" w-full border outline-none  rounded border-gray-400 px-2 py-1 focus:border-primary-500"
               ></textarea>
               <label className=" text-sm">{descriptionLength}/1000</label>
             </div>

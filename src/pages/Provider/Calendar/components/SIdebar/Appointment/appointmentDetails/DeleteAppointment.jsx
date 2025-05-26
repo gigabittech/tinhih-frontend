@@ -2,11 +2,12 @@ import {
   Modal,
   ModalBody,
   ModalHeader,
-} from "../../../../../../components/ui/Modal";
-import { Notify } from "../../../../../../components/ui/Toaster";
-import axiosInstance from "../../../../../../lib/axiosInstanceWithToken";
-import useAppointmentStore from "../../../../../../store/provider/appointmentsStore";
+} from "../../../../../../../components/ui/Modal";
+
 import { MdDeleteForever } from "react-icons/md";
+import useAppointmentStore from "../../../../../../../store/provider/appointmentsStore";
+import axiosInstance from "../../../../../../../lib/axiosInstanceWithToken";
+import { Notify } from "../../../../../../../components/ui/Toaster";
 
 function DeleteAppointment({ isOpen, onClose, id, closeSidebar }) {
   const { fetchAppointments } = useAppointmentStore();
