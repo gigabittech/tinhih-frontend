@@ -117,7 +117,7 @@ const router = createBrowserRouter([
             element: <Details />,
           },
           {
-            path: "ServicesAvailability",
+            path: "ServiceAvailability",
             element: <ServicesAvailability />,
           },
         ],
