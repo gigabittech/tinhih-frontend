@@ -1,6 +1,6 @@
 import { UserSquareIcon } from "lucide-react";
 import { useState } from "react";
-import { Outlet } from "react-router";
+import { Link, Outlet } from "react-router";
 
 function PersonalLayout() {
   const [active, setActive] = useState(0);
@@ -19,22 +19,27 @@ function PersonalLayout() {
       </header>
       {/* -------------------- button to switch tabs---------------- */}
       <div className="border-b border-[#dedede] flex px-10">
-        <button
-          onClick={() => setActive(0)}
-          className={`${
-            active === 0 ? "border-primary-600" : "border-transparent"
-          } pb-3 border-b-2 px-3 cursor-pointer`}
-        >
-          Details
-        </button>
-        <button
-          onClick={() => setActive(1)}
-          className={`${
-            active === 1 ? "border-primary-600" : "border-transparent"
-          } pb-3 border-b-2 px-3 cursor-pointer`}
-        >
-          Services availability
-        </button>
+        <Link to="/settings/personal/details">
+          <button
+            onClick={() => setActive(0)}
+            className={`${
+              active === 0 ? "border-primary-600" : "border-transparent"
+            } pb-3 border-b-2 px-3 cursor-pointer`}
+          >
+            Details
+          </button>
+        </Link>
+        <Link to="/settings/personal/ServiceAvailability">
+          <button
+            onClick={() => setActive(1)}
+            className={`${
+              active === 1 ? "border-primary-600" : "border-transparent"
+            } pb-3 border-b-2 px-3 cursor-pointer`}
+          >
+            Services availability
+          </button>
+        </Link>
+
         <button
           onClick={() => setActive(2)}
           className={`${
@@ -52,7 +57,9 @@ function PersonalLayout() {
           Notifications
         </button>
       </div>
-      <Outlet />
+      <div className="px-10 py-5 bg-gray-100 h-screen">
+        <Outlet />
+      </div>
     </div>
   );
 }

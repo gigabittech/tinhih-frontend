@@ -5,6 +5,7 @@ import { MdDeleteForever } from "react-icons/md";
 import axiosInstance from "../../../../../../../lib/axiosInstanceWithToken";
 import convertTo12HourFormat from "../../../../../../../hook/timeFormatTo12Hour";
 import dateFormat from "../../../../../../../hook/dateFormat";
+import Avatar from "../../../../../../../components/ui/Avatar";
 
 function AppointmentDetails({ id, setDeletePopupOpen }) {
   const [details, setDetails] = useState(null);
