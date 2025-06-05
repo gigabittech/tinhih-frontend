@@ -1,9 +1,9 @@
 import { Calendar, Globe } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
-import SettingsInput from "./components/SettingsInput";
-import EditButton from "./components/EditButton";
 import { SiReactrouter } from "react-icons/si";
+import EditButton from "../components/EditButton";
+import SettingsInput from "../components/SettingsInput";
 
 function Settings() {
   const [editCalendar, setEditCalendar] = useState(false);

@@ -8,23 +8,6 @@ const Register = lazy(() =>
 const CalendarPage = lazy(() =>
   import("../pages/Provider/Calendar/CalendarPage")
 );
-const Inbox = lazy(() => import("../pages/Provider/inbox/Inbox"));
-const Clients = lazy(() => import("../pages/Provider/clients/Clients"));
-const Billing = lazy(() => import("../pages/Provider/billing/Billing"));
-const YourTeam = lazy(() => import("../pages/Provider/yourTeam/YourTeam"));
-const Booking = lazy(() => import("../pages/Provider/booking/Booking"));
-const Trash = lazy(() => import("../pages/Provider/trash/Trash"));
-const Settings = lazy(() => import("../pages/Provider/settings/Settings"));
-const PersonalLayout = lazy(() =>
-  import("../pages/Provider/settings/personal/PersonalLayout")
-);
-const Details = lazy(() =>
-  import("../pages/Provider/settings/personal/Details")
-);
-const ServicesAvailability = lazy(() =>
-  import("../pages/Provider/settings/personal/ServicesAvailability")
-);
-
 const Onboarding = lazy(() =>
   import("../pages/Provider/onboarding/Onboarding")
 );
@@ -33,6 +16,42 @@ const NotFoundRoute = lazy(() => import("../pages/NotFoundRoute"));
 
 import AuthRedirect from "../components/routeVerifying/AuthRedirect";
 import ProtectedRoute from "../components/routeVerifying/ProtectedRoute";
+
+const Inbox = lazy(() => import("../pages/Provider/inbox/Inbox"));
+const Clients = lazy(() => import("../pages/Provider/clients/Clients"));
+const Billing = lazy(() => import("../pages/Provider/billing/Billing"));
+const YourTeam = lazy(() => import("../pages/Provider/yourTeam/YourTeam"));
+const Booking = lazy(() => import("../pages/Provider/booking/Booking"));
+const Trash = lazy(() => import("../pages/Provider/trash/Trash"));
+const Settings = lazy(() =>
+  import("../pages/Provider/settings/calendarSettings/Settings")
+);
+
+/* ---------my profile settings--------- */
+import MyProfileLayout from "../pages/Provider/settings/myProfile/MyProfileLayout";
+import Details from "../pages/Provider/settings/myProfile/Details";
+import ServicesAvailability from "../pages/Provider/settings/myProfile/ServicesAvailability";
+import ConnectedApps from "../pages/Provider/settings/myProfile/ConnectedApps";
+import Notifications from "../pages/Provider/settings/myProfile/Notifications";
+
+/* --------------workspace setting----------------- */
+import WorkspaceSettingsLayout from "../pages/Provider/settings/workspaceSettings/WorkspaceSettingsLayout";
+import WorkspaceDetails from "../pages/Provider/settings/workspaceSettings/Details";
+import Subscriptions from "../pages/Provider/settings/workspaceSettings/Subscriptions";
+import CustomFields from "../pages/Provider/settings/workspaceSettings/CustomFields";
+import Reminders from "../pages/Provider/settings/workspaceSettings/Reminders";
+import BillingLayout from "../pages/Provider/settings/billing/BillingLayout";
+import BillingDetails from "../pages/Provider/settings/billing/BillingDetails";
+import Invoices from "../pages/Provider/settings/billing/Invoices";
+import InsuranceLayout from "../pages/Provider/settings/insurance/InsuranceLayout";
+import Payers from "../pages/Provider/settings/insurance/Payers";
+import SchedulingLayout from "../pages/Provider/settings/scheduling/SchedulingLayout";
+import Locations from "../pages/Provider/settings/scheduling/Locations";
+import Services from "../pages/Provider/settings/scheduling/Services";
+import OnlineBooking from "../pages/Provider/settings/scheduling/OnlineBooking";
+import Templates from "../pages/Provider/settings/workflowManagement/Templates";
+import BasicReminders from "../pages/Provider/settings/workflowManagement/BasicReminders";
+import WorkflowLayout from "../pages/Provider/settings/workflowManagement/WorkflowLayout";
 
 const router = createBrowserRouter([
   {
@@ -107,73 +126,133 @@ const router = createBrowserRouter([
         path: "/trash",
         element: <Trash />,
       },
-      /* -------personal----------- */
+      /* -------my prfile----------- */
       {
-        path: "/settings/personal",
-        element: <PersonalLayout />,
+        path: "/settings/Personal",
+        element: <MyProfileLayout />,
         children: [
           {
-            path: "details",
+            index: true,
+            element: <Navigate to="Details" replace />,
+          },
+          {
+            path: "Details",
             element: <Details />,
           },
           {
             path: "ServiceAvailability",
             element: <ServicesAvailability />,
           },
+          {
+            path: "ConnectedApps",
+            element: <ConnectedApps />,
+          },
+          {
+            path: "Notifications",
+            element: <Notifications />,
+          },
         ],
       },
       /* -------workspaces----------- */
       {
-        path: "/settings/workspaces",
-        element: <PersonalLayout />,
+        path: "/settings/Workspace",
+        element: <WorkspaceSettingsLayout />,
         children: [
           {
-            path: "details",
-            element: <Details />,
+            index: true,
+            element: <Navigate to="Details" replace />,
+          },
+          {
+            path: "Details",
+            element: <WorkspaceDetails />,
+          },
+          {
+            path: "Subscriptions",
+            element: <Subscriptions />,
+          },
+          {
+            path: "CustomFields",
+            element: <CustomFields />,
+          },
+          {
+            path: "Reminders",
+            element: <Reminders />,
           },
         ],
       },
       /* ------billing----------- */
       {
-        path: "/settings/billing",
-        element: <PersonalLayout />,
+        path: "/settings/Billing",
+        element: <BillingLayout />,
         children: [
           {
-            path: "details",
-            element: <Details />,
+            index: true,
+            element: <Navigate to="Details" replace />,
+          },
+          {
+            path: "Details",
+            element: <BillingDetails />,
+          },
+          {
+            path: "Invoicing",
+            element: <Invoices />,
           },
         ],
       },
       /* -------insurance----------- */
       {
-        path: "/settings/insurance",
-        element: <PersonalLayout />,
+        path: "/settings/Insurance",
+        element: <InsuranceLayout />,
         children: [
           {
-            path: "payers",
-            element: <Details />,
+            index: true,
+            element: <Navigate to="Payers" replace />,
+          },
+          {
+            path: "Payers",
+            element: <Payers />,
           },
         ],
       },
       /* -------scheduling----------- */
       {
-        path: "/settings/scheduling",
-        element: <PersonalLayout />,
+        path: "/settings/Scheduling",
+        element: <SchedulingLayout />,
         children: [
           {
-            path: "locations",
-            element: <Details />,
+            index: true,
+            element: <Navigate to="Locations" replace />,
+          },
+          {
+            path: "Locations",
+            element: <Locations />,
+          },
+          {
+            path: "Services",
+            element: <Services />,
+          },
+          {
+            path: "OnlineBooking",
+            element: <OnlineBooking />,
           },
         ],
       },
       /* -------workflow----------- */
       {
-        path: "/settings/workflow",
-        element: <PersonalLayout />,
+        path: "/settings/Workflow",
+        element: <WorkflowLayout/>,
         children: [
           {
-            path: "templates",
-            element: <Details />,
+            index: true,
+            element: <Navigate to="Templates" replace />,
+          },
+          {
+            path: "Templates",
+            element: <Templates />,
+          },
+          {
+            path: "BasicReminders",
+            element: <BasicReminders />,
           },
         ],
       },
