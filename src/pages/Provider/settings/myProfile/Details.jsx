@@ -2,6 +2,7 @@ import { Globe, Lock, Paintbrush, User2 } from "lucide-react";
 import React, { useState } from "react";
 import EditButton from "../components/EditButton";
 import SettingsInput from "../components/SettingsInput";
+import Title from "../components/Title";
 
 function Details() {
   const [editPersonalDetails, setEditPersonalDetails] = useState(false);
@@ -13,9 +14,7 @@ function Details() {
       <div className=" w-[50%]">
         <div className="bg-white rounded-lg p-6">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-              <User2 /> Calendar details
-            </h2>
+            <Title icon={<User2 />} title={"Calendar details"} />
             <EditButton
               isEditMode={editPersonalDetails}
               onClose={() => setEditPersonalDetails(false)}
@@ -78,9 +77,7 @@ function Details() {
         {/* ----------------- timezone and laguage---------------- */}
         <div className="bg-white rounded-lg p-6 mb-5">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-              <Globe /> Language and timezone
-            </h2>
+            <Title icon={<Globe />} title={" Language and timezone"} />
             <EditButton
               isEditMode={editTimezone}
               onClose={() => setEditTimezone(false)}
@@ -125,9 +122,7 @@ function Details() {
         {/* --------------theme---------------- */}
         <div className="bg-white rounded-lg p-6 mb-5">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-              <Paintbrush /> Theme
-            </h2>
+            <Title icon={<Paintbrush />} title={"Theme"} />
             <EditButton
               isEditMode={editTheme}
               onClose={() => setEditTheme(false)}
@@ -136,7 +131,10 @@ function Details() {
           </div>
 
           <div className="grid gap-5">
-            <p>Choose between light and dark mode, and customize your theme preferences</p>
+            <p>
+              Choose between light and dark mode, and customize your theme
+              preferences
+            </p>
             <div className="grid grid-cols-2 gap-5">
               <SettingsInput
                 defaultValue={"Sunday"}
@@ -170,10 +168,7 @@ function Details() {
         </div>
 
         <div className="bg-white rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <Lock /> Multi-Factor Authentication (MFA)
-          </h2>
-
+          <Title icon={<Lock />} title={" Multi-Factor Authentication (MFA)"} />
           <div className="grid gap-5">
             <p>
               Secure your account by enabling Multi-Factor Authentication (MFA)
@@ -181,7 +176,6 @@ function Details() {
               secondary method to prevent unauthorized access.
             </p>
             <div className="grid grid-cols-2 gap-5"></div>
-            
           </div>
         </div>
       </div>
@@ -190,4 +184,3 @@ function Details() {
 }
 
 export default Details;
-  

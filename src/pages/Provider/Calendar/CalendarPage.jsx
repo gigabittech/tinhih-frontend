@@ -7,12 +7,15 @@ import ShortCalendar, {
 import MonthlyCalendar from "./components/FullCalendar/MonthlyCalendar";
 import Sidebar from "./components/SIdebar/Sidebar";
 import DeleteAppointment from "./components/SIdebar/Appointment/appointmentDetails/DeleteAppointment";
+import CreateInvoice from "./components/SIdebar/Appointment/appointmentDetails/CreateInvoice";
+import { useCreateInvoiceStore } from "../../../store/provider/createInvoiceStore";
 
 function CalendarPage() {
   const [openSideModal, setOpenSideModal] = useState(false);
   const [contentName, setContentName] = useState("Appointment");
   const [appointmentId, setAppointmentId] = useState(0);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
+  const { isOpen, closePopup } = useCreateInvoiceStore();
 
   const {
     currentDate,
@@ -45,6 +48,8 @@ function CalendarPage() {
 
   return (
     <div className=" flex flex-col h-screen">
+      <CreateInvoice isOpen={isOpen} onClose={closePopup} />
+
       <Sidebar
         isOpen={openSideModal}
         onClose={handleSideModal}

@@ -1,4 +1,5 @@
 import { BoxIcon } from "lucide-react";
+import Title from "../components/Title";
 
 export default function Subscriptions() {
   return (
@@ -6,10 +7,7 @@ export default function Subscriptions() {
       {/* -------------left side-------------------- */}
       <div className=" w-[50%]">
         <div className="bg-white rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <BoxIcon />
-            Subscription summary
-          </h2>
+          <Title icon={<BoxIcon />} title={"Subscription summary"} />
         </div>
       </div>
     </div>

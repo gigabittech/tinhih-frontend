@@ -1,6 +1,7 @@
 import { Calendar, Notebook, Paintbrush } from "lucide-react";
 import React from "react";
 import { FaCalendarCheck } from "react-icons/fa6";
+import Title from "../components/Title";
 
 function ServicesAvailability() {
   return (
@@ -8,9 +9,7 @@ function ServicesAvailability() {
       {/* -------------left side-------------------- */}
       <div className=" w-[50%]">
         <div className="bg-white rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <Notebook /> Assigned services
-          </h2>
+          <Title icon={<Notebook />} title={"Assigned services"} />
         </div>
       </div>
 
@@ -18,18 +17,12 @@ function ServicesAvailability() {
       <div className="w-[50%]">
         {/* ----------------- Date specific hours---------------- */}
         <div className="bg-white rounded-lg p-6 mb-5">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <Calendar /> Date specific hours
-          </h2>
-
+          <Title icon={<Calendar />} title={"Date specific hours"} />
         </div>
 
         {/* --------------Availability---------------- */}
         <div className="bg-white rounded-lg p-6 mb-5">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <FaCalendarCheck /> Availability
-          </h2>
-         
+          <Title icon={<FaCalendarCheck />} title={"Availability"} />
         </div>
       </div>
     </div>
