@@ -1,5 +1,5 @@
 import { Globe, Lock, User2 } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import EditButton from "../components/EditButton";
 import SettingsInput from "../components/SettingsInput";
 import Title from "../components/Title";
@@ -7,6 +7,7 @@ import useUserStore from "../../../../store/global/userStore";
 import { useForm } from "react-hook-form";
 import axiosInstance from "../../../../lib/axiosInstanceWithToken";
 import { Notify } from "../../../../components/ui/Toaster";
+import countries_data from "../../../../data/countryData";
 
 function Details() {
   const [editPersonalDetails, setEditPersonalDetails] = useState(false);
@@ -45,7 +46,7 @@ function Details() {
     try {
       const response = await updateUserProfile(data);
       if (response.status === 200) {
-        Notify(response.data.message)
+        Notify(response.data.message);
         setEditPersonalDetails(false);
       }
     } catch (error) {
@@ -57,7 +58,7 @@ function Details() {
     try {
       const response = await updateUserProfile(data);
       if (response.status === 200) {
-        Notify(response.data.message)
+        Notify(response.data.message);
         setEditTimezone(false);
       }
     } catch (error) {
@@ -178,6 +179,9 @@ function Details() {
                 register={registerTimezone}
                 name="time_zone"
                 showDropdownIcon={true}
+                dropdownOptions={countries_data}
+                optionLabelKey="name"
+                optionValueKey="name"
               />
             </div>
             {editTimezone && (

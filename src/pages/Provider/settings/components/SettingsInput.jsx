@@ -1,4 +1,3 @@
-import React from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 
 function SettingsInput({
@@ -8,6 +7,9 @@ function SettingsInput({
   register,
   name,
   showDropdownIcon = false,
+  dropdownOptions = [],
+  optionLabelKey = "label",
+  optionValueKey = "value",
   ...rest
 }) {
   return (
@@ -16,17 +18,35 @@ function SettingsInput({
 
       {isEditMode ? (
         <div className="relative">
-          <input
-            type="text"
-            defaultValue={defaultValue}
-            {...(register && name ? register(name) : {})}
-            {...rest}
-            className="border rounded border-gray-300 px-3 py-1 focus:border-primary-500 w-full outline-none bg-white"
-          />
-          {showDropdownIcon && (
-            <div className="absolute top-2 right-3">
-              <IoMdArrowDropdown size={20} />
-            </div>
+          {showDropdownIcon && dropdownOptions.length > 0 ? (
+            <>
+              <select
+                defaultValue={defaultValue}
+                {...(register && name ? register(name) : {})}
+                {...rest}
+                className="border rounded border-gray-300 px-3 py-1 focus:border-primary-500 w-full outline-none bg-white appearance-none"
+              >
+                {dropdownOptions.map((option, index) => (
+                  <option
+                    key={index}
+                    value={option[optionValueKey]}
+                  >
+                    {option[optionLabelKey]}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute top-2 right-3 pointer-events-none">
+                <IoMdArrowDropdown size={20} />
+              </div>
+            </>
+          ) : (
+            <input
+              type="text"
+              defaultValue={defaultValue}
+              {...(register && name ? register(name) : {})}
+              {...rest}
+              className="border rounded border-gray-300 px-3 py-1 focus:border-primary-500 w-full outline-none bg-white"
+            />
           )}
         </div>
       ) : (
@@ -39,4 +59,5 @@ function SettingsInput({
 }
 
 export default SettingsInput;
+
 
