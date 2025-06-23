@@ -1,86 +1,102 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import useBookingStore from "../../../../store/provider/bookingStore";
 
 function DateAndTime() {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState("");
+  const [currentDate, setCurrentDate] = useState(() => {
+    const now = new Date();
+    return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  });
+
+  const selectedDate = useBookingStore((state) => state.selectedDate);
+  const selectedTimeSlot = useBookingStore((state) => state.selectedTimeSlot);
+  const setSelectedDate = useBookingStore((state) => state.setSelectedDate);
+  const setSelectedTimeSlot = useBookingStore((state) => state.setSelectedTimeSlot);
 
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const times = [
-    "9:00 am",
-    "9:45 am",
-    "10:30 am",
-    "11:15 am",
-    "12:00 pm",
-    "12:45 pm",
-    "1:30 pm",
-    "2:15 pm",
-    "3:00 pm",
-    "3:45 pm",
+    { label: "9:00 am", value: "09:00" },
+    { label: "9:45 am", value: "09:45" },
+    { label: "10:30 am", value: "10:30" },
+    { label: "11:15 am", value: "11:15" },
+    { label: "12:00 pm", value: "12:00" },
+    { label: "12:45 pm", value: "12:45" },
+    { label: "1:00 pm", value: "13:00" },
+    { label: "2:15 pm", value: "14:15" },
+    { label: "3:00 pm", value: "15:00" },
+    { label: "3:45 pm", value: "15:45" },
   ];
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const today = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()));
 
   const isSameDay = (d1, d2) =>
-    d1?.getDate?.() === d2?.getDate?.() &&
-    d1?.getMonth?.() === d2?.getMonth?.() &&
-    d1?.getFullYear?.() === d2?.getFullYear?.();
+    d1 &&
+    d2 &&
+    d1.getUTCDate() === d2.getUTCDate() &&
+    d1.getUTCMonth() === d2.getUTCMonth() &&
+    d1.getUTCFullYear() === d2.getUTCFullYear();
 
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
-  const firstDayOfMonth = new Date(year, month, 1);
-  const lastDayOfMonth = new Date(year, month + 1, 0);
-  const daysInMonth = lastDayOfMonth.getDate();
-  const startingWeekday = firstDayOfMonth.getDay();
+  const year = currentDate.getUTCFullYear();
+  const month = currentDate.getUTCMonth();
+  const firstDayOfMonth = new Date(Date.UTC(year, month, 1));
+  const lastDayOfMonth = new Date(Date.UTC(year, month + 1, 0));
+  const daysInMonth = lastDayOfMonth.getUTCDate();
+  const startingWeekday = firstDayOfMonth.getUTCDay();
 
   const dates = Array.from({ length: startingWeekday }, () => null).concat(
-    Array.from({ length: daysInMonth }, (_, i) => new Date(year, month, i + 1))
+    Array.from({ length: daysInMonth }, (_, i) => new Date(Date.UTC(year, month, i + 1)))
   );
 
-  const isPast = (date) => date < today;
-  const isWeekend = (date) => [0, 6].includes(date.getDay());
+  const isPast = (date) => {
+    if (!date) return false;
+    const dateUTC = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+    return dateUTC < today;
+  };
+
+  const isWeekend = (date) => [0, 6].includes(date.getUTCDay());
 
   const getWeekDays = (baseDate) => {
-    const day = baseDate.getDay();
-    const monday = new Date(baseDate);
-    monday.setDate(baseDate.getDate() - ((day + 6) % 7));
-
+    const day = baseDate.getUTCDay();
+    const monday = new Date(Date.UTC(baseDate.getUTCFullYear(), baseDate.getUTCMonth(), baseDate.getUTCDate() - ((day + 6) % 7)));
     return Array.from({ length: 5 }, (_, i) => {
       const d = new Date(monday);
-      d.setDate(monday.getDate() + i);
-      return d;
+      d.setUTCDate(monday.getUTCDate() + i);
+      return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
     });
   };
 
   const handleWeekChange = (direction) => {
-    const newDate = new Date(selectedDate);
-    newDate.setDate(newDate.getDate() + direction * 7);
+    const base = selectedDate ? new Date(selectedDate) : today;
+    const newDate = new Date(Date.UTC(base.getUTCFullYear(), base.getUTCMonth(), base.getUTCDate() + direction * 7));
     setSelectedDate(newDate);
+    setSelectedTimeSlot("");
   };
-
-  const weekDays = getWeekDays(selectedDate);
 
   const handleMonthChange = (offset) => {
-    const newMonthDate = new Date(year, month + offset, 1);
-
-    // Find the first weekday (Mon-Fri) in the new month
+    const newMonthDate = new Date(Date.UTC(year, month + offset, 1));
     let newSelectedDate = new Date(newMonthDate);
-    while (newSelectedDate.getDay() === 0 || newSelectedDate.getDay() === 6) {
-      newSelectedDate.setDate(newSelectedDate.getDate() + 1);
+    while (newSelectedDate.getUTCDay() === 0 || newSelectedDate.getUTCDay() === 6) {
+      newSelectedDate.setUTCDate(newSelectedDate.getUTCDate() + 1);
     }
-
     setCurrentDate(newMonthDate);
     setSelectedDate(newSelectedDate);
+    setSelectedTimeSlot("");
   };
+
+  const weekDays = getWeekDays(selectedDate || today);
+
+  useEffect(() => {
+    if (!selectedDate) {
+      setSelectedDate(today);
+    }
+  }, [selectedDate]);
 
   return (
     <div className="flex gap-28 p-6 bg-white text-sm text-gray-700">
-      {/* --------- Calendar --------- */}
+      {/* Calendar */}
       <div className="w-[260px]">
         <div className="flex items-center justify-between mb-3">
           <h2 className="font-bold text-lg">
-            {currentDate.toLocaleString("default", { month: "long" })} {year}
+            {currentDate.toLocaleString("default", { month: "long", timeZone: "UTC" })} {year}
           </h2>
           <div className="flex gap-2 text-lg">
             <button onClick={() => handleMonthChange(-1)}>&lt;</button>
@@ -115,13 +131,12 @@ function DateAndTime() {
                     : "hover:bg-gray-100"
                 } ${disabled ? "opacity-30 cursor-not-allowed" : ""}`}
               >
-                {date ? date.getDate() : ""}
+                {date ? date.getUTCDate() : ""}
               </button>
             );
           })}
         </div>
 
-        {/* Timezone */}
         <select className="mt-6 p-2 border rounded w-full">
           <option>{Intl.DateTimeFormat().resolvedOptions().timeZone}</option>
           <option>(GMT+06:00) Asia/Dhaka</option>
@@ -129,9 +144,8 @@ function DateAndTime() {
         </select>
       </div>
 
-      {/* --------- Weekly Time Slots --------- */}
+      {/* Weekly Time Slots */}
       <div className="flex flex-col gap-2 w-full overflow-x-auto">
-        {/* Week Navigation Arrows */}
         <div className="flex justify-between items-center mb-2">
           <button
             onClick={() => handleWeekChange(-1)}
@@ -143,11 +157,13 @@ function DateAndTime() {
             {weekDays[0].toLocaleDateString(undefined, {
               month: "short",
               day: "numeric",
+              timeZone: "UTC",
             })}{" "}
             -{" "}
             {weekDays[4].toLocaleDateString(undefined, {
               month: "short",
               day: "numeric",
+              timeZone: "UTC",
             })}
           </h3>
           <button
@@ -164,6 +180,7 @@ function DateAndTime() {
             const label = day.toLocaleDateString("en-US", {
               weekday: "short",
               day: "numeric",
+              timeZone: "UTC",
             });
 
             return (
@@ -175,20 +192,23 @@ function DateAndTime() {
               >
                 <h4 className="mb-2 font-medium">{label}</h4>
                 {times.map((time) => {
-                  const id = `${label} - ${time}`;
+                  const id = `${label} - ${time.value}`;
                   const isSelectedTime = selectedTimeSlot === id;
 
                   return (
                     <button
                       key={id}
-                      onClick={() => setSelectedTimeSlot(id)}
+                      onClick={() => {
+                        setSelectedDate(day);
+                        setSelectedTimeSlot(id);
+                      }}
                       className={`w-full mb-1 py-1 rounded border text-sm ${
                         isSelectedTime
                           ? "bg-primary-600 text-white"
                           : "hover:bg-primary-100 border-gray-300"
                       }`}
                     >
-                      {time}
+                      {time.label}
                     </button>
                   );
                 })}

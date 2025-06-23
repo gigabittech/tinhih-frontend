@@ -9,6 +9,7 @@ export function PhoneNumberInput({
   defaultCountry = "+880",
   label = "Phone number",
   placeholder,
+  defaultValue,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const initialCountry =
@@ -34,7 +35,7 @@ export function PhoneNumberInput({
       <label className="text-sm mb-1 block">{label}</label>
       <div className="flex border border-[#a0a0a0] rounded px-2 py-[6px] items-center focus-within:border-amber-300 relative">
         {/* Custom country dropdown */}
-        <div className="relative w-28">
+        <div className="relative">
           <div
             onClick={toggleDropdown}
             className="cursor-pointer text-sm flex justify-between items-center"
@@ -73,6 +74,7 @@ export function PhoneNumberInput({
           })}
           className="ml-2 flex-1 outline-none text-sm"
           placeholder={placeholder}
+          defaultValue={defaultValue}
         />
       </div>
 

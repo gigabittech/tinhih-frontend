@@ -31,11 +31,22 @@ function CalendarPage() {
   );
 
   const handleDateSelect = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Remove time part for accurate comparison
+
+    const selected = new Date(date);
+    selected.setHours(0, 0, 0, 0);
+
+    if (selected < today) {
+      // If the selected date is in the past, don't open the sidebar
+      return;
+    }
+
     setSelectedDate(date);
     setOpenSideModal(true);
   };
 
-  const handleSideModal = () => {
+  const handleCloseSideModal = () => {
     setOpenSideModal(false);
     setSelectedDate(new Date());
     setContentName("");
@@ -52,7 +63,7 @@ function CalendarPage() {
 
       <Sidebar
         isOpen={openSideModal}
-        onClose={handleSideModal}
+        onClose={handleCloseSideModal}
         contentName={contentName ? contentName : "Appointment"}
         setSiderbarContent={setContentName}
         appointmentId={appointmentId}
@@ -62,7 +73,7 @@ function CalendarPage() {
         isOpen={openDeletePopup}
         onClose={() => setOpenDeletePopup(false)}
         id={appointmentId}
-        closeSidebar={handleSideModal}
+        closeSidebar={handleCloseSideModal}
       />
       <CalendarHeader />
       <div className="flex gap-3 h-full md:pl-5 border-t border-outline-medium">
