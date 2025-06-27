@@ -1,5 +1,5 @@
-import { LogOut } from 'lucide-react'
-import React from 'react'
+import { LogOut } from "lucide-react";
+import Title from "../components/Title";
 
 function CustomFields() {
   return (
@@ -7,14 +7,11 @@ function CustomFields() {
       {/* -------------left side-------------------- */}
       <div className=" w-[50%]">
         <div className="bg-white rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <LogOut />
-            Customise client fields
-          </h2>
+          <Title icon={<LogOut />} title={" Customise client fields"} />
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default CustomFields
+export default CustomFields;

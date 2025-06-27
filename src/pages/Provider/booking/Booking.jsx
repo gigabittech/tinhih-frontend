@@ -5,6 +5,9 @@ import { MdArrowDropDown } from "react-icons/md";
 import SignOut from "../../../components/ui/SignOut";
 import Stepper from "./components/Stepper";
 import StepContent from "./components/StepContent";
+import useBookingStore from "../../../store/provider/bookingStore";
+import { Notify } from "../../../components/ui/Toaster";
+import axiosInstance from "../../../lib/axiosInstanceWithToken";
 
 const steps = [
   "Staff",
@@ -14,12 +17,18 @@ const steps = [
   "Contact details",
 ];
 
-
 const Booking = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [openMenu, setOpenMenu] = useState(false);
   const [openSignOutMenu, setOpenSignOutMenu] = useState(false);
   const { user } = useUserStore();
+  const {
+    selectedService,
+    selectedLocation,
+    selectedDate,
+    selectedTimeSlot,
+    resetBooking,
+  } = useBookingStore();
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) setCurrentStep(currentStep + 1);
@@ -34,6 +43,33 @@ const Booking = () => {
     setOpenSignOutMenu(true);
   };
 
+  const handleConfirmAppointment = async () => {
+    const messageInput =
+      document.querySelector("textarea[name='message']")?.value || "";
+
+    const payload = {
+      workspace_id: user.currentWorkspace.id,
+      date: selectedDate?.toISOString()?.split("T")[0],
+      time: selectedTimeSlot?.split("-")[1]?.trim(),
+      attendees: [user.id],
+      services: [selectedService?.id],
+      locations: [selectedLocation?.id],
+      description: messageInput || "",
+    };
+
+    try {
+      const response = await axiosInstance.post("/appointments", payload);
+      if (response.status === 201) {
+        Notify("Appointment booked successfully!");
+        resetBooking();
+        setCurrentStep(0);
+      }
+    } catch (error) {
+      alert("Booking failed. Please try again.");
+      console.error("Error creating appointment:", error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white p-8 relative z-0">
       <div className=" container mx-auto">
@@ -43,25 +79,42 @@ const Booking = () => {
 
         <Stepper currentStep={currentStep} />
 
-        <StepContent step={currentStep} />
+        <StepContent step={currentStep} setCurrentStep={setCurrentStep} />
       </div>
 
       {/* Navigation Buttons */}
       <div className="p-10 flex items-center justify-between absolute left-0 right-0 bottom-0 border-t border-gray-200">
         <button
-          className="px-4 py-2 bg-gray-200 text-gray-700 rounded disabled:opacity-50 cursor-pointer"
+          className={`${
+            currentStep < 2
+              ? " text-transparent"
+              : "px-4 py-2 bg-gray-200 text-gray-700 rounded disabled:opacity-50 cursor-pointer"
+          } `}
           onClick={handleBack}
-          disabled={currentStep === 0}
+          disabled={currentStep < 2}
         >
           Back
         </button>
         <p className=" text-xs text-gray-400">Powered by TiNHiH</p>
         <button
-          className="px-4 py-2 bg-primary-700 text-white rounded disabled:opacity-50 cursor-pointer"
-          onClick={handleNext}
-          disabled={currentStep === steps.length - 1}
+          className={`${
+            currentStep < 3
+              ? "text-transparent"
+              : "text-white px-4 py-2 bg-primary-700 rounded disabled:opacity-50 cursor-pointer"
+          }`}
+          onClick={
+            currentStep === steps.length - 1
+              ? handleConfirmAppointment
+              : handleNext
+          }
+          disabled={
+            currentStep < 3 ||
+            (currentStep === 3 && (!selectedDate || !selectedTimeSlot))
+          }
         >
-          {currentStep === steps.length - 1 ? "Finish" : "Next"}
+          {currentStep === steps.length - 1
+            ? "Confirm appointment"
+            : "Continue"}
         </button>
       </div>
 

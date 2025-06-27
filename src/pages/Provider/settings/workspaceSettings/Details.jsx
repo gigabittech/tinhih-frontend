@@ -5,6 +5,7 @@ import SettingsInput from "../components/SettingsInput";
 import { PiMedalLight } from "react-icons/pi";
 import { MdDangerous } from "react-icons/md";
 import { FaLocationDot } from "react-icons/fa6";
+import Title from "../components/Title";
 
 function Details() {
   const [edit, setEdit] = useState(false);
@@ -17,9 +18,7 @@ function Details() {
         {/* ----------------- Business information---------------- */}
         <div className="bg-white rounded-lg p-6 mb-5">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-              <PiMedalLight /> Business information
-            </h2>
+            <Title icon={<PiMedalLight />} title={" Business information"} />
             <EditButton
               isEditMode={edit}
               onClose={() => setEdit(false)}
@@ -63,9 +62,7 @@ function Details() {
         {/* --------------Workspace branding---------------- */}
         <div className="bg-white rounded-lg p-6 mb-5">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-              <Palette /> Workspace branding
-            </h2>
+            <Title icon={<Palette />} title={"Workspace branding"} />
             <EditButton
               isEditMode={editBranding}
               onClose={() => setEditBranding(false)}
@@ -108,9 +105,7 @@ function Details() {
 
         {/* ---------------Danger zone ----------------------- */}
         <div className="bg-white rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <MdDangerous /> Danger zone
-          </h2>
+          <Title icon={<MdDangerous />} title={"Danger zone"} />
 
           <div className="grid gap-5 pt-5">
             <p>
@@ -127,9 +122,7 @@ function Details() {
       <div className=" w-[50%]">
         <div className="bg-white rounded-lg p-6">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-              <FaLocationDot /> Locations
-            </h2>
+            <Title icon={<FaLocationDot /> } title={"Locations"} />
           </div>
           <p className="py-5">
             Set up physical and virtual locations with specific addresses, room

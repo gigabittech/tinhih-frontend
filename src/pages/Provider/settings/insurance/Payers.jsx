@@ -1,5 +1,5 @@
-import { ShieldEllipsis, ShieldEllipsisIcon } from 'lucide-react'
-import React from 'react'
+import { ShieldEllipsis, ShieldEllipsisIcon } from "lucide-react";
+import Title from "../components/Title";
 
 function Payers() {
   return (
@@ -7,22 +7,18 @@ function Payers() {
       {/* -------------left side-------------------- */}
       <div className=" w-[50%] ">
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <ShieldEllipsis />Insurance payers
-          </h2>
+          <Title icon={<ShieldEllipsis />} title={"Insurance payers"} />
         </div>
       </div>
 
       {/* --------------------right side-------------------- */}
       <div className=" w-[50%] ">
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <ShieldEllipsisIcon /> Billing profiles
-          </h2>
+          <Title icon={<ShieldEllipsisIcon />} title={"Billing profiles"} />
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Payers
+export default Payers;

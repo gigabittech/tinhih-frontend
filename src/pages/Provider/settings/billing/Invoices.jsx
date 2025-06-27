@@ -1,5 +1,6 @@
 import { DollarSignIcon, NotepadTextDashed } from "lucide-react";
 import React from "react";
+import Title from "../components/Title";
 
 function Invoices() {
   return (
@@ -7,18 +8,14 @@ function Invoices() {
       {/* -------------left side-------------------- */}
       <div className=" w-[50%] ">
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <NotepadTextDashed /> Invoice templates
-          </h2>
+          <Title icon={<NotepadTextDashed />} title={"Invoice templates"} />
         </div>
       </div>
 
       {/* --------------------right side-------------------- */}
       <div className=" w-[50%] ">
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <DollarSignIcon /> Invoice reminders
-          </h2>
+          <Title icon={<DollarSignIcon />} title={"Invoice reminders"} />
         </div>
       </div>
     </div>

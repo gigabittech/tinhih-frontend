@@ -7,12 +7,15 @@ import ShortCalendar, {
 import MonthlyCalendar from "./components/FullCalendar/MonthlyCalendar";
 import Sidebar from "./components/SIdebar/Sidebar";
 import DeleteAppointment from "./components/SIdebar/Appointment/appointmentDetails/DeleteAppointment";
+import { useCreateInvoiceStore } from "../../../store/provider/createInvoiceStore";
+import CreateInvoice from "./components/SIdebar/Appointment/appointmentDetails/createInvoice/CreateInvoice";
 
 function CalendarPage() {
   const [openSideModal, setOpenSideModal] = useState(false);
   const [contentName, setContentName] = useState("Appointment");
   const [appointmentId, setAppointmentId] = useState(0);
   const [openDeletePopup, setOpenDeletePopup] = useState(false);
+  const { isOpen, closePopup } = useCreateInvoiceStore();
 
   const {
     currentDate,
@@ -28,11 +31,22 @@ function CalendarPage() {
   );
 
   const handleDateSelect = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Remove time part for accurate comparison
+
+    const selected = new Date(date);
+    selected.setHours(0, 0, 0, 0);
+
+    if (selected < today) {
+      // If the selected date is in the past, don't open the sidebar
+      return;
+    }
+
     setSelectedDate(date);
     setOpenSideModal(true);
   };
 
-  const handleSideModal = () => {
+  const handleCloseSideModal = () => {
     setOpenSideModal(false);
     setSelectedDate(new Date());
     setContentName("");
@@ -45,9 +59,11 @@ function CalendarPage() {
 
   return (
     <div className=" flex flex-col h-screen">
+      <CreateInvoice isOpen={isOpen} onClose={closePopup} />
+
       <Sidebar
         isOpen={openSideModal}
-        onClose={handleSideModal}
+        onClose={handleCloseSideModal}
         contentName={contentName ? contentName : "Appointment"}
         setSiderbarContent={setContentName}
         appointmentId={appointmentId}
@@ -57,7 +73,7 @@ function CalendarPage() {
         isOpen={openDeletePopup}
         onClose={() => setOpenDeletePopup(false)}
         id={appointmentId}
-        closeSidebar={handleSideModal}
+        closeSidebar={handleCloseSideModal}
       />
       <CalendarHeader />
       <div className="flex gap-3 h-full md:pl-5 border-t border-outline-medium">

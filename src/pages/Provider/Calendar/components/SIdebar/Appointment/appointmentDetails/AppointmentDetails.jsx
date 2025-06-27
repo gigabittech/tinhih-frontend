@@ -6,12 +6,12 @@ import axiosInstance from "../../../../../../../lib/axiosInstanceWithToken";
 import convertTo12HourFormat from "../../../../../../../hook/timeFormatTo12Hour";
 import dateFormat from "../../../../../../../hook/dateFormat";
 import Avatar from "../../../../../../../components/ui/Avatar";
+import { useCreateInvoiceStore } from "../../../../../../../store/provider/createInvoiceStore";
 
 function AppointmentDetails({ id, setDeletePopupOpen }) {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  console.log(details);
+  const { togglePopup } = useCreateInvoiceStore();
 
   useEffect(() => {
     const fetchAppointmentDetails = async () => {
@@ -67,7 +67,6 @@ function AppointmentDetails({ id, setDeletePopupOpen }) {
       </div>
       <div className="flex-1 overflow-y-auto pb-20">
         <div className="px-7 py-5 grid grid-cols-1 gap-4">
-          
           {/* -------------attendees--------------------- */}
           <div className=" grid grid-cols-1 gap-5">
             <h2 className="font-bold">Attendees</h2>
@@ -157,11 +156,12 @@ function AppointmentDetails({ id, setDeletePopupOpen }) {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <button className="border border-gray-300 py-2 rounded font-semibold hover:bg-gray-50 transition-colors">
+            <button className="border border-gray-300 py-2 rounded font-semibold hover:bg-gray-50 transition-colors cursor-pointer">
               Create note
             </button>
             <button
-              className={`py-2 rounded font-semibold transition-colors ${"bg-primary-600 text-white hover:bg-primary-700"}`}
+              onClick={togglePopup}
+              className={`py-2 rounded font-semibold transition-colors ${"bg-primary-600 text-white hover:bg-primary-700 cursor-pointer"}`}
             >
               Create invoice
             </button>

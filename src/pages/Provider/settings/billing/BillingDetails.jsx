@@ -1,6 +1,7 @@
 import { DollarSignIcon } from "lucide-react";
 import { FaGear, FaLocationPin } from "react-icons/fa6";
 import { PiMathOperationsFill } from "react-icons/pi";
+import Title from "../components/Title";
 
 function BillingDetails() {
   return (
@@ -8,9 +9,7 @@ function BillingDetails() {
       {/* -------------left side-------------------- */}
       <div className=" w-[50%] ">
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <DollarSignIcon/> Payment settings
-          </h2>
+          <Title icon={<DollarSignIcon />} title={"Payment settings"} />
         </div>
       </div>
 
@@ -18,21 +17,15 @@ function BillingDetails() {
       <div className="w-[50%] border border-gray-200 rounded-lg">
         {/* ----------------- Billing settings---------------- */}
         <div className="bg-white rounded-t-lg p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <FaGear /> Billing settings
-          </h2>
+          <Title icon={<FaGear />} title={"Billing settings"} />
         </div>
         {/* ------------------Tax rates------------------------ */}
         <div className="bg-white p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <PiMathOperationsFill />Tax rates
-          </h2>
+          <Title icon={<PiMathOperationsFill />} title={"Tax rates"} />
         </div>
         {/* -------------------- */}
         <div className="bg-white rounded-b-lg p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold mb-2 flex items-center gap-2">
-            <FaLocationPin /> Billing address
-          </h2>
+          <Title icon={<FaLocationPin />} title={"  Billing address"} />
         </div>
       </div>
     </div>
