@@ -80,11 +80,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/booking/:workspace_name/:user_name",
-    element: (
-      <ProtectedRoute>
-        <Booking />
-      </ProtectedRoute>
-    ),
+    element: <Booking />,
   },
   {
     path: "/",
@@ -240,7 +236,7 @@ const router = createBrowserRouter([
       /* -------workflow----------- */
       {
         path: "/settings/Workflow",
-        element: <WorkflowLayout/>,
+        element: <WorkflowLayout />,
         children: [
           {
             index: true,
