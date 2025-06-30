@@ -6,7 +6,7 @@ import { PiMedalFill } from "react-icons/pi";
 
 function Templates() {
   return (
-    <div>
+    <div className="opacity-50">
       {/* --------------Scheduling---------------- */}
       <div className="bg-white rounded-lg border mb-6 border-gray-200 px-5 py-3">
         <div className="flex justify-between items-center">

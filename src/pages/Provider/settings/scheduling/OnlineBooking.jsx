@@ -7,7 +7,7 @@ import Title from "../components/Title";
 
 function OnlineBooking() {
   return (
-    <div className="flex gap-5">
+    <div className="flex gap-5 opacity-50">
       {/* -------------left side-------------------- */}
       <div className=" w-[50%] ">
         {/* --------------Booking & cancellation policies---------------- */}

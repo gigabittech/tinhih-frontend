@@ -5,7 +5,7 @@ import Title from "../components/Title";
 
 function ServicesAvailability() {
   return (
-    <div className="flex gap-5">
+    <div className="flex gap-5 opacity-50">
       {/* -------------left side-------------------- */}
       <div className=" w-[50%]">
         <div className="bg-white rounded-lg p-6">

@@ -4,7 +4,7 @@ import Title from "../components/Title";
 
 export default function BasicReminders() {
   return (
-    <div className="flex gap-5">
+    <div className="flex gap-5 opacity-50">
       {/* -------------left side-------------------- */}
       <div className=" w-[50%] bg-white border rounded-lg border-gray-200 ">
         <div className=" border-b border-gray-200 p-6">
