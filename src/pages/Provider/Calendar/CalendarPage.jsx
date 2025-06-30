@@ -25,24 +25,24 @@ function CalendarPage() {
     setGoToToday,
   } = useCalendarStore();
 
-  const dateSlots = getMonthSlots(
-    selectedDate.getFullYear(),
-    selectedDate.getMonth()
-  );
+  // 🔐 Fix: safely handle undefined selectedDate
+  const selected = selectedDate || new Date();
+  const dateSlots = getMonthSlots(selected.getFullYear(), selected.getMonth());
 
   const handleDateSelect = (date) => {
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Remove time part for accurate comparison
+    today.setHours(0, 0, 0, 0);
 
     const selected = new Date(date);
     selected.setHours(0, 0, 0, 0);
 
+    // Allow creating appointment only for today or future
     if (selected < today) {
-      // If the selected date is in the past, don't open the sidebar
       return;
     }
 
     setSelectedDate(date);
+    setContentName("Appointment");
     setOpenSideModal(true);
   };
 
@@ -52,13 +52,16 @@ function CalendarPage() {
     setContentName("");
   };
 
-  const handleSeeDetails = (id) => {
-    setContentName("details");
+  // ✅ Called from MonthlyCalendar for ANY date (past or future) if there’s an appointment
+  const handleSeeDetails = (id, date) => {
+    setSelectedDate(date);
     setAppointmentId(id);
+    setContentName("details");
+    setOpenSideModal(true);
   };
 
   return (
-    <div className=" flex flex-col h-screen">
+    <div className="flex flex-col h-screen">
       <CreateInvoice isOpen={isOpen} onClose={closePopup} />
 
       <Sidebar
@@ -69,13 +72,16 @@ function CalendarPage() {
         appointmentId={appointmentId}
         setDeletePopupOpen={() => setOpenDeletePopup(true)}
       />
+
       <DeleteAppointment
         isOpen={openDeletePopup}
         onClose={() => setOpenDeletePopup(false)}
         id={appointmentId}
         closeSidebar={handleCloseSideModal}
       />
+
       <CalendarHeader />
+
       <div className="flex gap-3 h-full md:pl-5 border-t border-outline-medium">
         <section className="hidden md:block md:w-[17rem] pt-3">
           <ShortCalendar
@@ -86,6 +92,7 @@ function CalendarPage() {
             setGoToToday={setGoToToday}
           />
         </section>
+
         <section className="w-full border-l border-outline-medium">
           <MonthlyCalendar
             dateSlots={dateSlots}
@@ -100,3 +107,4 @@ function CalendarPage() {
 }
 
 export default CalendarPage;
+
