@@ -20,6 +20,8 @@ const useUserStore = create((set) => ({
   isSuccess: { ...API_STATE },
   message: { login: "", register: "", logout: "" },
 
+  setUser: (newUser) => set({ user: newUser }),
+
   getUser: async () => {
     const token = localStorage.getItem("auth-token");
     if (!token) {
@@ -40,7 +42,6 @@ const useUserStore = create((set) => ({
           user: response.data?.user,
           role: response.data?.user?.role,
         });
-        // console.log(response.data);
 
         updateState(set, "user", {
           loading: false,
@@ -62,9 +63,8 @@ const useUserStore = create((set) => ({
         user: null,
         role: null,
       });
-    }
-    finally {
-      set({ hydrated: true })
+    } finally {
+      set({ hydrated: true });
     }
   },
 

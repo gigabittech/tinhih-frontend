@@ -12,7 +12,7 @@ import countries_data from "../../../../data/countryData";
 function Details() {
   const [editPersonalDetails, setEditPersonalDetails] = useState(false);
   const [editTimezone, setEditTimezone] = useState(false);
-  const { user } = useUserStore();
+  const { user, setUser } = useUserStore();
 
   const {
     register: registerDetails,
@@ -47,6 +47,15 @@ function Details() {
       const response = await updateUserProfile(data);
       if (response.status === 200) {
         Notify(response.data.message);
+
+        // If API returns updated user info
+        if (response.data.updatedUser) {
+          setUser(response.data.updatedUser);
+        } else {
+          // Otherwise, refetch user from API to update store
+          await useUserStore.getState().getUser();
+        }
+
         setEditPersonalDetails(false);
       }
     } catch (error) {
@@ -59,6 +68,13 @@ function Details() {
       const response = await updateUserProfile(data);
       if (response.status === 200) {
         Notify(response.data.message);
+
+        if (response.data.updatedUser) {
+          setUser(response.data.updatedUser);
+        } else {
+          await useUserStore.getState().getUser();
+        }
+
         setEditTimezone(false);
       }
     } catch (error) {
@@ -208,7 +224,7 @@ function Details() {
         </div>
 
         {/* MFA */}
-        <div className="bg-white rounded-lg p-6">
+        <div className="bg-white rounded-lg p-6 opacity-50">
           <Title icon={<Lock />} title="Multi-Factor Authentication (MFA)" />
           <p>
             Secure your account by enabling Multi-Factor Authentication (MFA)

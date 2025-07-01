@@ -4,7 +4,7 @@ import Title from "../components/Title";
 function ConnectedApps() {
   return (
     <div>
-      <div className="bg-white rounded-lg p-6">
+      <div className="bg-white rounded-lg p-6 opacity-50">
         <Title icon={<BluetoothConnectedIcon />} title={"Connected apps"} />
       </div>
     </div>

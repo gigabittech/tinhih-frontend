@@ -125,7 +125,7 @@ const Booking = () => {
             onClick={() => setOpenMenu(!openMenu)}
             className="rounded-full border border-gray-300 p-1 flex items-center gap-2 cursor-pointer"
           >
-            <Avatar name={user.first_name + " " + user.last_name} />
+            <Avatar name={user?.first_name + " " + user?.last_name} />
             <span
               className={
                 openMenu
@@ -147,7 +147,7 @@ const Booking = () => {
                 }`}
           >
             <div className="font-semibold">{`${
-              user.first_name + " " + user.last_name
+              user?.first_name + " " + user?.last_name
             }`}</div>
             <button
               title="Coming soon.."
