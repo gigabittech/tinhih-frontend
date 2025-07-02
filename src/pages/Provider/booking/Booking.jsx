@@ -8,6 +8,7 @@ import StepContent from "./components/StepContent";
 import useBookingStore from "../../../store/provider/bookingStore";
 import { Notify } from "../../../components/ui/Toaster";
 import axiosInstance from "../../../lib/axiosInstanceWithToken";
+import { useLocation } from "react-router";
 
 const steps = [
   "Staff",
@@ -30,6 +31,11 @@ const Booking = () => {
     resetBooking,
   } = useBookingStore();
 
+  const { search } = useLocation();
+  const queryParams = new URLSearchParams(search);
+  const userId = queryParams.get("uid");
+  const workspaceId = queryParams.get("workspace_id");
+
   const handleNext = () => {
     if (currentStep < steps.length - 1) setCurrentStep(currentStep + 1);
   };
@@ -44,21 +50,31 @@ const Booking = () => {
   };
 
   const handleConfirmAppointment = async () => {
+    const first_name = document.querySelector(
+      "input[name='first_name']"
+    )?.value;
+    const last_name = document.querySelector("input[name='last_name']")?.value;
+    const email = document.querySelector("input[name='email']")?.value;
+    const phone = document.querySelector("input[name='phone']")?.value;
     const messageInput =
       document.querySelector("textarea[name='message']")?.value || "";
 
     const payload = {
-      workspace_id: user.currentWorkspace.id,
+      workspace_id: workspaceId,
       date: selectedDate?.toISOString()?.split("T")[0],
       time: selectedTimeSlot?.split("-")[1]?.trim(),
-      attendees: [user.id],
+      attendees: userId,
       services: [selectedService?.id],
       locations: [selectedLocation?.id],
+      first_name: first_name,
+      last_name: last_name,
+      email: email,
+      phone: phone,
       description: messageInput || "",
     };
 
     try {
-      const response = await axiosInstance.post("/appointments", payload);
+      const response = await axiosInstance.post("/booking/confirm", payload);
       if (response.status === 201) {
         Notify("Appointment booked successfully!");
         resetBooking();
@@ -79,7 +95,12 @@ const Booking = () => {
 
         <Stepper currentStep={currentStep} />
 
-        <StepContent step={currentStep} setCurrentStep={setCurrentStep} />
+        <StepContent
+          step={currentStep}
+          setCurrentStep={setCurrentStep}
+          workspaceId={workspaceId}
+          userId={userId}
+        />
       </div>
 
       {/* Navigation Buttons */}

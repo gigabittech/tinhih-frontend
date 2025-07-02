@@ -26,12 +26,9 @@ function Booking() {
   const { services, fetchServices } = useServiceStore();
   const { members, fetchMembers } = useTeamMemberStore();
   const { user } = useUserStore();
-  const businessName = user?.currentWorkspace.businessName;
-  const workspace_id = user?.currentWorkspace.id;
+  const workspace_id = user?.currentWorkspace?.id;
 
-  const bookingLink = `${window.location.origin}/booking/${businessName}/${
-    user?.first_name
-  }?uid=${user?.id}&workspace_id=${workspace_id}`;
+  const bookingLink = `${window.location.origin}/booking/booking_url/Developer?uid=${user?.id}&workspace_id=${workspace_id}`;
 
   useEffect(() => {
     fetchServices();

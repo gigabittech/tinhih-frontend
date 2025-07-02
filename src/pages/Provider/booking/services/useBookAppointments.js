@@ -1,24 +1,22 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../../../lib/axiosInstanceWithToken";
 
-function useBookAppointments() {
-  const [services, setServices] = useState([]);
-  const [locations, setLocations] = useState([]);
+function useBookAppointments( workspaceId, userId ) {
+  const [bookingDetails, setBookingDetails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchAll = async () => {
+  const fetchBookingDetails = async () => {
     setLoading(true);
     setError(null);
     try {
-      const [servicesRes, locationsRes] = await Promise.all([
-        axiosInstance.get("/services"),
-        axiosInstance.get("/locations"),
-      ]);
-      setServices(servicesRes.data.services );
-      setLocations(locationsRes.data.locations);
+      const response = await axiosInstance.get(
+        `/booking/${workspaceId}/${userId}`
+      );
+      const result = response.data;
+      setBookingDetails(result);
     } catch (err) {
-      console.error("Booking API fetch failed", err);
+      console.error("booking details fetch failed", err);
       setError(err);
     } finally {
       setLoading(false);
@@ -26,12 +24,13 @@ function useBookAppointments() {
   };
 
   useEffect(() => {
-    fetchAll();
-  }, []);
+    if (workspaceId && userId) {
+      fetchBookingDetails();
+    }
+  }, [workspaceId, userId]);
 
   return {
-    services,
-    locations,
+    bookingDetails,
     loading,
     error,
   };
