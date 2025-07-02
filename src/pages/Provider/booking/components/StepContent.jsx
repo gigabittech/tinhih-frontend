@@ -8,8 +8,8 @@ import useBookAppointments from "../services/useBookAppointments";
 import useUserStore from "../../../../store/global/userStore";
 import useBookingStore from "../../../../store/provider/bookingStore";
 
-const StepContent = ({ step, setCurrentStep }) => {
-  const { services, locations } = useBookAppointments();
+const StepContent = ({ step, setCurrentStep, workspaceId, userId }) => {
+  const { bookingDetails } = useBookAppointments(workspaceId, userId);
   const { user } = useUserStore();
   const { setSelectedService, setSelectedLocation } = useBookingStore();
 
@@ -45,7 +45,7 @@ const StepContent = ({ step, setCurrentStep }) => {
       return (
         <div className="flex justify-center">
           <div className="grid grid-cols-2 gap-5 mt-20">
-            {services?.map((s, index) => (
+            {bookingDetails?.workspaces[0]?.services?.map((s, index) => (
               <div
                 key={index}
                 onClick={() => {
@@ -65,7 +65,7 @@ const StepContent = ({ step, setCurrentStep }) => {
       return (
         <div className="flex justify-center pt-20">
           <div className="grid gap-5 w-[60%]">
-            {locations.map((loc, index) => (
+            {bookingDetails?.workspaces[0]?.locations?.map((loc, index) => (
               <div
                 key={index}
                 onClick={() => {
@@ -80,7 +80,6 @@ const StepContent = ({ step, setCurrentStep }) => {
                   </span>
                   <div>
                     <p className="font-semibold">{loc.display_name}</p>
-                    <p className="text-sm text-gray-600">{loc.type.name}</p>
                   </div>
                 </div>
                 <IoIosArrowForward />
@@ -99,15 +98,17 @@ const StepContent = ({ step, setCurrentStep }) => {
           <div className="w-[50%]">
             <div className="grid grid-cols-2 gap-5">
               <Input
+                {...register("first_name")}
                 type="text"
                 label="First name*"
-                value={user.first_name}
+                value={user?.first_name}
                 disabled
               />
               <Input
+                {...register("last_name")}
                 type="text"
                 label="Last name*"
-                value={user.last_name}
+                value={user?.last_name}
                 disabled
               />
               <PhoneNumberInput
@@ -115,12 +116,13 @@ const StepContent = ({ step, setCurrentStep }) => {
                 setValue={setValue}
                 watch={watch}
                 errors={errors}
-                defaultValue={user.phone}
+                defaultValue={user?.phone}
               />
               <Input
+                {...register("email")}
                 type="email"
                 label="Email address*"
-                value={user.email}
+                value={user?.email}
                 disabled
               />
             </div>

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { cn } from "../../../../../lib/utils";
 import useAppointmentStore from "../../../../../store/provider/appointmentsStore";
-import { BsDot } from "react-icons/bs";
 import convertTo12HourFormat from "../../../../../hook/timeFormatTo12Hour";
 
 function MonthlyCalendar({
@@ -25,7 +24,7 @@ function MonthlyCalendar({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  useState(() => {
+  useEffect(() => {
     fetchAppointments();
   }, [fetchAppointments]);
 
@@ -59,23 +58,29 @@ function MonthlyCalendar({
               key={index}
               className={cn(
                 "p-2 text-[13px] border-t border-r border-outline-light flex items-start justify-end text-base-content cursor-pointer relative",
-                currentMonth ? "" : "bg-action-lighter ",
-                isToday ? "font-extrabold text-sm " : "",
+                currentMonth ? "" : "bg-action-lighter",
+                isToday ? "font-extrabold text-sm" : "",
                 isSelected ? " font-extrabold" : ""
               )}
               onClick={() => onDateSelect(date)}
             >
+              {/* Appointment List */}
               {hasAppointments.length > 0 && (
-                <div className=" text-start text-xs absolute top-7 left-0 right-0 grid grid-cols-1 gap-1">
+                <div className="text-start text-xs absolute top-7 left-0 right-0 grid grid-cols-1 gap-1">
                   {hasAppointments.slice(0, 2).map((app) => (
                     <div
-                      onClick={() => seeDetails(app.id)}
-                      className=" bg-primary-500 rounded px-1 z-[]"
+                      key={app.id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        seeDetails(app.id);
+                      }}
+                      className="bg-primary-500 rounded px-1"
                     >
                       <p>{app.date}</p>
                       <p>{convertTo12HourFormat(app.time)}</p>
                     </div>
                   ))}
+
                   {hasAppointments.length > 2 && (
                     <div className="relative" ref={dropdownRef}>
                       <p
@@ -93,8 +98,14 @@ function MonthlyCalendar({
                       {openDropdownIndex === index && (
                         <div className="absolute z-[10] top-full left-0 right-0 grid grid-cols-1 gap-2 bg-white shadow-lg rounded p-2 border border-gray-400">
                           {hasAppointments.slice(2).map((app, i) => (
-                            <div onClick={() => seeDetails(app.id)} key={i}>
-                              <div className=" bg-primary-500 rounded px-1">
+                            <div
+                              key={i}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                seeDetails(app.id);
+                              }}
+                            >
+                              <div className="bg-primary-500 rounded px-1">
                                 <p>{app.date}</p>
                                 <p>{convertTo12HourFormat(app.time)}</p>
                               </div>
@@ -106,6 +117,8 @@ function MonthlyCalendar({
                   )}
                 </div>
               )}
+
+              {/* Date Number */}
               <span
                 className={cn(
                   isSelected && "border p-1 rounded-full size-7 shrink-0"
