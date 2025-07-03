@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "../../../components/ui/Avatar";
 import useUserStore from "../../../store/global/userStore";
 import { MdArrowDropDown } from "react-icons/md";
@@ -8,7 +8,6 @@ import StepContent from "./components/StepContent";
 import useBookingStore from "../../../store/provider/bookingStore";
 import { Notify } from "../../../components/ui/Toaster";
 import axiosInstance from "../../../lib/axiosInstanceWithToken";
-import { useLocation } from "react-router";
 
 const steps = [
   "Staff",
@@ -31,10 +30,24 @@ const Booking = () => {
     resetBooking,
   } = useBookingStore();
 
-  const { search } = useLocation();
-  const queryParams = new URLSearchParams(search);
-  const userId = queryParams.get("uid");
-  const workspaceId = queryParams.get("workspace_id");
+  const [workspaceId, setWorkspaceId] = useState(null);
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const encoded = searchParams.get("q");
+
+    if (encoded) {
+      try {
+        const decodedString = atob(decodeURIComponent(encoded));
+        const { uid, workspace_id } = JSON.parse(decodedString);
+        setUserId(uid);
+        setWorkspaceId(workspace_id);
+      } catch (err) {
+        console.error("Decode failed:", err);
+      }
+    }
+  }, []);
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) setCurrentStep(currentStep + 1);
