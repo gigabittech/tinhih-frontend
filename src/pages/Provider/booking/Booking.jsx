@@ -8,6 +8,7 @@ import StepContent from "./components/StepContent";
 import useBookingStore from "../../../store/provider/bookingStore";
 import { Notify } from "../../../components/ui/Toaster";
 import axiosInstance from "../../../lib/axiosInstanceWithToken";
+import { Link } from "react-router";
 
 const steps = [
   "Staff",
@@ -159,7 +160,11 @@ const Booking = () => {
             onClick={() => setOpenMenu(!openMenu)}
             className="rounded-full border border-gray-300 p-1 flex items-center gap-2 cursor-pointer"
           >
-            <Avatar name={user?.first_name + " " + user?.last_name} />
+            {user ? (
+              <Avatar name={user?.first_name + " " + user?.last_name} />
+            ) : (
+              <img src="/anonymous.jpg" className=" rounded-full w-8" />
+            )}
             <span
               className={
                 openMenu
@@ -174,27 +179,37 @@ const Booking = () => {
           {/* Dropdown Menu */}
           <div
             className={`absolute right-0 mt-1 min-w-56 bg-white border border-gray-300 rounded shadow 
-                p-5 transition-all duration-300 origin-top grid grid-cols-1 gap-3 ${
+                py-2 transition-all duration-300 origin-top ${
                   openMenu
                     ? "opacity-100 scale-100 pointer-events-auto"
                     : "opacity-0 scale-95 pointer-events-none"
                 }`}
           >
-            <div className="font-semibold">{`${
-              user?.first_name + " " + user?.last_name
-            }`}</div>
-            <button
-              title="Coming soon.."
-              className=" text-start cursor-pointer"
-            >
-              Go to your portal
-            </button>
-            <button
-              onClick={handleSignOut}
-              className=" text-start cursor-pointer"
-            >
-              Sign out
-            </button>
+            {user ? (
+              <div className="grid grid-cols-1">
+                <div className="font-bold px-5 py-2">{`${
+                  user?.first_name + " " + user?.last_name
+                }`}</div>
+                <button
+                  title="Coming soon.."
+                  className=" text-start cursor-progress hover:bg-gray-200 px-5 py-2"
+                >
+                  Go to your portal
+                </button>
+                <button
+                  onClick={handleSignOut}
+                  className=" text-start cursor-pointer hover:bg-gray-200 px-5 py-2"
+                >
+                  Sign out
+                </button>
+              </div>
+            ) : (
+              <div>
+                <p className=" cursor-pointer hover:bg-gray-200 px-5 py-2">
+                  <Link to={'/login'}>Sign in</Link>
+                </p>
+              </div>
+            )}
           </div>
           <SignOut
             isOpen={openSignOutMenu}

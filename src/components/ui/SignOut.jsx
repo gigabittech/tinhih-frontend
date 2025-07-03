@@ -1,9 +1,14 @@
-import React from "react";
 import useUserStore from "../../store/global/userStore";
 import { Modal, ModalBody, ModalHeader } from "./Modal";
 
 function SignOut({ isOpen, onClose }) {
   const hanldeLogOut = useUserStore((state) => state.logoutHandler);
+
+  const handleConfirm = () => {
+    hanldeLogOut(); // logs the user out
+    onClose();      // closes the modal
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalHeader icon={""} title={"Are you sure?"} onClose={onClose} />
@@ -17,7 +22,7 @@ function SignOut({ isOpen, onClose }) {
             Cancel
           </button>
           <button
-            onClick={hanldeLogOut}
+            onClick={handleConfirm}
             className=" border border-primary-700 bg-primary-700 text-white px-5 py-1 rounded cursor-pointer"
           >
             Confirm
@@ -29,3 +34,4 @@ function SignOut({ isOpen, onClose }) {
 }
 
 export default SignOut;
+
