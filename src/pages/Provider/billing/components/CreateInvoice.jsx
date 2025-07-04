@@ -7,46 +7,42 @@ import {
   ModalHeader,
 } from "../../../../components/ui/Modal";
 import { RiBillFill } from "react-icons/ri";
-import { ChevronDown, Plus } from "lucide-react";
+import { ChevronDown, Plus, X } from "lucide-react";
 import SettingsInput from "../../settings/components/SettingsInput";
+import useUserStore from "../../../../store/global/userStore";
+import ClientSelectDropdown from "./ClientSelectDropdown";
 
 function CreateInvoice({ isOpen, onClose }) {
   const [edit, setEdit] = useState(false);
-  const [invoiceData, setInvoiceData] = useState({
-    invoiceNumber: "000007",
-    issueDate: "Tuesday, 20 May 2025",
-    dueDate: "Tuesday, 3 Jun 2025",
-    practitioner: "Name",
-    client: "",
-    services: [
-      {
-        date: "",
-        service: "",
-        code: "",
-        units: 1,
-        price: 0,
-        tax: 0,
-        amount: 0,
-      },
-    ],
-  });
+  const [clientManuallySet, setClientManuallySet] = useState(false);
+  const [billToManuallySet, setBillToManuallySet] = useState(false);
 
   const today = new Date().toISOString().split("T")[0];
   const oneWeekLater = new Date();
   oneWeekLater.setDate(oneWeekLater.getDate() + 7);
   const nextWeek = oneWeekLater.toISOString().split("T")[0];
 
+  const [invoiceData, setInvoiceData] = useState({
+    invoiceNumber: "000007",
+    issueDate: "Tuesday, 20 May 2025",
+    dueDate: "Tuesday, 3 Jun 2025",
+    practitioner: "Name",
+    client: "",
+    billTo: "",
+    services: [],
+  });
+
+  const { user } = useUserStore();
+  
+
   const handleServiceChange = (index, field, value) => {
     const updatedServices = [...invoiceData.services];
     updatedServices[index][field] = value;
-
-    // Calculate amount if price or units change
     if (field === "price" || field === "units") {
       updatedServices[index].amount =
         parseFloat(updatedServices[index].units || 0) *
         parseFloat(updatedServices[index].price || 0);
     }
-
     setInvoiceData({ ...invoiceData, services: updatedServices });
   };
 
@@ -56,7 +52,7 @@ function CreateInvoice({ isOpen, onClose }) {
       services: [
         ...invoiceData.services,
         {
-          date: "",
+          date: today,
           service: "",
           code: "",
           units: 1,
@@ -68,9 +64,25 @@ function CreateInvoice({ isOpen, onClose }) {
     });
   };
 
+  const removeService = (index) => {
+    const updatedServices = invoiceData.services.filter((_, i) => i !== index);
+    setInvoiceData({ ...invoiceData, services: updatedServices });
+  };
+
   const handleCloseModal = () => {
-    onClose();
+    setInvoiceData({
+      invoiceNumber: "000007",
+      issueDate: "Tuesday, 20 May 2025",
+      dueDate: "Tuesday, 3 Jun 2025",
+      practitioner: "Name",
+      client: "",
+      billTo: "",
+      services: [],
+    });
+    setClientManuallySet(false);
+    setBillToManuallySet(false);
     setEdit(false);
+    onClose();
   };
 
   return (
@@ -78,7 +90,7 @@ function CreateInvoice({ isOpen, onClose }) {
       <Modal
         isOpen={isOpen}
         onClose={handleCloseModal}
-        className={" md:max-w-max"}
+        className={"md:max-w-[95vw]"}
       >
         <ModalHeader
           onClose={handleCloseModal}
@@ -86,8 +98,9 @@ function CreateInvoice({ isOpen, onClose }) {
           icon={<RiBillFill size={20} />}
         />
         <ModalBody className={" overflow-y-scroll max-h-[600px] relative"}>
+          {/* Header Inputs */}
           <div className="flex items-start justify-between">
-            <div className="grid grid-cols-3 gap-5 w-full">
+            <div className="grid grid-cols-3 gap-3 w-full">
               <SettingsInput
                 label="Title"
                 defaultValue={"Invoice"}
@@ -108,7 +121,7 @@ function CreateInvoice({ isOpen, onClose }) {
                 label="PO/SO number"
                 isEditMode={edit}
                 register={""}
-                name="po/so"
+                name="po_so"
               />
               <SettingsInput
                 label="Tax ID"
@@ -136,92 +149,57 @@ function CreateInvoice({ isOpen, onClose }) {
             <button
               onClick={() => setEdit(true)}
               className={` text-primary-800 font-bold cursor-pointer absolute right-5 ${
-                edit ? "hidden" : " "
+                edit ? "hidden" : ""
               }`}
             >
               Edit
             </button>
           </div>
 
-          {/* -----------------description ---------------- */}
+          {/* Description */}
           <div className="py-5">
-
-          <SettingsInput
-            label="Description"
-            isEditMode={edit}
-            register={""}
-            name="description"
-          />
+            <SettingsInput
+              label="Description"
+              isEditMode={edit}
+              register={""}
+              name="description"
+            />
           </div>
 
-          {/* -------------- Client and Practitioner Section  ----------------------- */}
-          <div className="grid grid-cols-2 gap-4 mb-6 pt-3 px-3 bg-gray-100">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Client or contact
-              </label>
-              <div className="flex">
-                <div className="relative flex-grow">
-                  <input
-                    type="text"
-                    className="block w-full px-3 py-1 border bg-white border-gray-300 rounded-l focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Search"
-                    value={invoiceData.client}
-                    onChange={(e) =>
-                      setInvoiceData({ ...invoiceData, client: e.target.value })
-                    }
-                  />
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                    <ChevronDown size={16} color="#3b3b3b" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Practitioner
-              </label>
-              <div className="flex">
-                <div className="relative flex-grow">
-                  <input
-                    type="text"
-                    className="block w-full px-3 py-1 bg-white border border-gray-300 rounded-l focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Search"
-                    value={invoiceData.practitioner}
-                    onChange={(e) =>
-                      setInvoiceData({
-                        ...invoiceData,
-                        practitioner: e.target.value,
-                      })
-                    }
-                  />
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                    <ChevronDown size={16} color="#3b3b3b" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700">
-                Bill to
-              </label>
-              <div className="flex">
-                <div className="relative flex-grow">
-                  <input
-                    type="text"
-                    className="block w-full px-3 py-1 bg-white border border-gray-300 rounded-l focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Search"
-                  />
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                    <ChevronDown size={16} color="#3b3b3b" />
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* Client and Bill To */}
+          <div className="grid grid-cols-2 gap-4 mb-6 py-5 px-3 bg-gray-100">
+            <ClientSelectDropdown
+              label="Client or contact"
+              name="client"
+              value={invoiceData.client}
+              options={user?.currentWorkspace?.clients || []}
+              onChange={(value) => {
+                setClientManuallySet(true);
+                setInvoiceData((prev) => ({
+                  ...prev,
+                  client: value,
+                  billTo: billToManuallySet ? prev.billTo : value,
+                }));
+              }}
+            />
+            <ClientSelectDropdown
+              label="Bill to"
+              name="billTo"
+              value={invoiceData.billTo}
+              options={user?.currentWorkspace?.clients || []}
+              onChange={(value) => {
+                setBillToManuallySet(true);
+                setInvoiceData((prev) => ({
+                  ...prev,
+                  billTo: value,
+                  client: clientManuallySet ? prev.client : value,
+                }));
+              }}
+            />
           </div>
 
-          {/* ------------Services Table -------------------*/}
-          <div className=" overflow-x-auto">
+          {/* Services Table */}
+          <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -246,6 +224,7 @@ function CreateInvoice({ isOpen, onClose }) {
                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Amount
                   </th>
+                  <th className="px-4 py-2"></th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -253,9 +232,8 @@ function CreateInvoice({ isOpen, onClose }) {
                   <tr key={index}>
                     <td className="px-4 py-2 whitespace-nowrap">
                       <input
-                        type="text"
+                        type="date"
                         className="p-1 outline-none rounded w-full"
-                        placeholder="Add date"
                         value={service.date}
                         onChange={(e) =>
                           handleServiceChange(index, "date", e.target.value)
@@ -263,21 +241,26 @@ function CreateInvoice({ isOpen, onClose }) {
                       />
                     </td>
                     <td className="px-4 py-2 whitespace-nowrap">
-                      <input
-                        type="text"
+                      <select
                         className="p-1 outline-none rounded w-full"
-                        placeholder="Add service"
                         value={service.service}
                         onChange={(e) =>
                           handleServiceChange(index, "service", e.target.value)
                         }
-                      />
+                      >
+                        <option value="">Select service</option>
+                        {user?.currentWorkspace?.services?.map((s) => (
+                          <option key={s.id} value={s.id}>
+                            {s.service_name}
+                          </option>
+                        ))}
+                      </select>
                     </td>
                     <td className="px-4 py-2 whitespace-nowrap">
                       <input
                         type="text"
                         className="p-1 outline-none rounded w-full"
-                        placeholder="Add code"
+                        placeholder="Code"
                         value={service.code}
                         onChange={(e) =>
                           handleServiceChange(index, "code", e.target.value)
@@ -317,13 +300,21 @@ function CreateInvoice({ isOpen, onClose }) {
                     <td className="px-4 py-2 whitespace-nowrap">
                       <div className="p-1">{service.amount.toFixed(2)}</div>
                     </td>
+                    <td className="px-4 py-2 whitespace-nowrap">
+                      <button
+                        type="button"
+                        onClick={() => removeService(index)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <X size={16} />
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
 
-          {/* Add Service Button */}
           <button
             onClick={addService}
             className="flex items-center gap-2 text-primary-700 border-b border-t border-gray-300 w-full py-3"
@@ -338,9 +329,7 @@ function CreateInvoice({ isOpen, onClose }) {
               type="button"
               variant="outline"
               className="w-full sm:w-auto"
-              onClick={() => {
-                onClose();
-              }}
+              onClick={onClose}
             >
               Cancel
             </Button>
