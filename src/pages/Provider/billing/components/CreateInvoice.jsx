@@ -164,7 +164,7 @@ function CreateInvoice({ isOpen, onClose }) {
         alert("Invoice created successfully!");
         onClose();
         resetInvoiceData();
-        fetchInvoices();
+        fetchInvoices()
       } else {
         alert("Failed to create invoice. Please try again.");
       }

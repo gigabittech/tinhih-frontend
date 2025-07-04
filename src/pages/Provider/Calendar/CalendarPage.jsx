@@ -8,7 +8,7 @@ import MonthlyCalendar from "./components/FullCalendar/MonthlyCalendar";
 import Sidebar from "./components/SIdebar/Sidebar";
 import DeleteAppointment from "./components/SIdebar/Appointment/appointmentDetails/DeleteAppointment";
 import { useCreateInvoiceStore } from "../../../store/provider/createInvoiceStore";
-import CreateInvoice from "./components/SIdebar/Appointment/appointmentDetails/createInvoice/CreateInvoice";
+import ViewInvoice from "./components/SIdebar/Appointment/appointmentDetails/createInvoice/ViewInvoice";
 
 function CalendarPage() {
   const [openSideModal, setOpenSideModal] = useState(false);
@@ -62,7 +62,7 @@ function CalendarPage() {
 
   return (
     <div className="flex flex-col h-screen">
-      <CreateInvoice isOpen={isOpen} onClose={closePopup} />
+      <ViewInvoice isOpen={isOpen} onClose={closePopup} invoice_id={1}/>
 
       <Sidebar
         isOpen={openSideModal}
