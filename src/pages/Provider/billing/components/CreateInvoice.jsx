@@ -13,6 +13,7 @@ import SettingsInput from "../../settings/components/SettingsInput";
 import useUserStore from "../../../../store/global/userStore";
 import ClientSelectDropdown from "./ClientSelectDropdown";
 import axiosInstance from "../../../../lib/axiosInstanceWithToken";
+import useInvoiceStore from "../../../../store/provider/invoiceStore";
 
 function CreateInvoice({ isOpen, onClose }) {
   const [edit, setEdit] = useState(false);
@@ -35,8 +36,8 @@ function CreateInvoice({ isOpen, onClose }) {
   });
 
   const { user } = useUserStore();
+  const { fetchInvoices } = useInvoiceStore();
 
-  // React Hook Form for validation & errors only
   const {
     handleSubmit,
     formState: { errors },
@@ -162,6 +163,8 @@ function CreateInvoice({ isOpen, onClose }) {
       if (response.status === 200) {
         alert("Invoice created successfully!");
         onClose();
+        resetInvoiceData();
+        fetchInvoices();
       } else {
         alert("Failed to create invoice. Please try again.");
       }
@@ -175,7 +178,7 @@ function CreateInvoice({ isOpen, onClose }) {
     setEdit(false);
     setClientManuallySet(false);
     setBillToManuallySet(false);
-    clearErrors(); // Clear all react-hook-form errors
+    clearErrors();
     setInvoiceData({
       invoiceNumber: "000007",
       issueDate: today,
