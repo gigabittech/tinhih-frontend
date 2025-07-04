@@ -17,13 +17,15 @@ function ProtectedRoute({
   } = useWorkspaceStore();
 
   useEffect(() => {
-    fetchWorkspaces();
-  }, [fetchWorkspaces]);
+    if (!workspaces || workspaces.length === 0) {
+      fetchWorkspaces();
+    }
+  }, [fetchWorkspaces, workspaces]);
 
   if (workspaceLoading || !hydrated) {
     return <AppLoader />;
   }
-  
+
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
@@ -39,8 +41,13 @@ function ProtectedRoute({
     );
   }
 
-  // If user should have workspace but doesn't, redirect
-  if (!shouldHaveNoWorkspace && !hasWorkspace) {
+  // ✅ Updated condition
+  if (
+    !shouldHaveNoWorkspace &&
+    !hasWorkspace &&
+    hydrated &&
+    !workspaceLoading
+  ) {
     return <Navigate to="/Onboarding" replace />;
   }
 

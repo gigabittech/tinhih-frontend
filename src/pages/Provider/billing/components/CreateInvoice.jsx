@@ -8,8 +8,10 @@ import {
 } from "../../../../components/ui/Modal";
 import { RiBillFill } from "react-icons/ri";
 import { ChevronDown, Plus } from "lucide-react";
+import SettingsInput from "../../settings/components/SettingsInput";
 
 function CreateInvoice({ isOpen, onClose }) {
+  const [edit, setEdit] = useState(false);
   const [invoiceData, setInvoiceData] = useState({
     invoiceNumber: "000007",
     issueDate: "Tuesday, 20 May 2025",
@@ -28,6 +30,11 @@ function CreateInvoice({ isOpen, onClose }) {
       },
     ],
   });
+
+  const today = new Date().toISOString().split("T")[0];
+  const oneWeekLater = new Date();
+  oneWeekLater.setDate(oneWeekLater.getDate() + 7);
+  const nextWeek = oneWeekLater.toISOString().split("T")[0];
 
   const handleServiceChange = (index, field, value) => {
     const updatedServices = [...invoiceData.services];
@@ -61,97 +68,94 @@ function CreateInvoice({ isOpen, onClose }) {
     });
   };
 
+  const handleCloseModal = () => {
+    onClose();
+    setEdit(false);
+  };
+
   return (
     <div>
-      <Modal isOpen={isOpen} onClose={onClose} className={" md:max-w-max"}>
+      <Modal
+        isOpen={isOpen}
+        onClose={handleCloseModal}
+        className={" md:max-w-max"}
+      >
         <ModalHeader
-          onClose={onClose}
+          onClose={handleCloseModal}
           title={"New Invoice"}
           icon={<RiBillFill size={20} />}
         />
-        <ModalBody className={' overflow-y-scroll max-h-[600px]'}>
-          <div className="grid grid-cols-3 gap-5">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Title
-              </label>
-              <input
-                type="text"
+        <ModalBody className={" overflow-y-scroll max-h-[600px] relative"}>
+          <div className="flex items-start justify-between">
+            <div className="grid grid-cols-3 gap-5 w-full">
+              <SettingsInput
+                label="Title"
+                defaultValue={"Invoice"}
+                isEditMode={edit}
+                register={""}
                 placeholder="Invoice"
-                className="px-3 py-1 border border-gray-300 w-full rounded"
+                name="title"
               />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Invoice #
-              </label>
-              <input
-                type="text"
-                placeholder="Invoice"
-                className="px-3 py-1 border border-gray-300 w-full rounded"
+              <SettingsInput
+                label="Invoice #"
+                isEditMode={edit}
+                defaultValue={edit ? "" : "000015"}
+                register={""}
+                placeholder="000015"
+                name="invoice"
               />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                PO/SO number
-              </label>
-              <input
-                type="text"
-                placeholder="Invoice"
-                className="px-3 py-1 border border-gray-300 w-full rounded"
+              <SettingsInput
+                label="PO/SO number"
+                isEditMode={edit}
+                register={""}
+                name="po/so"
               />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                TIN
-              </label>
-              <input
-                type="text"
-                placeholder="Invoice"
-                className="px-3 py-1 border border-gray-300 w-full rounded"
+              <SettingsInput
+                label="Tax ID"
+                isEditMode={edit}
+                register={""}
+                name="tax"
               />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Issue date
-              </label>
-              <input
+              <SettingsInput
+                label="Issue date"
+                isEditMode={edit}
+                defaultValue={today}
+                register={""}
                 type="date"
-                placeholder="Invoice"
-                className="px-3 py-1 border border-gray-300 rounded w-full"
+                name="issue"
               />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Due date
-              </label>
-              <input
+              <SettingsInput
+                label="Due date"
+                isEditMode={edit}
+                defaultValue={nextWeek}
+                register={""}
                 type="date"
-                placeholder="Invoice"
-                className="px-3 py-1 border border-gray-300 rounded w-full"
+                name="due"
               />
             </div>
+            <button
+              onClick={() => setEdit(true)}
+              className={` text-primary-800 font-bold cursor-pointer absolute right-5 ${
+                edit ? "hidden" : " "
+              }`}
+            >
+              Edit
+            </button>
           </div>
 
           {/* -----------------description ---------------- */}
-          <div className="my-5">
-            <label className="block text-sm font-medium text-gray-700">
-              Description
-            </label>
-            <textarea
-              name=""
-              id=""
-              rows={1}
-              className="px-3 py-1 border border-gray-300 rounded w-full"
-            ></textarea>
+          <div className="py-5">
+
+          <SettingsInput
+            label="Description"
+            isEditMode={edit}
+            register={""}
+            name="description"
+          />
           </div>
 
           {/* -------------- Client and Practitioner Section  ----------------------- */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-2 gap-4 mb-6 pt-3 px-3 bg-gray-100">
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Client or contact
@@ -160,7 +164,7 @@ function CreateInvoice({ isOpen, onClose }) {
                 <div className="relative flex-grow">
                   <input
                     type="text"
-                    className="block w-full px-3 py-1 border border-gray-300 rounded-l focus:ring-blue-500 focus:border-blue-500"
+                    className="block w-full px-3 py-1 border bg-white border-gray-300 rounded-l focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Search"
                     value={invoiceData.client}
                     onChange={(e) =>
@@ -181,7 +185,7 @@ function CreateInvoice({ isOpen, onClose }) {
                 <div className="relative flex-grow">
                   <input
                     type="text"
-                    className="block w-full px-3 py-1 border border-gray-300 rounded-l focus:ring-blue-500 focus:border-blue-500"
+                    className="block w-full px-3 py-1 bg-white border border-gray-300 rounded-l focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Search"
                     value={invoiceData.practitioner}
                     onChange={(e) =>
@@ -205,7 +209,7 @@ function CreateInvoice({ isOpen, onClose }) {
                 <div className="relative flex-grow">
                   <input
                     type="text"
-                    className="block w-full px-3 py-1 border border-gray-300 rounded-l focus:ring-blue-500 focus:border-blue-500"
+                    className="block w-full px-3 py-1 bg-white border border-gray-300 rounded-l focus:ring-blue-500 focus:border-blue-500"
                     placeholder="Search"
                   />
                   <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -324,7 +328,7 @@ function CreateInvoice({ isOpen, onClose }) {
             onClick={addService}
             className="flex items-center gap-2 text-primary-700 border-b border-t border-gray-300 w-full py-3"
           >
-           <Plus size={15}/> 
+            <Plus size={15} />
             Add service
           </button>
         </ModalBody>
