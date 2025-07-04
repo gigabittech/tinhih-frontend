@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronDown, X } from "lucide-react";
 import Avatar from "../../../../components/ui/Avatar";
 
-const ClientDropdown = ({ label, value, onChange, options }) => {
+const ClientSelectDropdown = ({ label, value, onChange, options, error }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
   const containerRef = useRef();
@@ -59,7 +59,8 @@ const ClientDropdown = ({ label, value, onChange, options }) => {
         {label}
       </label>
       <div
-        className="w-full px-3 py-2 border border-gray-300 rounded bg-white text-left flex justify-between items-center cursor-text"
+        className={`w-full px-3 py-2 border rounded bg-white text-left flex justify-between items-center cursor-text
+          ${error ? "border-red-600" : "border-gray-300"}`}
         onClick={() => setIsOpen(true)}
       >
         {selectedClient ? (
@@ -97,6 +98,7 @@ const ClientDropdown = ({ label, value, onChange, options }) => {
           </>
         )}
       </div>
+      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
 
       {isOpen && (
         <div className="absolute z-50 mt-1 w-full bg-white border border-gray-300 rounded shadow-md max-h-60 overflow-y-auto">
@@ -106,29 +108,28 @@ const ClientDropdown = ({ label, value, onChange, options }) => {
                 <li
                   key={client.id}
                   onClick={() => handleSelect(client.id)}
-                  className="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                  className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-100"
                 >
                   <Avatar
-                    name={client.first_name + " " + client.last_name || ""}
+                    size={24}
+                    src={client.avatar_url || ""}
+                    alt={client.first_name}
+                    fallback={
+                      client.first_name
+                        ? client.first_name[0].toUpperCase()
+                        : "?"
+                    }
                   />
                   <span className="text-sm">
                     {client.first_name} {client.last_name || ""}
                   </span>
-                  {client.isDemo && (
-                    <span className="ml-auto bg-gray-200 text-xs px-2 py-0.5 rounded">
-                      Demo
-                    </span>
-                  )}
                 </li>
               ))
             ) : (
-              <li className="px-3 py-2 text-gray-500 text-sm">
-                No results found
+              <li className="px-3 py-2 text-sm text-gray-500">
+                No clients found
               </li>
             )}
-            {/* <li className="px-3 py-2 text-primary-700 cursor-pointer hover:bg-gray-100 text-sm border-t">
-              + New contact
-            </li> */}
           </ul>
         </div>
       )}
@@ -136,4 +137,5 @@ const ClientDropdown = ({ label, value, onChange, options }) => {
   );
 };
 
-export default ClientDropdown;
+export default ClientSelectDropdown;
+
