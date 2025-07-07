@@ -1,7 +1,5 @@
 import { Navigate } from "react-router";
 import useUserStore from "../../store/global/userStore";
-import { useEffect } from "react";
-import useWorkspaceStore from "../../store/global/useWorkspace";
 import AppLoader from "../global/AppLoader";
 
 function ProtectedRoute({
@@ -9,20 +7,13 @@ function ProtectedRoute({
   shouldHaveNoWorkspace = false,
   children,
 }) {
-  const { isAuthenticated, role, hydrated } = useUserStore();
-  const {
-    workspaces,
-    fetchWorkspaces,
-    loading: workspaceLoading,
-  } = useWorkspaceStore();
+  const { user, isAuthenticated, role, hydrated } = useUserStore();
+  const currentWorkspace = user?.currentWorkspace;
 
-  useEffect(() => {
-    if (!workspaces || workspaces.length === 0) {
-      fetchWorkspaces();
-    }
-  }, [fetchWorkspaces, workspaces]);
+  // hasWorkspace is true if currentWorkspace is a non-null object
+  const hasWorkspace = currentWorkspace && Object.keys(currentWorkspace).length > 0;
 
-  if (workspaceLoading || !hydrated) {
+  if (!hydrated) {
     return <AppLoader />;
   }
 
@@ -30,9 +21,6 @@ function ProtectedRoute({
     return <Navigate to="/login" replace />;
   }
 
-  const hasWorkspace = workspaces?.length > 0;
-
-  // If user shouldn't have workspace but does, redirect
   if (shouldHaveNoWorkspace && hasWorkspace) {
     return role === "provider" ? (
       <Navigate to="/calendar" replace />
@@ -41,13 +29,7 @@ function ProtectedRoute({
     );
   }
 
-  // ✅ Updated condition
-  if (
-    !shouldHaveNoWorkspace &&
-    !hasWorkspace &&
-    hydrated &&
-    !workspaceLoading
-  ) {
+  if (!shouldHaveNoWorkspace && !hasWorkspace) {
     return <Navigate to="/Onboarding" replace />;
   }
 
@@ -59,3 +41,5 @@ function ProtectedRoute({
 }
 
 export default ProtectedRoute;
+
+
