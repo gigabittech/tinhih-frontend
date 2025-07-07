@@ -6,6 +6,7 @@ import CreateInvoice from "./components/CreateInvoice";
 function Billing() {
   const [tab, setTab] = useState(0);
   const [openInvoice, setOpenInvoice] = useState(false);
+
   return (
     <div>
       <CreateInvoice
@@ -24,7 +25,7 @@ function Billing() {
           </div>
           <button
             onClick={() => setOpenInvoice(true)}
-            className=" bg-primary-700 font-semibold text-white px-3 py-1 rounded hover:bg-primary-800 flex items-center gap-2"
+            className=" bg-primary-700 font-semibold text-white px-3 py-1 rounded hover:bg-primary-800 cursor-pointer flex items-center gap-2"
           >
             <Plus size={18} /> New invoice
           </button>

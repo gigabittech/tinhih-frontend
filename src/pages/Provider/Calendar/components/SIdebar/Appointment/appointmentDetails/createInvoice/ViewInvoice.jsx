@@ -4,13 +4,40 @@ import { FaFileInvoice } from "react-icons/fa";
 import { HiCurrencyDollar } from "react-icons/hi2";
 import { BiSolidPencil } from "react-icons/bi";
 import { RxDotsVertical } from "react-icons/rx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditInvoice from "./EditInvoice";
 import DropDown from "./DropDown";
+import axiosInstance from "../../../../../../../../lib/axiosInstanceWithToken";
 
-function CreateInvoice({ isOpen, onClose }) {
+function ViewInvoice({ isOpen, onClose, invoice_id }) {
   const [editInvoice, setEditInvoice] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [invoiceData, setInvoiceData] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen || !invoice_id) return;
+
+    const fetchInvoice = async () => {
+      setLoading(true);
+      try {
+        const res = await axiosInstance.get(`/invoices/${invoice_id}`);
+        if (res.status === 200) {
+          setInvoiceData(res?.data.invoice);
+        }
+      } catch (error) {
+        console.error("Error fetching invoice:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInvoice();
+  }, [isOpen, invoice_id]);
+
+  if (loading) {
+    return;
+  }
 
   return (
     <div
@@ -31,15 +58,21 @@ function CreateInvoice({ isOpen, onClose }) {
       <div className="bg-white px-5 py-3 border-b border-gray-200">
         <p className="flex items-center gap-3">
           Billing <MdKeyboardArrowRight size={20} />
-          <span className=" text-primary-700">Bobby Doe</span>
+          <span className=" text-primary-700">{invoiceData?.client.email}</span>
         </p>
         <div className="flex items-center justify-between">
           <div className="pt-3 flex items-center gap-3">
             <span className="p-2 rounded bg-gray-100">
               <FaFileInvoice size={20} />
             </span>
-            <p className="text-2xl font-bold">Invoice 11110</p>
-            <p className=" bg-orange-200 px-3 rounded text-sm">Unpaid</p>
+            <p className="text-2xl font-bold">
+              Invoice {invoiceData?.serial_number}
+            </p>
+            {invoiceData?.is_paid === 0 ? (
+              <p className=" bg-orange-200 px-3 rounded text-sm">Unpaid</p>
+            ) : (
+              <p className=" bg-green-200 px-3 rounded text-sm">Paid</p>
+            )}
           </div>
           <div className="flex items-center gap-3">
             <button className="flex items-center gap-2 bg-primary-600 font-bold text-white px-3 py-2 rounded  cursor-pointer">
@@ -79,24 +112,26 @@ function CreateInvoice({ isOpen, onClose }) {
           <div className="flex justify-between text-sm">
             <div>
               <h6 className=" font-bold mb-2">Bill to</h6>
-              <p>Bobby Doe</p>
+              <p>{invoiceData?.biller?.email}</p>
             </div>
             <div>
               <h6 className=" font-bold mb-2">Client</h6>
-              <p>Bobby Doe</p>
+              <p>Client name</p>
               <p>0000000000</p>
-              <p>email@email.com</p>
+              <p>{invoiceData?.client?.email}</p>
             </div>
             <div>
               <h6>
-                <span className=" font-bold">Invoice</span>&nbsp; #11110
+                <span className=" font-bold">Invoice</span>&nbsp; #
+                {invoiceData?.serial_number}
               </h6>
               <p className="my-2">
-                <span className=" font-bold">Date issued </span>&nbsp; 17 jun
-                2025
+                <span className=" font-bold">Date issued </span>&nbsp;{" "}
+                {invoiceData?.issue_date}
               </p>
               <p>
-                <span className=" font-bold">Due date </span>&nbsp; 17 jun 2025
+                <span className=" font-bold">Due date </span>&nbsp;{" "}
+                {invoiceData?.due_date}
               </p>
             </div>
           </div>
@@ -111,6 +146,19 @@ function CreateInvoice({ isOpen, onClose }) {
                 <th className="text-left">Tax</th>
                 <th className="text-left">Amount</th>
               </tr>
+              <tr className="border-b border-gray-200">
+                <td className="ps-5 py-4 text-left"> </td>
+                <td className="text-left">{invoiceData?.services[0]?.id}</td>
+                <td className="text-left">{invoiceData?.services[0]?.code}</td>
+                <td className="text-left">{invoiceData?.services[0]?.unit}</td>
+                <td className="text-left">
+                  BDT {invoiceData?.services[0]?.price}
+                </td>
+                <td className="text-left">{invoiceData?.services[0]?.tax}</td>
+                <td className="text-left">
+                  BDT {invoiceData?.services[0]?.amount}
+                </td>
+              </tr>
             </thead>
           </table>
           <div className="flex justify-end">
@@ -118,13 +166,17 @@ function CreateInvoice({ isOpen, onClose }) {
               <tbody>
                 <tr className="border-b border-gray-200 text-sm">
                   <td className="text-end pb-2">Subtotal</td>
-                  <td className="text-end pb-2 font-medium">BDT 0.00</td>
+                  <td className="text-end pb-2 font-medium">
+                    BDT {invoiceData?.subtotal}
+                  </td>
                 </tr>
                 <tr>
                   <td className="text-end pt-2 font-semibold text-sm">
                     Total (BDT)
                   </td>
-                  <td className="text-end pt-2 font-bold">BDT 0.00</td>
+                  <td className="text-end pt-2 font-bold">
+                    BDT {invoiceData?.subtotal}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -133,7 +185,7 @@ function CreateInvoice({ isOpen, onClose }) {
         <footer className="text-sm">
           <p className=" font-bold">Practitioner</p>
           <p>first_name last_name</p>
-          <p>email@yahoo.com</p>
+          <p>{invoiceData?.client?.email}</p>
         </footer>
       </div>
 
@@ -142,4 +194,4 @@ function CreateInvoice({ isOpen, onClose }) {
   );
 }
 
-export default CreateInvoice;
+export default ViewInvoice;
