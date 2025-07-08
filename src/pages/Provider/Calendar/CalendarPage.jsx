@@ -8,7 +8,7 @@ import MonthlyCalendar from "./components/FullCalendar/MonthlyCalendar";
 import Sidebar from "./components/SIdebar/Sidebar";
 import DeleteAppointment from "./components/SIdebar/Appointment/appointmentDetails/DeleteAppointment";
 import { useCreateInvoiceStore } from "../../../store/provider/createInvoiceStore";
-import ViewInvoice from "./components/SIdebar/Appointment/appointmentDetails/createInvoice/ViewInvoice";
+import ViewInvoice from "../billing/viewInvoice/ViewInvoice";
 
 function CalendarPage() {
   const [openSideModal, setOpenSideModal] = useState(false);

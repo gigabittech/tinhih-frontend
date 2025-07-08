@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
+import ViewInvoice from "../viewInvoice/ViewInvoice";
 import useInvoiceStore from "../../../../store/provider/invoiceStore";
-import ViewInvoice from "../../Calendar/components/SIdebar/Appointment/appointmentDetails/createInvoice/ViewInvoice";
-
 function InvoiceTab() {
   const [viewInvoiceId, setViewInvoiceId] = useState(null);
   const { invoices, loading, fetchInvoices } = useInvoiceStore();

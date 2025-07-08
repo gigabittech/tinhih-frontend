@@ -10,9 +10,9 @@ import {
   Video,
   CheckSquare,
 } from "lucide-react";
-import CreateInvoice from "../../../../pages/Provider/billing/components/CreateInvoice";
 import Note from "./Note";
 import CreateNewClient from "../../../../pages/Provider/Calendar/components/SIdebar/ModalsToCreate/NewClient/CreateNewClient";
+import CreateInvoice from "../../../../pages/Provider/billing/createInvoice/CreateInvoice";
 
 const options = [
   { name: "Appointment", icon: <CalendarCheck size={20} /> },

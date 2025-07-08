@@ -1,42 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import Button from "../../../../components/ui/Button";
+import { RiBillFill } from "react-icons/ri";
+import { Plus, X } from "lucide-react";
+import useUserStore from "../../../../store/global/userStore";
+import useInvoice from "../services/useInvoice";
+import axiosInstance from "../../../../lib/axiosInstanceWithToken";
+import { Notify } from "../../../../components/ui/Toaster";
+import ClientSelectDropdown from "../createInvoice/components/ClientSelectDropdown";
+import SettingsInput from "../../settings/components/SettingsInput";
 import {
   Modal,
   ModalBody,
   ModalFooter,
   ModalHeader,
 } from "../../../../components/ui/Modal";
-import { RiBillFill } from "react-icons/ri";
-import { Plus, X } from "lucide-react";
-import SettingsInput from "../../settings/components/SettingsInput";
-import useUserStore from "../../../../store/global/userStore";
-import ClientSelectDropdown from "./ClientSelectDropdown";
-import axiosInstance from "../../../../lib/axiosInstanceWithToken";
+import Button from "../../../../components/ui/Button";
 import useInvoiceStore from "../../../../store/provider/invoiceStore";
 
-function CreateInvoice({ isOpen, onClose }) {
+function EditInvoice({ isOpen, onClose, invoiceId }) {
+  const { user } = useUserStore();
+  const { invoiceData: fetchedInvoice, loading } = useInvoice(invoiceId);
+  const { fetchInvoices } = useInvoiceStore();
   const [edit, setEdit] = useState(false);
+  const [invoiceData, setInvoiceData] = useState(null);
   const [clientManuallySet, setClientManuallySet] = useState(false);
   const [billToManuallySet, setBillToManuallySet] = useState(false);
 
   const today = new Date().toISOString().split("T")[0];
-  const oneWeekLater = new Date();
-  oneWeekLater.setDate(oneWeekLater.getDate() + 7);
-  const nextWeek = oneWeekLater.toISOString().split("T")[0];
-
-  const [invoiceData, setInvoiceData] = useState({
-    invoiceNumber: "000007",
-    issueDate: "Tuesday, 20 May 2025",
-    dueDate: "Tuesday, 3 Jun 2025",
-    practitioner: "Name",
-    client: "",
-    billTo: "",
-    services: [],
-  });
-
-  const { user } = useUserStore();
-  const { fetchInvoices } = useInvoiceStore();
 
   const {
     handleSubmit,
@@ -45,24 +35,46 @@ function CreateInvoice({ isOpen, onClose }) {
     clearErrors,
   } = useForm();
 
+  useEffect(() => {
+    if (fetchedInvoice) {
+      setInvoiceData({
+        invoiceNumber: fetchedInvoice.serial_number,
+        issueDate: fetchedInvoice.issue_date,
+        dueDate: fetchedInvoice.due_date,
+        practitioner: "Name",
+        client: String(fetchedInvoice.client_id),
+        billTo: String(fetchedInvoice.biller_id),
+        title: fetchedInvoice.title,
+        po_so: fetchedInvoice.po_so_number,
+        tax: fetchedInvoice.tax_id,
+        description: fetchedInvoice.description,
+        services: fetchedInvoice.services.map((s) => ({
+          date: s.date,
+          service: String(s.id),
+          price: s.price,
+          units: s.unit,
+          tax: s.taxes?.[0] || 0,
+          code: s.code,
+          amount: s.price * s.unit,
+        })),
+      });
+    }
+  }, [fetchedInvoice]);
+
   const handleServiceChange = (index, value) => {
     const updatedServices = [...invoiceData.services];
     const serviceId = Number(value);
-
     const selectedService = user?.currentWorkspace?.services.find(
       (s) => s.id === serviceId
     );
-
     if (selectedService) {
       const price = parseFloat(selectedService.price) || 0;
       updatedServices[index] = {
         ...updatedServices[index],
         service: value,
-        price: price,
-        amount: price,
+        price,
+        amount: price * (updatedServices[index].units || 1),
       };
-
-      //Only clear error here when a valid service is selected
       clearErrors("services");
     } else {
       updatedServices[index] = {
@@ -72,20 +84,21 @@ function CreateInvoice({ isOpen, onClose }) {
         amount: 0,
       };
     }
-
     setInvoiceData({ ...invoiceData, services: updatedServices });
   };
 
   const handleFieldChange = (index, field, value) => {
     const updatedServices = [...invoiceData.services];
-    updatedServices[index] = {
-      ...updatedServices[index],
-      [field]:
-        field === "units" || field === "price" || field === "tax"
-          ? parseFloat(value) || 0
-          : value,
-    };
-
+    const service = updatedServices[index];
+    const parsedValue =
+      field === "units" || field === "price" || field === "tax"
+        ? parseFloat(value) || 0
+        : value;
+    service[field] = parsedValue;
+    const price = field === "price" ? parsedValue : service.price || 0;
+    const units = field === "units" ? parsedValue : service.units || 0;
+    service.amount = price * units;
+    updatedServices[index] = service;
     setInvoiceData({ ...invoiceData, services: updatedServices });
   };
 
@@ -114,23 +127,15 @@ function CreateInvoice({ isOpen, onClose }) {
 
   const onSubmit = async () => {
     clearErrors();
-
     let hasError = false;
 
-    if (!invoiceData.client) {
-      setError("client", { type: "required", message: "Client is required" });
-      hasError = true;
-    }
-
-    if (!invoiceData.billTo) {
-      setError("billTo", { type: "required", message: "Bill To is required" });
-      hasError = true;
-    }
-
-    if (!invoiceData.services.length) {
+    if (
+      !invoiceData.services.length ||
+      invoiceData.services.every((s) => !s.service)
+    ) {
       setError("services", {
         type: "required",
-        message: "At least one service is required",
+        message: "At least one service must be selected",
       });
       hasError = true;
     }
@@ -138,15 +143,6 @@ function CreateInvoice({ isOpen, onClose }) {
     if (hasError) return;
 
     const payload = {
-      client_id: Number(invoiceData.client),
-      biller_id: Number(invoiceData.billTo),
-      title: invoiceData.title || "Invoice",
-      serial_number: invoiceData.invoiceNumber || "000007",
-      po_so_number: invoiceData.po_so || "",
-      tax_id: invoiceData.tax || null,
-      issue_date: invoiceData.issueDate || today,
-      due_date: invoiceData.dueDate || nextWeek,
-      description: invoiceData.description || "",
       services: invoiceData.services.map((s) => ({
         id: Number(s.service),
         price: Number(s.price),
@@ -155,154 +151,115 @@ function CreateInvoice({ isOpen, onClose }) {
         taxes: s.tax ? [Number(s.tax)] : [],
         code: s.code || "",
       })),
+      is_paid: false,
     };
 
     try {
-      const response = await axiosInstance.post("/invoices", payload);
-
+      const response = await axiosInstance.put(
+        `/invoices/${invoiceId}`,
+        payload
+      );
       if (response.status === 200) {
-        alert("Invoice created successfully!");
+        Notify(response.data.message);
         onClose();
-        resetInvoiceData();
-        fetchInvoices()
+        fetchInvoices();
       } else {
-        alert("Failed to create invoice. Please try again.");
+        alert("Failed to update invoice. Please try again.");
       }
     } catch (error) {
-      console.error("Error creating invoice:", error);
-      alert("An error occurred while creating the invoice.");
+      console.error("Error updating invoice:", error);
+      alert("An error occurred while updating the invoice.");
     }
   };
 
-  const resetInvoiceData = () => {
-    setEdit(false);
+  const resetAndClose = () => {
     setClientManuallySet(false);
     setBillToManuallySet(false);
     clearErrors();
-    setInvoiceData({
-      invoiceNumber: "000007",
-      issueDate: today,
-      dueDate: nextWeek,
-      practitioner: "Name",
-      client: "",
-      billTo: "",
-      services: [],
-    });
+    onClose();
   };
 
+  if (!invoiceData) return null;
+
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={() => {
-        resetInvoiceData();
-        setEdit(false);
-        onClose();
-      }}
-      className={"md:max-w-[95vw]"}
-    >
+    <Modal isOpen={isOpen} onClose={resetAndClose} className="md:max-w-[95vw]">
       <ModalHeader
-        onClose={() => {
-          resetInvoiceData();
-          setEdit(false);
-          onClose();
-        }}
-        title={"New Invoice"}
+        onClose={resetAndClose}
+        title="Edit Invoice"
         icon={<RiBillFill size={20} />}
       />
-      <ModalBody className={"overflow-y-scroll max-h-[600px] relative"}>
-        {/* Header Inputs */}
-        <div className="flex items-start justify-between">
-          <div className="grid grid-cols-3 gap-3 w-full">
-            <SettingsInput
-              label="Title"
-              defaultValue={"Invoice"}
-              isEditMode={edit}
-              register={""}
-              placeholder="Invoice"
-              name="title"
-              onChange={(e) =>
-                setInvoiceData({ ...invoiceData, title: e.target.value })
-              }
-            />
-            <SettingsInput
-              label="Invoice #"
-              isEditMode={edit}
-              defaultValue={edit ? "" : "000015"}
-              register={""}
-              placeholder="000015"
-              name="invoiceNumber"
-              onChange={(e) =>
-                setInvoiceData({
-                  ...invoiceData,
-                  invoiceNumber: e.target.value,
-                })
-              }
-            />
-            <SettingsInput
-              label="PO/SO number"
-              isEditMode={edit}
-              register={""}
-              name="po_so"
-              onChange={(e) =>
-                setInvoiceData({ ...invoiceData, po_so: e.target.value })
-              }
-            />
-            <SettingsInput
-              label="Tax ID"
-              isEditMode={edit}
-              register={""}
-              name="tax"
-              onChange={(e) =>
-                setInvoiceData({ ...invoiceData, tax: e.target.value })
-              }
-            />
-            <SettingsInput
-              label="Issue date"
-              isEditMode={edit}
-              defaultValue={today}
-              register={""}
-              type="date"
-              name="issueDate"
-              onChange={(e) =>
-                setInvoiceData({ ...invoiceData, issueDate: e.target.value })
-              }
-            />
-            <SettingsInput
-              label="Due date"
-              isEditMode={edit}
-              defaultValue={nextWeek}
-              register={""}
-              type="date"
-              name="dueDate"
-              onChange={(e) =>
-                setInvoiceData({ ...invoiceData, dueDate: e.target.value })
-              }
-            />
-          </div>
-          <button
-            onClick={() => setEdit(true)}
-            className={` text-primary-800 font-bold cursor-pointer absolute right-5 ${
-              edit ? "hidden" : ""
-            }`}
-          >
-            Edit
-          </button>
+      <ModalBody className="overflow-y-scroll max-h-[600px] relative">
+        <div className="grid grid-cols-3 gap-3 w-full">
+          <SettingsInput
+            label="Title"
+            isEditMode={edit}
+            name="title"
+            defaultValue={invoiceData.title}
+            onChange={(e) =>
+              setInvoiceData({ ...invoiceData, title: e.target.value })
+            }
+          />
+          <SettingsInput
+            label="Invoice #"
+            isEditMode={edit}
+            name="invoiceNumber"
+            defaultValue={invoiceData.invoiceNumber}
+            onChange={(e) =>
+              setInvoiceData({ ...invoiceData, invoiceNumber: e.target.value })
+            }
+          />
+          <SettingsInput
+            label="PO/SO number"
+            isEditMode={edit}
+            name="po_so"
+            defaultValue={invoiceData.po_so}
+            onChange={(e) =>
+              setInvoiceData({ ...invoiceData, po_so: e.target.value })
+            }
+          />
+          <SettingsInput
+            label="Tax ID"
+            isEditMode={edit}
+            name="tax"
+            defaultValue={invoiceData.tax}
+            onChange={(e) =>
+              setInvoiceData({ ...invoiceData, tax: e.target.value })
+            }
+          />
+          <SettingsInput
+            label="Issue date"
+            isEditMode={edit}
+            type="date"
+            name="issueDate"
+            defaultValue={invoiceData.issueDate}
+            onChange={(e) =>
+              setInvoiceData({ ...invoiceData, issueDate: e.target.value })
+            }
+          />
+          <SettingsInput
+            label="Due date"
+            isEditMode={edit}
+            type="date"
+            name="dueDate"
+            defaultValue={invoiceData.dueDate}
+            onChange={(e) =>
+              setInvoiceData({ ...invoiceData, dueDate: e.target.value })
+            }
+          />
         </div>
 
-        {/* Description */}
         <div className="py-5">
           <SettingsInput
             label="Description"
             isEditMode={edit}
-            register={""}
             name="description"
+            defaultValue={invoiceData.description}
             onChange={(e) =>
               setInvoiceData({ ...invoiceData, description: e.target.value })
             }
           />
         </div>
 
-        {/* Client and Bill To */}
         <div className="grid grid-cols-2 gap-4 mb-6 py-5 px-3 bg-gray-100">
           <ClientSelectDropdown
             label="Client or contact"
@@ -316,9 +273,8 @@ function CreateInvoice({ isOpen, onClose }) {
                 client: value,
                 billTo: billToManuallySet ? prev.billTo : value,
               }));
-
               clearErrors("client");
-              if (!billToManuallySet) clearErrors("billTo"); //  Also clear billTo error
+              if (!billToManuallySet) clearErrors("billTo");
             }}
             error={errors.client?.message}
           />
@@ -335,15 +291,13 @@ function CreateInvoice({ isOpen, onClose }) {
                 billTo: value,
                 client: clientManuallySet ? prev.client : value,
               }));
-
               clearErrors("billTo");
-              if (!clientManuallySet) clearErrors("client"); //  Also clear client error
+              if (!clientManuallySet) clearErrors("client");
             }}
             error={errors.billTo?.message}
           />
         </div>
 
-        {/* Services Table */}
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -393,7 +347,9 @@ function CreateInvoice({ isOpen, onClose }) {
                         handleServiceChange(index, e.target.value)
                       }
                     >
-                      <option value="">Select service</option>
+                      <option value="" disabled>
+                        Select service
+                      </option>
                       {user?.currentWorkspace?.services?.map((s) => (
                         <option key={s.id} value={s.id}>
                           {s.service_name}
@@ -476,19 +432,14 @@ function CreateInvoice({ isOpen, onClose }) {
       <ModalFooter className="justify-end">
         <div className="w-full sm:w-auto flex flex-col-reverse sm:flex-row items-center gap-3">
           <Button
-            type="button"
             variant="outline"
+            onClick={resetAndClose}
             className="w-full sm:w-auto"
-            onClick={onClose}
           >
             Cancel
           </Button>
-          <Button
-            type="button"
-            className="w-full sm:w-auto"
-            onClick={handleSubmit(onSubmit)}
-          >
-            Create
+          <Button onClick={handleSubmit(onSubmit)} className="w-full sm:w-auto">
+            Save
           </Button>
         </div>
       </ModalFooter>
@@ -496,4 +447,4 @@ function CreateInvoice({ isOpen, onClose }) {
   );
 }
 
-export default CreateInvoice;
+export default EditInvoice;

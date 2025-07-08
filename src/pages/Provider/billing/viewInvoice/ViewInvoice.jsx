@@ -4,40 +4,17 @@ import { FaFileInvoice } from "react-icons/fa";
 import { HiCurrencyDollar } from "react-icons/hi2";
 import { BiSolidPencil } from "react-icons/bi";
 import { RxDotsVertical } from "react-icons/rx";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import EditInvoice from "./EditInvoice";
-import DropDown from "./DropDown";
-import axiosInstance from "../../../../../../../../lib/axiosInstanceWithToken";
+import DropDown from "./components/DropDown";
+import useInvoice from "../services/useInvoice";
 
 function ViewInvoice({ isOpen, onClose, invoice_id }) {
   const [editInvoice, setEditInvoice] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [invoiceData, setInvoiceData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { invoiceData, loading } = useInvoice(invoice_id);
 
-  useEffect(() => {
-    if (!isOpen || !invoice_id) return;
-
-    const fetchInvoice = async () => {
-      setLoading(true);
-      try {
-        const res = await axiosInstance.get(`/invoices/${invoice_id}`);
-        if (res.status === 200) {
-          setInvoiceData(res?.data.invoice);
-        }
-      } catch (error) {
-        console.error("Error fetching invoice:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchInvoice();
-  }, [isOpen, invoice_id]);
-
-  if (loading) {
-    return;
-  }
+  if (loading) return null;
 
   return (
     <div
@@ -189,7 +166,14 @@ function ViewInvoice({ isOpen, onClose, invoice_id }) {
         </footer>
       </div>
 
-      <EditInvoice isOpen={editInvoice} onClose={() => setEditInvoice(false)} />
+      <EditInvoice
+        isOpen={editInvoice}
+        onClose={() => {
+          setEditInvoice(false);
+          onClose()
+        }}
+        invoiceId={invoice_id}
+      />
     </div>
   );
 }
