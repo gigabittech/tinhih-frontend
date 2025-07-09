@@ -53,7 +53,7 @@ function ViewInvoice({ isOpen, onClose, invoice_id }) {
             )}
           </div>
           <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 bg-primary-600 font-bold text-white px-3 py-2 rounded  cursor-pointer">
+            <button className="flex items-center gap-2 bg-primary-600 font-bold text-white px-3 py-2 rounded  cursor-not-allowed">
               <HiCurrencyDollar size={20} />
               Mark as paid
             </button>
@@ -73,6 +73,9 @@ function ViewInvoice({ isOpen, onClose, invoice_id }) {
               <DropDown
                 isOpen={isDropdownOpen}
                 onClose={() => setIsDropdownOpen(false)}
+                serial_number={invoiceData.serial_number}
+                id={invoiceData.id}
+                onCloseViewInvoice={onClose}
               />
             </div>
           </div>
