@@ -8,6 +8,7 @@ import { useState } from "react";
 import EditInvoice from "./EditInvoice";
 import DropDown from "./components/DropDown";
 import useInvoice from "../services/useInvoice";
+import dateFormatToDDMMMYYYY from "../../../../hook/dateFormatToDDMMMYYYY";
 
 function ViewInvoice({ isOpen, onClose, invoice_id }) {
   const [editInvoice, setEditInvoice] = useState(false);
@@ -104,11 +105,11 @@ function ViewInvoice({ isOpen, onClose, invoice_id }) {
               </h6>
               <p className="my-2">
                 <span className=" font-bold">Date issued </span>&nbsp;{" "}
-                {invoiceData?.issue_date}
+                {dateFormatToDDMMMYYYY(invoiceData?.issue_date)}
               </p>
               <p>
                 <span className=" font-bold">Due date </span>&nbsp;{" "}
-                {invoiceData?.due_date}
+                {dateFormatToDDMMMYYYY(invoiceData?.due_date)}
               </p>
             </div>
           </div>
@@ -123,21 +124,22 @@ function ViewInvoice({ isOpen, onClose, invoice_id }) {
                 <th className="text-left">Tax</th>
                 <th className="text-left">Amount</th>
               </tr>
-              <tr className="border-b border-gray-200">
-                <td className="ps-5 py-4 text-left"> </td>
-                <td className="text-left">{invoiceData?.services[0]?.id}</td>
-                <td className="text-left">{invoiceData?.services[0]?.code}</td>
-                <td className="text-left">{invoiceData?.services[0]?.unit}</td>
-                <td className="text-left">
-                  BDT {invoiceData?.services[0]?.price}
-                </td>
-                <td className="text-left">{invoiceData?.services[0]?.tax}</td>
-                <td className="text-left">
-                  BDT {invoiceData?.services[0]?.amount}
-                </td>
-              </tr>
             </thead>
+            <tbody>
+              {invoiceData?.services?.map((service, index) => (
+                <tr key={index} className="border-b border-gray-200">
+                  <td className="ps-5 py-4 text-left">{service.date || "-"}</td>
+                  <td className="text-left">{service.id}</td>
+                  <td className="text-left">{service.code}</td>
+                  <td className="text-left">{service.unit}</td>
+                  <td className="text-left">BDT {service.price}</td>
+                  <td className="text-left">{service.tax}</td>
+                  <td className="text-left">BDT {service.amount}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
+
           <div className="flex justify-end">
             <table className=" w-[300px]">
               <tbody>
@@ -170,9 +172,9 @@ function ViewInvoice({ isOpen, onClose, invoice_id }) {
         isOpen={editInvoice}
         onClose={() => {
           setEditInvoice(false);
-          onClose()
         }}
         invoiceId={invoice_id}
+        onCloseViewInvoice={onClose}
       />
     </div>
   );

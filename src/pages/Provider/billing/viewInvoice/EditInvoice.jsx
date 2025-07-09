@@ -16,15 +16,14 @@ import {
 } from "../../../../components/ui/Modal";
 import Button from "../../../../components/ui/Button";
 import useInvoiceStore from "../../../../store/provider/invoiceStore";
+import dateFormatToDDMMMYYYY from "../../../../hook/dateFormatToDDMMMYYYY";
 
-function EditInvoice({ isOpen, onClose, invoiceId }) {
+function EditInvoice({ isOpen, onClose, invoiceId, onCloseViewInvoice }) {
   const { user } = useUserStore();
-  const { invoiceData: fetchedInvoice, loading } = useInvoice(invoiceId);
+  const { invoiceData: fetchedInvoice } = useInvoice(invoiceId);
   const { fetchInvoices } = useInvoiceStore();
   const [edit, setEdit] = useState(false);
   const [invoiceData, setInvoiceData] = useState(null);
-  const [clientManuallySet, setClientManuallySet] = useState(false);
-  const [billToManuallySet, setBillToManuallySet] = useState(false);
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -42,15 +41,15 @@ function EditInvoice({ isOpen, onClose, invoiceId }) {
         issueDate: fetchedInvoice.issue_date,
         dueDate: fetchedInvoice.due_date,
         practitioner: "Name",
-        client: String(fetchedInvoice.client_id),
-        billTo: String(fetchedInvoice.biller_id),
+        client: String(fetchedInvoice.client.email),
+        billTo: String(fetchedInvoice.biller.email),
         title: fetchedInvoice.title,
         po_so: fetchedInvoice.po_so_number,
         tax: fetchedInvoice.tax_id,
         description: fetchedInvoice.description,
         services: fetchedInvoice.services.map((s) => ({
           date: s.date,
-          service: String(s.id),
+          id: s.service_id,
           price: s.price,
           units: s.unit,
           tax: s.taxes?.[0] || 0,
@@ -71,7 +70,7 @@ function EditInvoice({ isOpen, onClose, invoiceId }) {
       const price = parseFloat(selectedService.price) || 0;
       updatedServices[index] = {
         ...updatedServices[index],
-        service: value,
+        id: value,
         price,
         amount: price * (updatedServices[index].units || 1),
       };
@@ -79,7 +78,7 @@ function EditInvoice({ isOpen, onClose, invoiceId }) {
     } else {
       updatedServices[index] = {
         ...updatedServices[index],
-        service: "",
+        id: 0,
         price: 0,
         amount: 0,
       };
@@ -109,7 +108,7 @@ function EditInvoice({ isOpen, onClose, invoiceId }) {
         ...invoiceData.services,
         {
           date: today,
-          service: "",
+          id: 0,
           code: "",
           units: 1,
           price: 0,
@@ -131,7 +130,7 @@ function EditInvoice({ isOpen, onClose, invoiceId }) {
 
     if (
       !invoiceData.services.length ||
-      invoiceData.services.every((s) => !s.service)
+      invoiceData.services.every((s) => !s.id)
     ) {
       setError("services", {
         type: "required",
@@ -144,7 +143,7 @@ function EditInvoice({ isOpen, onClose, invoiceId }) {
 
     const payload = {
       services: invoiceData.services.map((s) => ({
-        id: Number(s.service),
+        id: Number(s.id),
         price: Number(s.price),
         unit: Number(s.units),
         date: s.date,
@@ -163,6 +162,7 @@ function EditInvoice({ isOpen, onClose, invoiceId }) {
         Notify(response.data.message);
         onClose();
         fetchInvoices();
+        onCloseViewInvoice()
       } else {
         alert("Failed to update invoice. Please try again.");
       }
@@ -173,8 +173,6 @@ function EditInvoice({ isOpen, onClose, invoiceId }) {
   };
 
   const resetAndClose = () => {
-    setClientManuallySet(false);
-    setBillToManuallySet(false);
     clearErrors();
     onClose();
   };
@@ -231,7 +229,7 @@ function EditInvoice({ isOpen, onClose, invoiceId }) {
             isEditMode={edit}
             type="date"
             name="issueDate"
-            defaultValue={invoiceData.issueDate}
+            defaultValue={dateFormatToDDMMMYYYY(invoiceData.issueDate)}
             onChange={(e) =>
               setInvoiceData({ ...invoiceData, issueDate: e.target.value })
             }
@@ -241,7 +239,7 @@ function EditInvoice({ isOpen, onClose, invoiceId }) {
             isEditMode={edit}
             type="date"
             name="dueDate"
-            defaultValue={invoiceData.dueDate}
+            defaultValue={dateFormatToDDMMMYYYY(invoiceData.dueDate)}
             onChange={(e) =>
               setInvoiceData({ ...invoiceData, dueDate: e.target.value })
             }
@@ -260,42 +258,25 @@ function EditInvoice({ isOpen, onClose, invoiceId }) {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-6 py-5 px-3 bg-gray-100">
-          <ClientSelectDropdown
-            label="Client or contact"
-            name="client"
-            value={invoiceData.client}
-            options={user?.currentWorkspace?.clients || []}
-            onChange={(value) => {
-              setClientManuallySet(true);
-              setInvoiceData((prev) => ({
-                ...prev,
-                client: value,
-                billTo: billToManuallySet ? prev.billTo : value,
-              }));
-              clearErrors("client");
-              if (!billToManuallySet) clearErrors("billTo");
-            }}
-            error={errors.client?.message}
-          />
-
-          <ClientSelectDropdown
-            label="Bill to"
-            name="billTo"
-            value={invoiceData.billTo}
-            options={user?.currentWorkspace?.clients || []}
-            onChange={(value) => {
-              setBillToManuallySet(true);
-              setInvoiceData((prev) => ({
-                ...prev,
-                billTo: value,
-                client: clientManuallySet ? prev.client : value,
-              }));
-              clearErrors("billTo");
-              if (!clientManuallySet) clearErrors("client");
-            }}
-            error={errors.billTo?.message}
-          />
+        <div className="grid grid-cols-2 gap-4 mb-6 py-5 px-3 bg-gray-100 text-sm">
+          <div className="grid">
+            <label htmlFor="">Client or contact</label>
+            <input
+              type="text"
+              value={invoiceData.client}
+              className="bg-white rounded border border-gray-300 px-3 py-2 mt-1 cursor-not-allowed"
+              disabled
+            />
+          </div>
+          <div className="grid">
+            <label htmlFor="">Bill to</label>
+            <input
+              type="text"
+              value={invoiceData.billTo}
+              className="bg-white rounded border border-gray-300 px-3 py-2 mt-1 cursor-not-allowed"
+              disabled
+            />
+          </div>
         </div>
 
         <div className="overflow-x-auto">
@@ -342,7 +323,7 @@ function EditInvoice({ isOpen, onClose, invoiceId }) {
                   <td className="px-4 py-2 whitespace-nowrap">
                     <select
                       className="p-1 outline-none rounded w-full"
-                      value={service.service}
+                      value={Number(service.id)}
                       onChange={(e) =>
                         handleServiceChange(index, e.target.value)
                       }
