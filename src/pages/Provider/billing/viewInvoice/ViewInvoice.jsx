@@ -73,8 +73,8 @@ function ViewInvoice({ isOpen, onClose, invoice_id }) {
               <DropDown
                 isOpen={isDropdownOpen}
                 onClose={() => setIsDropdownOpen(false)}
-                serial_number={invoiceData.serial_number}
-                id={invoiceData.id}
+                serial_number={invoiceData?.serial_number}
+                id={invoiceData?.id}
                 onCloseViewInvoice={onClose}
               />
             </div>

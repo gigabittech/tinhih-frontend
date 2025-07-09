@@ -51,7 +51,7 @@ function AppointmentDetails({ id, setDeletePopupOpen }) {
               <div className="flex items-center gap-1 text-sm">
                 <p>{dateFormat(details?.date)}</p>
                 <BsDot />
-                <p>{convertTo12HourFormat(details.time)}</p>
+                <p>{convertTo12HourFormat(details?.time)}</p>
               </div>
             </div>
           </div>
@@ -76,12 +76,12 @@ function AppointmentDetails({ id, setDeletePopupOpen }) {
                 a.role === "provider" ? -1 : b.role === "provider" ? 1 : 0
               )
               .map((attendee) => (
-                <div key={attendee.id} className="flex items-center gap-1">
-                  <Avatar name={attendee.email} />
-                  {attendee.email}
-                  {attendee.role === "provider"
+                <div key={attendee?.id} className="flex items-center gap-1">
+                  <Avatar name={attendee?.email} />
+                  {attendee?.email}
+                  {attendee?.role === "provider"
                     ? " (you)"
-                    : " - " + attendee.role}
+                    : " - " + attendee?.role}
                 </div>
               ))}
           </div>
