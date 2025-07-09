@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import ViewInvoice from "../viewInvoice/ViewInvoice";
 import useInvoiceStore from "../../../../store/provider/invoiceStore";
-import ViewInvoice from "../../Calendar/components/SIdebar/Appointment/appointmentDetails/createInvoice/ViewInvoice";
-
+import dateFormatToDDMMMYYYY from "../../../../hook/dateFormatToDDMMMYYYY";
 function InvoiceTab() {
   const [viewInvoiceId, setViewInvoiceId] = useState(null);
   const { invoices, loading, fetchInvoices } = useInvoiceStore();
@@ -20,7 +20,7 @@ function InvoiceTab() {
       />
 
       {/* --------- Invoice Stat Boxes --------- */}
-      <header className="py-5 flex gap-5 px-10">
+      <header className="py-5 flex gap-5 px-10 opacity-50">
         {[...Array(4)].map((_, i) => (
           <div
             key={i}
@@ -42,11 +42,11 @@ function InvoiceTab() {
         <h2 className="text-lg font-semibold whitespace-nowrap">
           {invoices?.length} Invoices
         </h2>
-        <input
+        {/* <input
           type="text"
           placeholder="Search invoices"
           className="w-96 border rounded px-3 py-2"
-        />
+        /> */}
       </div>
 
       {/* --------- Invoice Table --------- */}
@@ -85,7 +85,7 @@ function InvoiceTab() {
                   key={invoice.id || index}
                   className="border-t border-[#d7d7d7] hover:bg-[#f2f2f2] cursor-pointer"
                 >
-                  <td className="ps-10 py-3">{invoice.issue_date || "-"}</td>
+                  <td className="ps-10 py-3">{dateFormatToDDMMMYYYY(invoice.issue_date) || "-"}</td>
                   <td className="p-2">{invoice?.serial_number || "-"}</td>
                   <td className="p-2">{invoice?.client.email || "-"}</td>
                   <td className="p-2">{invoice?.biller.email || "-"}</td>
@@ -94,7 +94,7 @@ function InvoiceTab() {
                       "-"}
                   </td>
                   <td className="p-2">BDT {invoice?.subtotal || "-"}</td>
-                  <td className="p-2">{invoice?.due_date || "-"}</td>
+                  <td className="p-2">{dateFormatToDDMMMYYYY(invoice?.due_date) || "-"}</td>
                   <td className="p-2">
                     <span
                       className={`px-2 py-0.5 text-xs font-semibold rounded-full ${

@@ -11,9 +11,10 @@ import { RiBillFill } from "react-icons/ri";
 import { Plus, X } from "lucide-react";
 import SettingsInput from "../../settings/components/SettingsInput";
 import useUserStore from "../../../../store/global/userStore";
-import ClientSelectDropdown from "./ClientSelectDropdown";
 import axiosInstance from "../../../../lib/axiosInstanceWithToken";
 import useInvoiceStore from "../../../../store/provider/invoiceStore";
+import { Notify } from "../../../../components/ui/Toaster";
+import ClientSelectDropdown from "./components/ClientSelectDropdown";
 
 function CreateInvoice({ isOpen, onClose }) {
   const [edit, setEdit] = useState(false);
@@ -78,14 +79,21 @@ function CreateInvoice({ isOpen, onClose }) {
 
   const handleFieldChange = (index, field, value) => {
     const updatedServices = [...invoiceData.services];
-    updatedServices[index] = {
-      ...updatedServices[index],
-      [field]:
-        field === "units" || field === "price" || field === "tax"
-          ? parseFloat(value) || 0
-          : value,
-    };
+    const service = updatedServices[index];
 
+    const parsedValue =
+      field === "units" || field === "price" || field === "tax"
+        ? parseFloat(value) || 0
+        : value;
+
+    service[field] = parsedValue;
+
+    // Recalculate amount
+    const price = field === "price" ? parsedValue : service.price || 0;
+    const units = field === "units" ? parsedValue : service.units || 0;
+    service.amount = price * units;
+
+    updatedServices[index] = service;
     setInvoiceData({ ...invoiceData, services: updatedServices });
   };
 
@@ -127,10 +135,13 @@ function CreateInvoice({ isOpen, onClose }) {
       hasError = true;
     }
 
-    if (!invoiceData.services.length) {
+    if (
+      !invoiceData.services.length ||
+      invoiceData.services.every((s) => !s.service)
+    ) {
       setError("services", {
         type: "required",
-        message: "At least one service is required",
+        message: "At least one service must be selected",
       });
       hasError = true;
     }
@@ -161,10 +172,10 @@ function CreateInvoice({ isOpen, onClose }) {
       const response = await axiosInstance.post("/invoices", payload);
 
       if (response.status === 200) {
-        alert("Invoice created successfully!");
+        Notify(response.data.message);
         onClose();
         resetInvoiceData();
-        fetchInvoices()
+        fetchInvoices();
       } else {
         alert("Failed to create invoice. Please try again.");
       }
@@ -393,7 +404,9 @@ function CreateInvoice({ isOpen, onClose }) {
                         handleServiceChange(index, e.target.value)
                       }
                     >
-                      <option value="">Select service</option>
+                      <option value="" disabled>
+                        Select service
+                      </option>
                       {user?.currentWorkspace?.services?.map((s) => (
                         <option key={s.id} value={s.id}>
                           {s.service_name}
@@ -479,7 +492,11 @@ function CreateInvoice({ isOpen, onClose }) {
             type="button"
             variant="outline"
             className="w-full sm:w-auto"
-            onClick={onClose}
+            onClick={() => {
+              resetInvoiceData();
+              setEdit(false);
+              onClose();
+            }}
           >
             Cancel
           </Button>

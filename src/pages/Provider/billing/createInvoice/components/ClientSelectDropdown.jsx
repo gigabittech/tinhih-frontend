@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, X } from "lucide-react";
-import Avatar from "../../../../components/ui/Avatar";
+import Avatar from "../../../../../components/ui/Avatar";
 
 const ClientSelectDropdown = ({ label, value, onChange, options, error }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -138,4 +138,3 @@ const ClientSelectDropdown = ({ label, value, onChange, options, error }) => {
 };
 
 export default ClientSelectDropdown;
-

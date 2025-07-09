@@ -1,7 +1,7 @@
 import { CircleDollarSign, Plus } from "lucide-react";
 import { useState } from "react";
 import InvoiceTab from "./components/InvoiceTab";
-import CreateInvoice from "./components/CreateInvoice";
+import CreateInvoice from "./createInvoice/CreateInvoice";
 
 function Billing() {
   const [tab, setTab] = useState(0);

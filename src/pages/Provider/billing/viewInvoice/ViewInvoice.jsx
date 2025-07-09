@@ -4,40 +4,18 @@ import { FaFileInvoice } from "react-icons/fa";
 import { HiCurrencyDollar } from "react-icons/hi2";
 import { BiSolidPencil } from "react-icons/bi";
 import { RxDotsVertical } from "react-icons/rx";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import EditInvoice from "./EditInvoice";
-import DropDown from "./DropDown";
-import axiosInstance from "../../../../../../../../lib/axiosInstanceWithToken";
+import DropDown from "./components/DropDown";
+import useInvoice from "../services/useInvoice";
+import dateFormatToDDMMMYYYY from "../../../../hook/dateFormatToDDMMMYYYY";
 
 function ViewInvoice({ isOpen, onClose, invoice_id }) {
   const [editInvoice, setEditInvoice] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [invoiceData, setInvoiceData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { invoiceData, loading } = useInvoice(invoice_id);
 
-  useEffect(() => {
-    if (!isOpen || !invoice_id) return;
-
-    const fetchInvoice = async () => {
-      setLoading(true);
-      try {
-        const res = await axiosInstance.get(`/invoices/${invoice_id}`);
-        if (res.status === 200) {
-          setInvoiceData(res?.data.invoice);
-        }
-      } catch (error) {
-        console.error("Error fetching invoice:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchInvoice();
-  }, [isOpen, invoice_id]);
-
-  if (loading) {
-    return;
-  }
+  if (loading) return null;
 
   return (
     <div
@@ -75,7 +53,7 @@ function ViewInvoice({ isOpen, onClose, invoice_id }) {
             )}
           </div>
           <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 bg-primary-600 font-bold text-white px-3 py-2 rounded  cursor-pointer">
+            <button className="flex items-center gap-2 bg-primary-600 font-bold text-white px-3 py-2 rounded  cursor-not-allowed">
               <HiCurrencyDollar size={20} />
               Mark as paid
             </button>
@@ -95,6 +73,9 @@ function ViewInvoice({ isOpen, onClose, invoice_id }) {
               <DropDown
                 isOpen={isDropdownOpen}
                 onClose={() => setIsDropdownOpen(false)}
+                serial_number={invoiceData.serial_number}
+                id={invoiceData.id}
+                onCloseViewInvoice={onClose}
               />
             </div>
           </div>
@@ -127,11 +108,11 @@ function ViewInvoice({ isOpen, onClose, invoice_id }) {
               </h6>
               <p className="my-2">
                 <span className=" font-bold">Date issued </span>&nbsp;{" "}
-                {invoiceData?.issue_date}
+                {dateFormatToDDMMMYYYY(invoiceData?.issue_date)}
               </p>
               <p>
                 <span className=" font-bold">Due date </span>&nbsp;{" "}
-                {invoiceData?.due_date}
+                {dateFormatToDDMMMYYYY(invoiceData?.due_date)}
               </p>
             </div>
           </div>
@@ -146,21 +127,22 @@ function ViewInvoice({ isOpen, onClose, invoice_id }) {
                 <th className="text-left">Tax</th>
                 <th className="text-left">Amount</th>
               </tr>
-              <tr className="border-b border-gray-200">
-                <td className="ps-5 py-4 text-left"> </td>
-                <td className="text-left">{invoiceData?.services[0]?.id}</td>
-                <td className="text-left">{invoiceData?.services[0]?.code}</td>
-                <td className="text-left">{invoiceData?.services[0]?.unit}</td>
-                <td className="text-left">
-                  BDT {invoiceData?.services[0]?.price}
-                </td>
-                <td className="text-left">{invoiceData?.services[0]?.tax}</td>
-                <td className="text-left">
-                  BDT {invoiceData?.services[0]?.amount}
-                </td>
-              </tr>
             </thead>
+            <tbody>
+              {invoiceData?.services?.map((service, index) => (
+                <tr key={index} className="border-b border-gray-200">
+                  <td className="ps-5 py-4 text-left">{service.date || "-"}</td>
+                  <td className="text-left">{service.id}</td>
+                  <td className="text-left">{service.code}</td>
+                  <td className="text-left">{service.unit}</td>
+                  <td className="text-left">BDT {service.price}</td>
+                  <td className="text-left">{service.tax}</td>
+                  <td className="text-left">BDT {service.amount}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
+
           <div className="flex justify-end">
             <table className=" w-[300px]">
               <tbody>
@@ -189,7 +171,14 @@ function ViewInvoice({ isOpen, onClose, invoice_id }) {
         </footer>
       </div>
 
-      <EditInvoice isOpen={editInvoice} onClose={() => setEditInvoice(false)} />
+      <EditInvoice
+        isOpen={editInvoice}
+        onClose={() => {
+          setEditInvoice(false);
+        }}
+        invoiceId={invoice_id}
+        onCloseViewInvoice={onClose}
+      />
     </div>
   );
 }
