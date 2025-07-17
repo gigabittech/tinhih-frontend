@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Modal,
   ModalBody,
@@ -9,10 +9,22 @@ import Button from "../../../../../components/ui/Button";
 import axiosInstance from "../../../../../lib/axiosInstanceWithToken";
 import { Notify } from "../../../../../components/ui/Toaster";
 import useInvoiceStore from "../../../../../store/provider/invoiceStore";
+import useInvoice from "../../services/useInvoice";
+import InvoicePreview from "./InvoicePreview";
+import html2pdf from "html2pdf.js";
 
-function DropDown({ isOpen, onClose, id, serial_number, onCloseViewInvoice }) {
+function DropDown({
+  isOpen,
+  onClose,
+  id,
+  serial_number,
+  onCloseViewInvoice,
+  currentWorkspace,
+}) {
   const [openDelete, setOpenDelete] = useState(false);
   const { fetchInvoices } = useInvoiceStore();
+  const { invoiceData, loading } = useInvoice(id);
+  const elementRef = useRef();
 
   const handleDelete = async () => {
     try {
@@ -22,7 +34,7 @@ function DropDown({ isOpen, onClose, id, serial_number, onCloseViewInvoice }) {
         setOpenDelete(false);
         onClose();
         fetchInvoices();
-        onCloseViewInvoice()
+        onCloseViewInvoice();
       }
     } catch (error) {
       console.error("Delete error:", error);
@@ -30,8 +42,34 @@ function DropDown({ isOpen, onClose, id, serial_number, onCloseViewInvoice }) {
     }
   };
 
+  const handleDownloadPDF = () => {
+    const element = elementRef.current;
+
+    html2pdf()
+      .set({
+        margin: 1,
+
+        filename: `invoice-${serial_number}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 1 },
+        jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+      })
+      .from(element)
+      .save();
+  };
+
+  if (loading) {
+    return;
+  }
   return (
     <div>
+      <div className="hidden" ref={elementRef}>
+        <InvoicePreview
+          currentWorkspace={currentWorkspace}
+          invoiceData={invoiceData}
+          className="w-full"
+        />
+      </div>
       {isOpen && <div onClick={onClose} className=" fixed inset-0"></div>}
       <div
         className={
@@ -40,7 +78,9 @@ function DropDown({ isOpen, onClose, id, serial_number, onCloseViewInvoice }) {
             : "hidden"
         }
       >
-        <p className="px-3 cursor-not-allowed">Download</p>
+        <p onClick={() => handleDownloadPDF()} className="px-3 cursor-pointer">
+          Download
+        </p>
         <p className="px-3 cursor-not-allowed">Print</p>
         <p className="px-3 cursor-not-allowed">Email</p>
         <p className="px-3 cursor-not-allowed">Mark as void</p>

@@ -11,8 +11,8 @@ import {
   CheckSquare,
 } from "lucide-react";
 import Note from "./Note";
-import CreateNewClient from "../../../../pages/Provider/Calendar/components/SIdebar/ModalsToCreate/NewClient/CreateNewClient";
 import CreateInvoice from "../../../../pages/Provider/billing/createInvoice/CreateInvoice";
+import CreateNewClient from "../../../../pages/Provider/clients/CreateNewClient";
 
 const options = [
   { name: "Appointment", icon: <CalendarCheck size={20} /> },

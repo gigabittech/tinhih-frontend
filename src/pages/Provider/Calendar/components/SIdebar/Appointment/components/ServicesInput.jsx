@@ -61,7 +61,7 @@ function ServicesInput({
                   <div className="flex text-sm items-center text-gray-500">
                     <p>{service.duration} mins</p>
                     <LuDot />
-                    <p>{"BDT" + " " + service.price}</p>
+                    <p>{"USD" + " " + service.price}</p>
                   </div>
                 </div>
               );
@@ -83,7 +83,7 @@ function ServicesInput({
               </div>
               <div className="flex items-center gap-5">
                 <p className="text-sm">
-                  {"BDT" + " " + service.price}{" "}
+                  {"USD" + " " + service.price}{" "}
                 </p>
                 <button
                   onClick={() => handleRemoveService(service.id)}

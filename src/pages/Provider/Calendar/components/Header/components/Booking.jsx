@@ -17,7 +17,7 @@ import useServiceStore from "../../../../../../store/provider/serviceStore";
 import useTeamMemberStore from "../../../../../../store/provider/teamMemberStore";
 import SelectDropdown from "../../../../../../components/ui/SelectDropdown";
 
-function Booking() {
+function Booking({ button }) {
   const [openBookingPopup, setOpenBookingPopup] = useState(false);
   const [activeTab, setActiveTab] = useState("link");
   const [copiedLink, setCopiedLink] = useState("");
@@ -28,7 +28,7 @@ function Booking() {
   const { user } = useUserStore();
   const workspace_id = user?.currentWorkspace?.id;
   const businessName = user?.currentWorkspace?.businessName;
-  
+
   const data = JSON.stringify({
     uid: user?.id,
     workspace_id: workspace_id,
@@ -62,15 +62,7 @@ function Booking() {
 
   return (
     <div>
-      <Button
-        onClick={() => setOpenBookingPopup(true)}
-        variant="outline"
-        size="header"
-        className="hidden lg:flex"
-      >
-        <Link2 size={18} />
-        <span>Booking</span>
-      </Button>
+      <div onClick={() => setOpenBookingPopup(true)}>{button}</div>
       <Modal onClose={handleClose} isOpen={openBookingPopup}>
         <ModalHeader
           icon={<IoLink size={22} />}

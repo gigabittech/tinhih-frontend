@@ -29,7 +29,7 @@ function InvoiceTab() {
             <span className="absolute top-2 right-2 bg-amber-100 text-primary-600 text-xs font-semibold px-2 py-0.5 rounded">
               Bkash
             </span>
-            <div className="text-2xl font-bold text-primary-800">120BDT</div>
+            <div className="text-2xl font-bold text-primary-800">120 USD</div>
             <div className="text-sm text-gray-600 mt-1 font-medium">
               In Transit
             </div>
@@ -42,11 +42,12 @@ function InvoiceTab() {
         <h2 className="text-lg font-semibold whitespace-nowrap">
           {invoices?.length} Invoices
         </h2>
-        {/* <input
+        <input
           type="text"
           placeholder="Search invoices"
-          className="w-96 border rounded px-3 py-2"
-        /> */}
+          className="w-96 border rounded px-3 py-2 cursor-not-allowed"
+          disabled
+        />
       </div>
 
       {/* --------- Invoice Table --------- */}
@@ -62,7 +63,7 @@ function InvoiceTab() {
               <th className="p-2">Price</th>
               <th className="p-2">Due date</th>
               <th className="p-2">Status</th>
-              <th className="p-2">Date received</th>
+              <th className="p-2 opacity-50 cursor-not-allowed">Date received</th>
             </tr>
           </thead>
           <tbody className="bg-white">
@@ -93,7 +94,7 @@ function InvoiceTab() {
                     {invoice.services?.map((s) => s?.service_id).join(", ") ||
                       "-"}
                   </td>
-                  <td className="p-2">BDT {invoice?.subtotal || "-"}</td>
+                  <td className="p-2">USD {invoice?.subtotal || "-"}</td>
                   <td className="p-2">{dateFormatToDDMMMYYYY(invoice?.due_date) || "-"}</td>
                   <td className="p-2">
                     <span

@@ -38,6 +38,8 @@ function AppointmentDetails({ id, setDeletePopupOpen }) {
     return;
   }
 
+  console.log(details);
+
   return (
     <div className="relative h-screen flex flex-col">
       <div className="py-5 px-7 border-b border-gray-200 bg-white">
@@ -47,7 +49,7 @@ function AppointmentDetails({ id, setDeletePopupOpen }) {
               <IoMdCalendar size={20} className="text-gray-600" />
             </span>
             <div>
-              <p className=" font-bold">Name</p>
+              {/*  <p className=" font-bold">Name</p> */}
               <div className="flex items-center gap-1 text-sm">
                 <p>{dateFormat(details?.date)}</p>
                 <BsDot />
@@ -101,7 +103,7 @@ function AppointmentDetails({ id, setDeletePopupOpen }) {
                   </p>
                 </div>
                 <div className="flex items-center gap-5">
-                  <p className="text-sm">{"BDT" + " " + service.price} </p>
+                  <p className="text-sm">{"USD" + " " + service.price} </p>
                 </div>
               </div>
             ))}
@@ -148,7 +150,7 @@ function AppointmentDetails({ id, setDeletePopupOpen }) {
                 mins
               </p>
               <p className=" font-semibold">
-                BDT{" "}
+                USD{" "}
                 {details.services
                   .reduce((total, service) => total + Number(service.price), 0)
                   .toFixed(2)}

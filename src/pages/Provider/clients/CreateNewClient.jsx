@@ -1,18 +1,13 @@
-import React, {  useState } from "react";
-import {
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-} from "../../../../../../../components/ui/Modal";
-import Button from "../../../../../../../components/ui/Button";
+import React, { useState } from "react";
 import { UserRoundPlus } from "lucide-react";
 import { useForm } from "react-hook-form";
-import axiosInstance from "../../../../../../../lib/axiosInstanceWithToken";
-import { Notify } from "../../../../../../../components/ui/Toaster";
-import StatusDropdown from "./StatusDropdown";
-import useClientStore from "../../../../../../../store/provider/clientStore";
-import { PhoneNumberInput } from "../../../../../../../components/ui/PhoneNumberInput";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "../../../components/ui/Modal";
+import useClientStore from "../../../store/provider/clientStore";
+import axiosInstance from "../../../lib/axiosInstanceWithToken";
+import { Notify } from "../../../components/ui/Toaster";
+import StatusDropdown from "./components/StatusDropdown";
+import { PhoneNumberInput } from "../../../components/ui/PhoneNumberInput";
+import Button from "../../../components/ui/Button";
 
 function CreateNewClient({ isOpen, onClose }) {
   const {
@@ -25,7 +20,6 @@ function CreateNewClient({ isOpen, onClose }) {
   } = useForm();
   const [apiErrors, setApiErrors] = useState("");
   const { fetchClients } = useClientStore();
-
 
   const onSubmit = async (data) => {
     try {
@@ -97,9 +91,9 @@ function CreateNewClient({ isOpen, onClose }) {
                 setValue={setValue}
                 watch={watch}
                 errors={errors}
-                defaultCountry="+880"
+                defaultCountry="+1"
                 label="Phone number"
-                placeholder="XXX XXXX XXX" 
+                placeholder="XXX XXXX XXX"
               />
               {/* Errors */}
               {apiErrors.phone && (

@@ -6,6 +6,7 @@ import GridListButton from "./components/GridListButton";
 import CalendarNavigator from "./components/CalendarNavigator";
 import TodayDuration from "./components/TodayDuration";
 import Booking from "./components/Booking";
+import { Link2 } from "lucide-react";
 
 function CalendarHeader() {
   return (
@@ -20,7 +21,14 @@ function CalendarHeader() {
 
       <div className="flex items-center gap-1.5 md:gap-3">
         <GridListButton className="md:hidden" />
-        <Booking />
+        <Booking
+          button={
+            <Button variant="outline" size="header" className="hidden lg:flex">
+              <Link2 size={18} />
+              <span>Booking</span>
+            </Button>
+          }
+        />
         <NewDropdown />
         <Button
           variant="outline"

@@ -1,4 +1,5 @@
 const countries_data = [
+  { name: "United States", abbreviation: "US", code: "+1" },
   { name: "Afghanistan", abbreviation: "AF", code: "+93" },
   { name: "Albania", abbreviation: "AL", code: "+355" },
   { name: "Algeria", abbreviation: "DZ", code: "+213" },
