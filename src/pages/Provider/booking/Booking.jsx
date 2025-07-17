@@ -192,7 +192,7 @@ const Booking = () => {
                 }`}</div>
                 <button
                   title="Coming soon.."
-                  className=" text-start cursor-progress hover:bg-gray-200 px-5 py-2"
+                  className=" text-start cursor-not-allowed hover:bg-gray-200 px-5 py-2"
                 >
                   Go to your portal
                 </button>

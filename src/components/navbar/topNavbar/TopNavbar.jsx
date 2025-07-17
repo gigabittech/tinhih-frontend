@@ -9,6 +9,7 @@ import useToggleWorkspace from "./hooks/toggleWorkspace";
 import CreateWorkspaceModal from "./components/CreateWorkspaceModal";
 import SignOut from "../../ui/SignOut";
 import QuickActions from "./components/QuickActions";
+import Booking from "../../../pages/Provider/Calendar/components/Header/components/Booking";
 
 function TopNavbar() {
   const [expand, setExpand] = useState(false);
@@ -32,7 +33,7 @@ function TopNavbar() {
   return (
     <div className="pb-7 pt-2 px-10">
       <div className="flex justify-end items-center gap-5 relative">
-        <QuickActions/>
+        <QuickActions />
         {/* ---------profile button---------- */}
         <div
           onClick={() => setExpand(!expand)}
@@ -67,9 +68,13 @@ function TopNavbar() {
                 <p className="text-sm font-bold">{full_name}</p>
                 <p className="text-xs">{email}</p>
               </div>
-              <span className=" bg-gray-100 p-2 text-xl rounded">
-                <IoLink />
-              </span>
+              <Booking
+                button={
+                  <span className="p-2 rounded bg-gray-100 cursor-pointer inline-flex items-center justify-center">
+                    <IoLink size={20} />
+                  </span>
+                }
+              />
             </div>
             {/* ---------Workspaces---------- */}
             <div className=" py-5 border-b border-b-[#ebebeb]">

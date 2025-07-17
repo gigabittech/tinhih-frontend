@@ -247,7 +247,7 @@ const CreateLocation = ({ isOpen, onClose }) => {
                 setValue={setValue}
                 watch={watch}
                 errors={errors}
-                defaultCountry="+880"
+                defaultCountry="+1"
                 label="Phone number"
                 placeholder=""
               />

@@ -6,7 +6,7 @@ export function PhoneNumberInput({
   setValue,
   watch,
   errors,
-  defaultCountry = "+880",
+  defaultCountry = "+1",
   label = "Phone number",
   placeholder,
   defaultValue,

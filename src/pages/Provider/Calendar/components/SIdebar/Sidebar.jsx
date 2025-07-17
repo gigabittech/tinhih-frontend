@@ -9,15 +9,15 @@ import { FaDoorOpen } from "react-icons/fa";
 import { BiTaskX } from "react-icons/bi";
 import { SideModal } from "../../../../../components/ui/SideModal";
 import CreateAppointment from "./Appointment/CreateAppointment";
-import AppointmentDetails from "./Appointment/appointmentDetails/AppointmentDetails";
-import CreateNewClient from "./ModalsToCreate/NewClient/CreateNewClient";
-import CreateNewTeamMember from "./ModalsToCreate/teamMember.jsx/CreateNewTeamMember";
+import AppointmentDetails from "./Appointment/appointmentDetails/AppointmentDetails"
 import CreateService from "./ModalsToCreate/Services/CreateService";
 import CreateLocation from "./ModalsToCreate/Location/CreateLocation";
 import Task from "./task/Task";
 import Reminder from "./reminder/Reminder";
 import Meeting from "./meeting/Meeting";
 import OutOfOffice from "./outOfOffice/OutOfOffice";
+import CreateNewTeamMember from "../../../yourTeam/CreateNewTeamMember";
+import CreateNewClient from "../../../clients/CreateNewClient";
 
 const options = [
   { label: "Appointment", icon: <FaRegCalendarCheck /> },

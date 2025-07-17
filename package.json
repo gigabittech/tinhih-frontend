@@ -19,6 +19,7 @@
     "date-fns": "^4.1.0",
     "formik": "^2.4.6",
     "framer-motion": "^12.5.0",
+    "html2pdf.js": "^0.10.2",
     "lucide-react": "^0.479.0",
     "nanoid": "^5.1.5",
     "react": "^19.0.0",
