@@ -62,7 +62,7 @@ function CalendarPage() {
 
   return (
     <div className="flex flex-col h-screen">
-      <ViewInvoice isOpen={isOpen} onClose={closePopup} invoice_id={1}/>
+      <ViewInvoice isOpen={isOpen} onClose={closePopup} invoice_id={1} />
 
       <Sidebar
         isOpen={openSideModal}
@@ -107,4 +107,3 @@ function CalendarPage() {
 }
 
 export default CalendarPage;
-
