@@ -7,7 +7,7 @@ import { RxDotsVertical } from "react-icons/rx";
 import { useState } from "react";
 import EditInvoice from "./EditInvoice";
 import DropDown from "./components/DropDown";
-import useInvoice from "../services/useInvoice";
+import useInvoice from "../utilities/useInvoice";
 import useUserStore from "../../../../store/global/userStore";
 import InvoicePreview from "./components/InvoicePreview";
 
@@ -18,6 +18,7 @@ function ViewInvoice({ isOpen, onClose, invoice_id }) {
   const { user } = useUserStore();
 
   if (loading) return null;
+
 
   return (
     <div
@@ -78,6 +79,7 @@ function ViewInvoice({ isOpen, onClose, invoice_id }) {
                 serial_number={invoiceData?.serial_number}
                 id={invoiceData?.id}
                 onCloseViewInvoice={onClose}
+                currentWorkspace={user?.currentWorkspace?.businessName}
               />
             </div>
           </div>
@@ -86,10 +88,7 @@ function ViewInvoice({ isOpen, onClose, invoice_id }) {
 
       {/* ------------------ main ------------------------ */}
 
-      <InvoicePreview
-        currentWorkspace={user.currentWorkspace.businessName}
-        invoiceData={invoiceData}
-      />
+      <InvoicePreview invoiceData={invoiceData} currentWorkspace={user?.currentWorkspace?.businessName} className={"w-[90%] xl:w-[60%] 2xl:w-[40%]"}/>
 
       <EditInvoice
         isOpen={editInvoice}

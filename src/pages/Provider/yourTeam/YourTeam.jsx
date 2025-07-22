@@ -82,7 +82,7 @@ function YourTeam() {
                     <td className="ps-10 py-3 ">
                       <input type="checkbox" />
                     </td>
-                    <td className="p-2 text-purple-600">
+                    <td className="p-2 text-primary-800 font-bold">
                       {client.first_name + " " + client.last_name}
                     </td>
                     <td className="p-2">{client.phone_number}</td>

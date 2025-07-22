@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { RiBillFill } from "react-icons/ri";
 import { Plus, X } from "lucide-react";
 import useUserStore from "../../../../store/global/userStore";
-import useInvoice from "../services/useInvoice";
+import useInvoice from "../utilities/useInvoice";
 import axiosInstance from "../../../../lib/axiosInstanceWithToken";
 import { Notify } from "../../../../components/ui/Toaster";
 import ClientSelectDropdown from "../createInvoice/components/ClientSelectDropdown";

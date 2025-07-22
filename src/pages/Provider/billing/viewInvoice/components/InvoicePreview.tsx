@@ -4,19 +4,24 @@ import dateFormatToDDMMMYYYY from "../../../../../hook/dateFormatToDDMMMYYYY";
 const InvoicePreview = ({
   currentWorkspace,
   invoiceData,
-  className = "w-[40%]",
+  className,
 }) => {
   return (
     <div
-      className={`${className} mx-auto mt-10 h-screen bg-white rounded-lg p-10`}
+      className={`${className} mx-auto mt-10 rounded-lg p-10 bg-white h-screen`}
     >
+      {/* Header */}
       <header className="text-end">
         <h1 className="text-4xl font-medium">Invoice</h1>
         <p className="text-sm pt-3">{currentWorkspace}</p>
       </header>
 
-      <main className="py-5 border-t border-gray-200 mt-5">
-        <div className="flex justify-between text-sm">
+      {/* Main */}
+      <main
+        className="py-5 mt-5 border-t"
+        style={{ borderColor: "#E5E7EB", borderTopWidth: "1px" }}
+      >
+        <div className="flex justify-between gap-5 text-sm">
           <div>
             <h6 className="font-bold mb-2">Bill to</h6>
             <p>{invoiceData?.biller?.email}</p>
@@ -31,19 +36,20 @@ const InvoicePreview = ({
               {invoiceData?.serial_number}
             </h6>
             <p className="my-2">
-              <span className="font-bold">Date issued</span> &nbsp;
+              <span className="font-bold">Date issued:</span>{" "}
               {dateFormatToDDMMMYYYY(invoiceData?.issue_date)}
             </p>
             <p>
-              <span className="font-bold">Due date</span> &nbsp;
+              <span className="font-bold">Due date:</span>{" "}
               {dateFormatToDDMMMYYYY(invoiceData?.due_date)}
             </p>
           </div>
         </div>
 
-        <table className="w-full my-5">
+        {/* Services Table */}
+        <table className="w-full my-5 text-sm border-collapse">
           <thead>
-            <tr className="bg-amber-100 text-left">
+            <tr style={{ backgroundColor: "#FEF3C7", textAlign: "left" }}>
               <th className="ps-5 py-2">Date</th>
               <th>Service</th>
               <th>Code</th>
@@ -55,8 +61,12 @@ const InvoicePreview = ({
           </thead>
           <tbody>
             {invoiceData?.services?.map((service, index) => (
-              <tr key={index} className="border-b border-gray-200">
-                <td className="ps-5 py-4">{service.date || "-"}</td>
+              <tr
+                key={index}
+                style={{ borderBottom: "1px solid #E5E7EB" }}
+                className="text-sm"
+              >
+                <td className="ps-5 py-2">{service.date || "-"}</td>
                 <td>{service.id}</td>
                 <td>{service.code}</td>
                 <td>{service.unit}</td>
@@ -68,10 +78,11 @@ const InvoicePreview = ({
           </tbody>
         </table>
 
-        <div className="flex justify-end">
-          <table className="w-[300px] text-sm">
+        {/* Totals */}
+        <div className="flex justify-end mt-6">
+          <table className="w-[300px] text-sm border-collapse">
             <tbody>
-              <tr className="border-b border-gray-200">
+              <tr style={{ borderBottom: "1px solid #E5E7EB" }}>
                 <td className="text-end pb-2">Subtotal</td>
                 <td className="text-end pb-2 font-medium">
                   USD {invoiceData?.subtotal}
@@ -88,7 +99,8 @@ const InvoicePreview = ({
         </div>
       </main>
 
-      <footer className="text-sm mt-5">
+      {/* Footer */}
+      <footer className="text-sm mt-10">
         <p className="font-bold">Practitioner</p>
         <p>{invoiceData?.client?.email}</p>
       </footer>
@@ -97,3 +109,4 @@ const InvoicePreview = ({
 };
 
 export default InvoicePreview;
+

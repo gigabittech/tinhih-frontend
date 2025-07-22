@@ -9,9 +9,10 @@ import Button from "../../../../../components/ui/Button";
 import axiosInstance from "../../../../../lib/axiosInstanceWithToken";
 import { Notify } from "../../../../../components/ui/Toaster";
 import useInvoiceStore from "../../../../../store/provider/invoiceStore";
-import useInvoice from "../../services/useInvoice";
+import useInvoice from "../../utilities/useInvoice";
 import InvoicePreview from "./InvoicePreview";
-import html2pdf from "html2pdf.js";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 function DropDown({
   isOpen,
@@ -42,34 +43,45 @@ function DropDown({
     }
   };
 
-  const handleDownloadPDF = () => {
-    const element = elementRef.current;
+  const [shouldRenderPreview, setShouldRenderPreview] = useState(false);
 
-    html2pdf()
-      .set({
-        margin: 1,
+  const handleDownloadPDF = async () => {
+    setShouldRenderPreview(true);
 
-        filename: `invoice-${serial_number}.pdf`,
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 1 },
-        jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
-      })
-      .from(element)
-      .save();
+    requestAnimationFrame(() => {
+      setTimeout(async () => {
+        const element = elementRef.current;
+        if (!element) return;
+
+        try {
+          const canvas = await html2canvas(element, {
+            scale: 3,
+            useCORS: true, // enable if you're loading remote images/fonts
+          });
+
+          const imgData = canvas.toDataURL("image/png");
+          const pdf = new jsPDF("p", "mm", "a4");
+
+          const imgProps = pdf.getImageProperties(imgData);
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+          pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+          pdf.save(`invoice-${serial_number}.pdf`);
+        } catch (error) {
+          console.error("PDF generation failed", error);
+          Notify("Failed to generate PDF");
+        } finally {
+          setShouldRenderPreview(false);
+        }
+      }, 300);
+    });
   };
 
-  if (loading) {
-    return;
-  }
+  if (loading || !invoiceData) return null;
+
   return (
     <div>
-      <div className="hidden" ref={elementRef}>
-        <InvoicePreview
-          currentWorkspace={currentWorkspace}
-          invoiceData={invoiceData}
-          className="w-full"
-        />
-      </div>
       {isOpen && <div onClick={onClose} className=" fixed inset-0"></div>}
       <div
         className={
@@ -119,6 +131,17 @@ function DropDown({
           </div>
         </ModalBody>
       </Modal>
+
+      {shouldRenderPreview && (
+        <div className="absolute left-[-9999px] top-0 opacity-0 pointer-events-none">
+          <div ref={elementRef}>
+            <InvoicePreview
+              currentWorkspace={currentWorkspace}
+              invoiceData={invoiceData}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
