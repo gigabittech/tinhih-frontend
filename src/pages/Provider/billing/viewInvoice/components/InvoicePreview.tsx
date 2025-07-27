@@ -1,19 +1,18 @@
 import React from "react";
 import dateFormatToDDMMMYYYY from "../../../../../hook/dateFormatToDDMMMYYYY";
 
-const InvoicePreview = ({
-  currentWorkspace,
-  invoiceData,
-  className,
-}) => {
+const InvoicePreview = ({ currentWorkspace, invoiceData, className }) => {
   return (
     <div
       className={`${className} mx-auto mt-10 rounded-lg p-10 bg-white h-screen`}
     >
       {/* Header */}
-      <header className="text-end">
-        <h1 className="text-4xl font-medium">Invoice</h1>
-        <p className="text-sm pt-3">{currentWorkspace}</p>
+      <header className="flex justify-between items-center">
+        <img src="/Logo.svg" alt="Logo" className="w-16 h-16"/>
+        <div>
+          <h1 className="text-4xl font-medium">Invoice</h1>
+          <p className="text-sm pt-3">{currentWorkspace}</p>
+        </div>
       </header>
 
       {/* Main */}
@@ -109,4 +108,3 @@ const InvoicePreview = ({
 };
 
 export default InvoicePreview;
-

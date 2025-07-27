@@ -52,6 +52,8 @@ import OnlineBooking from "../pages/Provider/settings/scheduling/OnlineBooking";
 import Templates from "../pages/Provider/settings/workflowManagement/Templates";
 import BasicReminders from "../pages/Provider/settings/workflowManagement/BasicReminders";
 import WorkflowLayout from "../pages/Provider/settings/workflowManagement/WorkflowLayout";
+import Personal from "../pages/Provider/clients/personal/Personal";
+import TeamMemberPersonal from "../pages/Provider/yourTeam/personal/TeamMemberPersonal";
 
 const router = createBrowserRouter([
   {
@@ -109,6 +111,11 @@ const router = createBrowserRouter([
       {
         path: "/clients",
         element: <Clients />,
+       
+      },
+      {
+        path: "/clients/:clientId/profile",
+        element: <Personal />,
       },
       {
         path: "/billing",
@@ -117,6 +124,11 @@ const router = createBrowserRouter([
       {
         path: "/your-team",
         element: <YourTeam />,
+        
+      },
+      {
+        path: "/your-team/:memberId/profile",
+        element: <TeamMemberPersonal/>,
       },
       {
         path: "/trash",

@@ -3,9 +3,11 @@ import { PiBagSimpleFill } from "react-icons/pi";
 import useTeamMemberStore from "../../../store/provider/teamMemberStore";
 import { Plus } from "lucide-react";
 import CreateNewTeamMember from "./CreateNewTeamMember";
+import { useNavigate } from "react-router";
 
 function YourTeam() {
   const { members, loading, fetchMembers } = useTeamMemberStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchMembers();
@@ -31,8 +33,11 @@ function YourTeam() {
             </span>
             <p className=" font-bold">Your team</p>
           </div>
-          <button onClick={openModal} className=" bg-primary-700 font-semibold text-white px-3 py-1 rounded hover:bg-primary-800 flex items-center gap-2">
-           <Plus size={18}/> New team member
+          <button
+            onClick={openModal}
+            className=" bg-primary-700 font-semibold text-white px-3 py-1 rounded hover:bg-primary-800 flex items-center gap-2"
+          >
+            <Plus size={18} /> New team member
           </button>
         </div>
       </header>
@@ -77,17 +82,21 @@ function YourTeam() {
                   </td>
                 </tr>
               ) : (
-                members.map((client, index) => (
-                  <tr key={index} className="border-t border-[#d7d7d7] hover:bg-[#f2f2f2]">
-                    <td className="ps-10 py-3 ">
+                members.map((member, index) => (
+                  <tr
+                    key={index}
+                    className="border-t border-[#d7d7d7] hover:bg-[#f2f2f2] cursor-pointer"
+                    onClick={() => navigate(`/your-team/${member.id}/profile`)}
+                  >
+                    <td className="ps-10 py-3">
                       <input type="checkbox" />
                     </td>
                     <td className="p-2 text-primary-800 font-bold">
-                      {client.first_name + " " + client.last_name}
+                      {member.first_name + " " + member.last_name}
                     </td>
-                    <td className="p-2">{client.phone_number}</td>
-                    <td className="p-2">{client.email}</td>
-                    <td className="p-2">{client.job_title}</td>
+                    <td className="p-2">{member.phone_number}</td>
+                    <td className="p-2">{member.email}</td>
+                    <td className="p-2">{member.job_title}</td>
                   </tr>
                 ))
               )}

@@ -3,11 +3,13 @@ import { FaUserGroup } from "react-icons/fa6";
 import useClientStore from "../../../store/provider/clientStore";
 import { Plus } from "lucide-react";
 import CreateNewClient from "./CreateNewClient";
+import { useNavigate } from "react-router";
 
 function Clients() {
   const { clients, fetchClients, loading } = useClientStore();
   const [showCreateClientComponentForm, setShowCreateClientComponentForm] =
     useState(false);
+  const navigate = useNavigate();
 
   const [search, SetSearch] = useState("");
 
@@ -111,7 +113,11 @@ function Clients() {
                 </tr>
               ) : (
                 clients.map((client, index) => (
-                  <tr key={index} className="border-t border-[#d7d7d7] hover:bg-[#f2f2f2]">
+                  <tr
+                    key={index}
+                    onClick={() => navigate(`/clients/${client.id}/profile`)}
+                    className="border-t border-[#d7d7d7] hover:bg-[#f2f2f2]"
+                  >
                     <td className="ps-10 py-3">
                       <input type="checkbox" />
                     </td>
